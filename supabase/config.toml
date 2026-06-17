@@ -1,0 +1,11 @@
+[api]
+project_id = "dazucslvjgtfxjoocnei"
+
+[functions.auth-start]
+verify_jwt = false
+
+[functions.auth-callback]
+verify_jwt = false
+
+[functions.token]
+verify_jwt = false
