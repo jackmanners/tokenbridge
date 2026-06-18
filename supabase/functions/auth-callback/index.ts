@@ -83,6 +83,20 @@ Deno.serve(async (req) => {
   const scopeStr = tokenData.scope as string | undefined
   const scopes = scopeStr ? scopeStr.split(/[\s,]+/) : provider.scopes
 
+  // Fetch the provider's internal user ID so webhooks can map back to our user_id
+  let healthUserId: string | null = null
+  if (stateRow.provider === 'google-health') {
+    const profileRes = await fetch('https://health.googleapis.com/v4/users/me/profile', {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` },
+    })
+    if (profileRes.ok) {
+      const profile = await profileRes.json() as Record<string, unknown>
+      // name field is in the format "users/{healthUserId}"
+      const name = profile.name as string | undefined
+      healthUserId = name ? name.split('/').pop() ?? null : null
+    }
+  }
+
   const { error: upsertError } = await supabase.from('oauth_tokens').upsert(
     {
       user_id: stateRow.user_id,
@@ -92,6 +106,7 @@ Deno.serve(async (req) => {
       expires_at: expiresAt,
       scopes,
       raw,
+      health_user_id: healthUserId,
     },
     { onConflict: 'user_id,provider' },
   )

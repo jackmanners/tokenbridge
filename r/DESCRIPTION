@@ -1,0 +1,19 @@
+Package: tokenbridge
+Type: Package
+Title: TokenBridge Client for Health API Research
+Version: 0.1.0
+Authors@R: person("Jack", "Manners", role = c("aut", "cre"),
+                  email = "jack@example.com")
+Description: Lightweight client for fetching health data via a TokenBridge
+    deployment. TokenBridge handles OAuth token management; this package
+    provides the R interface for auth URLs, token retrieval, and health data
+    fetching. Currently supports Google Health API (Fitbit-backed), with
+    Withings support planned.
+License: MIT + file LICENSE
+Imports:
+    httr
+Suggests:
+    testthat (>= 3.0.0)
+Encoding: UTF-8
+RoxygenNote: 7.3.0
+Config/testthat/edition: 3

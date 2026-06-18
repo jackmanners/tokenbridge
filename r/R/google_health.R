@@ -1,0 +1,346 @@
+# Google Health API v4 provider
+#
+# Wraps https://health.googleapis.com/v4 — uses TokenBridge for auth,
+# handles pagination and client-side date filtering.
+#
+# You rarely need to call these functions directly.
+# The canonical way is via tb_fetch() in tokenbridge.R:
+#
+#   tb_set_provider("google-health")              # set once (it's the default)
+#   tb_fetch("p001", "sleep", start, end)
+#   tb_fetch("p001", "steps", start, end)
+#
+# gh_fetch() is the Google-Health-specific shorthand (always uses this provider):
+#
+#   gh_fetch("p001", "sleep", start, end)         # equivalent to tb_fetch with provider="google-health"
+#
+# Token reuse (one TokenBridge call for multiple fetches):
+#
+#   tok <- tb_get_token("p001")
+#   gh_fetch("p001", "sleep", start, end, token = tok)
+#   gh_fetch("p001", "steps", start, end, token = tok)
+#
+# Data type IDs: see names(GH_DATA_TYPES) or docs/providers.md
+#
+# Function prefix: gh_   (Google Health)
+
+# ── Data types reference ───────────────────────────────────────────────────────
+
+#' All supported Google Health data type IDs
+#'
+#' Named character vector. Names are the kebab-case type IDs to pass to
+#' gh_fetch() / tb_fetch(). Values are "list" or "dailyRollup" (the endpoint
+#' type — you don't need to think about this; gh_fetch handles it automatically).
+#'
+#' \code{names(GH_DATA_TYPES)}  — list all type IDs
+#' \code{GH_DATA_TYPES["sleep"]}  — check endpoint type for a specific ID
+#'
+#' Full descriptions and units: see docs/providers.md
+#'
+#' @export
+GH_DATA_TYPES <- c(
+  # Sleep
+  "sleep"                               = "list",
+  "respiratory-rate-sleep-summary"      = "list",
+  "daily-sleep-temperature-derivations" = "list",
+  # Activity
+  "steps"                               = "list",
+  "distance"                            = "list",
+  "active-minutes"                      = "list",
+  "active-zone-minutes"                 = "list",
+  "active-energy-burned"                = "list",
+  "activity-level"                      = "list",
+  "sedentary-period"                    = "list",
+  "altitude"                            = "list",
+  "swim-lengths-data"                   = "list",
+  "time-in-heart-rate-zone"             = "list",
+  "exercise"                            = "list",
+  "vo2-max"                             = "list",
+  "run-vo2-max"                         = "list",
+  "daily-vo2-max"                       = "list",
+  "floors"                              = "dailyRollup",
+  "total-calories"                      = "dailyRollup",
+  "calories-in-heart-rate-zone"         = "dailyRollup",
+  # Heart & circulation
+  "heart-rate"                          = "list",
+  "daily-resting-heart-rate"            = "list",
+  "daily-heart-rate-zones"              = "list",
+  "heart-rate-variability"              = "list",
+  "daily-heart-rate-variability"        = "list",
+  "electrocardiogram"                   = "list",
+  "irregular-rhythm-notification"       = "list",
+  # Vitals
+  "oxygen-saturation"                   = "list",
+  "daily-oxygen-saturation"             = "list",
+  "daily-respiratory-rate"              = "list",
+  "core-body-temperature"               = "list",
+  "blood-glucose"                       = "list",
+  # Body
+  "weight"                              = "list",
+  "body-fat"                            = "list",
+  "height"                              = "list",
+  # Nutrition
+  "food"                                = "list",
+  "nutrition-log"                       = "list",
+  "hydration-log"                       = "list"
+)
+
+# ── Main fetch function ────────────────────────────────────────────────────────
+
+#' Fetch Google Health data for a participant
+#'
+#' data_type is the kebab-case type ID — e.g. "sleep", "steps",
+#' "heart-rate-variability". See \code{names(GH_DATA_TYPES)} or
+#' docs/providers.md for the full list.
+#'
+#' This function is the Google-Health shorthand for tb_fetch().
+#' It always uses the google-health provider regardless of tb_get_provider().
+#'
+#' @param user_id    TokenBridge user ID
+#' @param data_type  Data type ID (kebab-case). See names(GH_DATA_TYPES).
+#' @param start_date "YYYY-MM-DD"
+#' @param end_date   "YYYY-MM-DD"
+#' @param token      Pre-fetched access token (optional). Pass when fetching
+#'   multiple types for the same user to avoid repeated TokenBridge calls.
+#' @param env_file   Path to .env file (default ".env")
+#' @return data.frame, one row per data point
+#' @export
+gh_fetch <- function(user_id, data_type, start_date, end_date,
+                     token = NULL, env_file = ".env") {
+  if (!data_type %in% names(GH_DATA_TYPES))
+    warning("'", data_type, "' is not in GH_DATA_TYPES. ",
+            "See names(GH_DATA_TYPES) or docs/providers.md.", call. = FALSE)
+  if (is.null(token))
+    token <- tb_get_token(user_id, provider = "google-health", env_file = env_file)
+  if (isTRUE(GH_DATA_TYPES[[data_type]] == "dailyRollup")) {
+    .gh_fetch_daily_rollup(token, data_type, start_date, end_date)
+  } else {
+    .gh_fetch_datapoints(token, data_type, start_date, end_date)
+  }
+}
+
+# ── Analysis helpers ───────────────────────────────────────────────────────────
+
+#' Summary statistics for one participant (sleep + respiratory rate)
+#'
+#' Gets a single token and reuses it for both requests.
+#'
+#' @param user_id    TokenBridge user ID
+#' @param start_date "YYYY-MM-DD"
+#' @param end_date   "YYYY-MM-DD"
+#' @param env_file   Path to .env file (default ".env")
+#' @return Named list: user_id, period_days, sleep, respiratory_rate
+#' @export
+gh_summary <- function(user_id, start_date, end_date, env_file = ".env") {
+  token  <- tb_get_token(user_id, provider = "google-health", env_file = env_file)
+  period <- as.numeric(as.Date(end_date) - as.Date(start_date)) + 1L
+  sleep  <- .gh_fetch_datapoints(token, "sleep", start_date, end_date)
+  rr     <- .gh_fetch_datapoints(token, "respiratory-rate-sleep-summary", start_date, end_date)
+
+  list(
+    user_id          = user_id,
+    period_days      = period,
+    sleep            = .gh_summarise_sleep(sleep, period),
+    respiratory_rate = .gh_summarise_rr(rr, period)
+  )
+}
+
+#' Summary statistics for multiple participants
+#'
+#' Runs gh_summary() for each user ID. Errors per participant are caught and
+#' returned as list(error = "message") for that entry.
+#'
+#' @param user_ids   Character vector of TokenBridge user IDs
+#' @param start_date "YYYY-MM-DD"
+#' @param end_date   "YYYY-MM-DD"
+#' @param env_file   Path to .env file (default ".env")
+#' @return Named list, one element per user ID
+#' @export
+gh_summary_all <- function(user_ids, start_date, end_date, env_file = ".env") {
+  results <- setNames(vector("list", length(user_ids)), user_ids)
+  for (uid in user_ids) {
+    results[[uid]] <- tryCatch(
+      gh_summary(uid, start_date, end_date, env_file = env_file),
+      error = function(e) list(error = conditionMessage(e))
+    )
+  }
+  results
+}
+
+#' Data completeness audit for multiple participants
+#'
+#' Returns a data.frame with one row per participant x data type.
+#' Columns: user_id, data_type, n, days_with_data, coverage_pct, error.
+#'
+#' @param user_ids   Character vector of TokenBridge user IDs
+#' @param start_date "YYYY-MM-DD"
+#' @param end_date   "YYYY-MM-DD"
+#' @param env_file   Path to .env file (default ".env")
+#' @return data.frame
+#' @export
+gh_data_completeness <- function(user_ids, start_date, end_date, env_file = ".env") {
+  rows <- list()
+  for (uid in user_ids) {
+    s <- tryCatch(
+      gh_summary(uid, start_date, end_date, env_file = env_file),
+      error = function(e) list(error = conditionMessage(e))
+    )
+    if (!is.null(s$error)) {
+      rows <- c(rows, list(data.frame(
+        user_id = uid, data_type = "all", n = NA_integer_,
+        days_with_data = NA_integer_, coverage_pct = NA_real_,
+        error = s$error, stringsAsFactors = FALSE
+      )))
+    } else {
+      for (dtype in c("sleep", "respiratory_rate")) {
+        st <- s[[dtype]]
+        rows <- c(rows, list(data.frame(
+          user_id        = uid,
+          data_type      = dtype,
+          n              = st$n,
+          days_with_data = st$days_with_data,
+          coverage_pct   = st$coverage_pct,
+          error          = NA_character_,
+          stringsAsFactors = FALSE
+        )))
+      }
+    }
+  }
+  do.call(rbind, rows)
+}
+
+# ── Internal ───────────────────────────────────────────────────────────────────
+
+.gh_fetch_datapoints <- function(token, data_type, start_date, end_date) {
+  url         <- paste0("https://health.googleapis.com/v4/users/me/dataTypes/",
+                        data_type, "/dataPoints")
+  start_epoch <- as.numeric(as.POSIXct(paste0(start_date, " 00:00:00"), tz = "UTC"))
+  end_epoch   <- as.numeric(as.POSIXct(paste0(end_date,   " 23:59:59"), tz = "UTC"))
+  all_points  <- list()
+  page_token  <- NULL
+
+  repeat {
+    query <- list(pageSize = 1000)
+    if (!is.null(page_token)) query$pageToken <- page_token
+
+    resp <- httr::GET(
+      url,
+      httr::add_headers(Authorization = paste("Bearer", token)),
+      query = query,
+      httr::timeout(30)
+    )
+
+    if (httr::status_code(resp) != 200) {
+      warning("Google Health API error for '", data_type, "': ",
+              httr::content(resp)$error$message, call. = FALSE)
+      return(data.frame())
+    }
+
+    body       <- httr::content(resp)
+    page_token <- body$nextPageToken
+
+    for (pt in body$dataPoints) {
+      pt_start <- as.numeric(pt$startTime$seconds)
+      if (!is.null(pt_start) && pt_start >= start_epoch && pt_start <= end_epoch)
+        all_points <- c(all_points, list(pt))
+    }
+
+    if (is.null(page_token) || !nchar(page_token)) break
+  }
+
+  if (!length(all_points)) return(data.frame())
+
+  rows     <- lapply(all_points, function(p) as.list(unlist(p)))
+  all_cols <- unique(unlist(lapply(rows, names)))
+  do.call(rbind, lapply(rows, function(r) {
+    r[setdiff(all_cols, names(r))] <- NA
+    as.data.frame(r[all_cols], stringsAsFactors = FALSE, check.names = FALSE)
+  }))
+}
+
+.gh_fetch_daily_rollup <- function(token, data_type, start_date, end_date) {
+  url  <- paste0("https://health.googleapis.com/v4/users/me/dataTypes/",
+                 data_type, "/dataPoints:dailyRollUp")
+  resp <- httr::POST(
+    url,
+    httr::add_headers(Authorization = paste("Bearer", token),
+                      `Content-Type` = "application/json"),
+    body   = list(startDate = start_date, endDate = end_date),
+    encode = "json",
+    httr::timeout(30)
+  )
+
+  if (httr::status_code(resp) != 200) {
+    warning("Google Health API error for '", data_type, "' (dailyRollup): ",
+            httr::content(resp)$error$message, call. = FALSE)
+    return(data.frame())
+  }
+
+  rollup <- httr::content(resp)$dailyRollup
+  if (!length(rollup)) return(data.frame())
+
+  rows     <- lapply(rollup, function(p) as.list(unlist(p)))
+  all_cols <- unique(unlist(lapply(rows, names)))
+  do.call(rbind, lapply(rows, function(r) {
+    r[setdiff(all_cols, names(r))] <- NA
+    as.data.frame(r[all_cols], stringsAsFactors = FALSE, check.names = FALSE)
+  }))
+}
+
+.gh_summarise_sleep <- function(df, period_days) {
+  if (!nrow(df)) return(list(n = 0L, days_with_data = 0L, coverage_pct = 0))
+
+  days <- 0L
+  if ("startTime.seconds" %in% names(df)) {
+    ts   <- suppressWarnings(as.numeric(df[["startTime.seconds"]]))
+    ts   <- ts[!is.na(ts)]
+    days <- length(unique(as.Date(as.POSIXct(ts, origin = "1970-01-01", tz = "UTC"))))
+  }
+
+  result <- list(
+    n              = nrow(df),
+    days_with_data = days,
+    coverage_pct   = if (period_days > 0) round(days / period_days * 100, 1) else 0
+  )
+
+  dur_col <- intersect(c("duration.seconds", "duration"), names(df))[1]
+  if (!is.na(dur_col)) {
+    durs <- suppressWarnings(as.numeric(df[[dur_col]])) / 3600
+    durs <- durs[!is.na(durs) & durs > 0]
+    if (length(durs)) {
+      result$mean_duration_hours <- round(mean(durs), 2)
+      if (length(durs) > 1) result$std_duration_hours <- round(sd(durs), 2)
+    }
+  }
+  result
+}
+
+.gh_summarise_rr <- function(df, period_days) {
+  if (!nrow(df)) return(list(n = 0L, days_with_data = 0L, coverage_pct = 0))
+
+  days <- 0L
+  if ("startTime.seconds" %in% names(df)) {
+    ts   <- suppressWarnings(as.numeric(df[["startTime.seconds"]]))
+    ts   <- ts[!is.na(ts)]
+    days <- length(unique(as.Date(as.POSIXct(ts, origin = "1970-01-01", tz = "UTC"))))
+  }
+
+  result <- list(
+    n              = nrow(df),
+    days_with_data = days,
+    coverage_pct   = if (period_days > 0) round(days / period_days * 100, 1) else 0
+  )
+
+  val_col <- grep("fpval|intval|value", names(df), ignore.case = TRUE, value = TRUE)[1]
+  if (!is.na(val_col)) {
+    vals <- suppressWarnings(as.numeric(df[[val_col]]))
+    vals <- vals[!is.na(vals) & vals > 4 & vals < 40]
+    if (length(vals)) {
+      result$mean <- round(mean(vals), 2)
+      result$min  <- round(min(vals),  2)
+      result$max  <- round(max(vals),  2)
+      if (length(vals) > 1) result$std <- round(sd(vals), 2)
+    }
+  }
+  result
+}

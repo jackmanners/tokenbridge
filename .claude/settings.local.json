@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:health.googleapis.com)",
+      "WebFetch(domain:developers.google.com)",
+      "Bash(find /c/GitRepos/tokenbridge -maxdepth 3 -name \".gitignore\" -o -name \".env\" -o -name \"*.env\" 2>/dev/null | head -30 && echo \"---\" && ls /c/GitRepos/tokenbridge)",
+      "Read(//c/GitRepos/tokenbridge/supabase//**)",
+      "Read(//c/GitRepos/tokenbridge/supabase/.temp//**)",
+      "Read(//c/GitRepos/tokenbridge/**)",
+      "Bash(grep -r \"dazucslvjgtfxjoocnei\\\\|jackmanners\\\\|jack@example\" /c/GitRepos/tokenbridge --include=\"*.md\" --include=\"*.toml\" --include=\"*.ts\" --include=\"*.py\" --include=\"*.R\" --include=\"*.txt\" --include=\"*.example\" -l 2>/dev/null)",
+      "Bash(grep -r \"dazucslvjgtfxjoocnei\" /c/GitRepos/tokenbridge --include=\"*.md\" --include=\"*.py\" --include=\"*.R\" --include=\"*.example\" -n 2>/dev/null)"
+    ]
+  }
+}

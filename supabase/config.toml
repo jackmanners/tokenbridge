@@ -1,5 +1,6 @@
-[api]
-project_id = "dazucslvjgtfxjoocnei"
+# Replace YOUR_PROJECT_REF with your Supabase project reference ID.
+# Find it at: Project Settings → General → Project reference ID
+project_id = "YOUR_PROJECT_REF"
 
 [functions.auth-start]
 verify_jwt = false
@@ -8,4 +9,7 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.token]
+verify_jwt = false
+
+[functions.webhook]
 verify_jwt = false

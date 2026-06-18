@@ -14,13 +14,16 @@ export const providers: Record<string, Provider> = {
     authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
     tokenUrl: 'https://oauth2.googleapis.com/token',
     scopes: [
-      'openid',
-      'https://www.googleapis.com/auth/fitness.activity.read',
-      'https://www.googleapis.com/auth/fitness.body.read',
-      'https://www.googleapis.com/auth/fitness.heart_rate.read',
-      'https://www.googleapis.com/auth/fitness.sleep.read',
-      'https://www.googleapis.com/auth/fitness.nutrition.read',
-      'https://www.googleapis.com/auth/fitness.location.read',
+      // Google Health API readonly scopes (full list as of 2026)
+      'https://www.googleapis.com/auth/googlehealth.activity_and_fitness.readonly',
+      'https://www.googleapis.com/auth/googlehealth.ecg.readonly',
+      'https://www.googleapis.com/auth/googlehealth.health_metrics_and_measurements.readonly',
+      'https://www.googleapis.com/auth/googlehealth.irn.readonly',
+      'https://www.googleapis.com/auth/googlehealth.location.readonly',
+      'https://www.googleapis.com/auth/googlehealth.nutrition.readonly',
+      'https://www.googleapis.com/auth/googlehealth.profile.readonly',
+      'https://www.googleapis.com/auth/googlehealth.settings.readonly',
+      'https://www.googleapis.com/auth/googlehealth.sleep.readonly',
     ],
     pkce: true,
     authParams: {

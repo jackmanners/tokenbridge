@@ -1,141 +1,120 @@
 # TokenBridge
 
 Centralised OAuth token management for health data research APIs.  
-Handles the full OAuth flow, stores tokens in Supabase, and auto-refreshes before expiry.
+Point your scripts at TokenBridge instead of handling OAuth yourself — it manages the full auth flow, stores tokens in Supabase Postgres, and auto-refreshes before expiry.
+
+```
+participant (browser, once)
+      │  visits auth-start URL
+      ▼
+  TokenBridge  ◄──── your scripts (POST /token → valid access token)
+      │
+      └── Supabase Postgres (token storage + auto-refresh)
+```
+
+Designed for researchers who want a self-hosted, minimal, open-source alternative to managed wearable data platforms.
+
+## Deploy your own instance
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for step-by-step setup.  
+You need a free [Supabase](https://supabase.com) account and a [Google Cloud](https://console.cloud.google.com) project.
+
+## Client packages
+
+| Language | Install |
+|----------|---------|
+| Python | `pip install git+https://github.com/YOUR_USERNAME/tokenbridge.git#subdirectory=python` |
+| R | `devtools::install_github("YOUR_USERNAME/tokenbridge", subdir = "r")` |
+
+### Python
+
+```python
+from tokenbridge import TokenBridge
+
+tb = TokenBridge()              # reads TOKENBRIDGE_URL + TOKENBRIDGE_API_KEY from .env
+tb.provider = "google-health"   # set default provider once at the top of your script
+
+# Onboard participants — send them this URL
+tb.auth_url("participant-001")
+tb.auth_urls(["p001", "p002", "p003"])   # batch
+
+# Fetch data using the default provider
+tb.fetch("p001", "sleep",                "2026-05-01", "2026-06-18")
+tb.fetch("p001", "steps",                "2026-05-01", "2026-06-18")
+tb.fetch("p001", "heart-rate-variability","2026-05-01", "2026-06-18")
+
+# Provider namespace — always Google Health regardless of tb.provider
+tb.google.fetch("p001", "sleep", "2026-05-01", "2026-06-18")
+
+# Override provider for a single call
+tb.fetch("p001", "sleep", start, end, provider="withings")
+
+# Efficient: one token request for multiple fetches
+token = tb.get_token("p001")
+tb.fetch("p001", "sleep", start, end, token=token)
+tb.fetch("p001", "steps", start, end, token=token)
+
+# Analysis
+tb.google.summary("p001", "2026-05-01", "2026-06-18")
+tb.google.data_completeness(["p001", "p002", "p003"], "2026-05-01", "2026-06-18")
+```
+
+### R
+
+```r
+library(tokenbridge)
+
+tb_set_provider("google-health")   # set default once (optional — it's the default)
+
+# Onboard participants
+tb_auth_url("p001")
+tb_auth_urls(c("p001", "p002", "p003"))
+
+# Fetch data using the default provider
+tb_fetch("p001", "sleep",                 "2026-05-01", "2026-06-18")
+tb_fetch("p001", "steps",                 "2026-05-01", "2026-06-18")
+tb_fetch("p001", "heart-rate-variability","2026-05-01", "2026-06-18")
+
+# Google Health shorthand (always uses google-health)
+gh_fetch("p001", "sleep", "2026-05-01", "2026-06-18")
+
+# Override provider for a single call
+tb_fetch("p001", "sleep", start, end, provider = "withings")
+
+# Efficient: one token for multiple fetches
+tok <- tb_get_token("p001")
+tb_fetch("p001", "sleep", start, end, token = tok)
+tb_fetch("p001", "steps", start, end, token = tok)
+
+# Analysis
+gh_summary("p001", "2026-05-01", "2026-06-18")
+gh_data_completeness(c("p001", "p002", "p003"), "2026-05-01", "2026-06-18")
+
+# Browse available data types
+names(GH_DATA_TYPES)
+```
+
+## Supported data types
+
+All data types use their kebab-case API ID — the same string in both languages.  
+See [docs/providers.md](docs/providers.md) for the full reference including units, endpoint types, and device requirements.
+
+| Category | Example type IDs |
+|---|---|
+| Sleep | `sleep`, `respiratory-rate-sleep-summary`, `daily-sleep-temperature-derivations` |
+| Activity | `steps`, `distance`, `exercise`, `active-zone-minutes`, `floors`, `daily-vo2-max` |
+| Heart | `daily-resting-heart-rate`, `heart-rate-variability`, `daily-heart-rate-zones`, `electrocardiogram` |
+| Vitals | `oxygen-saturation`, `daily-respiratory-rate`, `core-body-temperature`, `blood-glucose` |
+| Body | `weight`, `body-fat`, `height` |
+| Nutrition | `nutrition-log`, `hydration-log` |
 
 ## Supported providers
 
-| Provider | Env prefix | Notes |
-|---|---|---|
-| `google-health` | `GOOGLE_HEALTH_` | Google Fit REST API scopes |
-| `withings` | `WITHINGS_` | Stubbed and ready to configure |
+| Provider ID | Status |
+|---|---|
+| `google-health` | Supported — requires Fitbit app linked to a Google account |
+| `withings` | Stub — auth wired, data fetch not yet implemented |
 
----
+## License
 
-## Setup
-
-### 1. Supabase project
-
-You need a Supabase project. The project reference for this instance is `dazucslvjgtfxjoocnei`.
-
-Run the migration to create the required tables:
-
-```bash
-supabase db push
-# or paste supabase/migrations/20240001_init.sql into the SQL editor
-```
-
-### 2. Google Cloud OAuth credentials
-
-1. Go to [Google Cloud Console → APIs & Services → Credentials](https://console.cloud.google.com/apis/credentials)
-2. Create an **OAuth 2.0 Client ID** (type: Web application)
-3. Add this **Authorized redirect URI**:
-   ```
-   https://dazucslvjgtfxjoocnei.supabase.co/functions/v1/auth-callback
-   ```
-4. Enable the **Fitness API** in [APIs & Services → Library](https://console.cloud.google.com/apis/library)
-
-### 3. Deploy edge functions
-
-```bash
-supabase functions deploy auth-start
-supabase functions deploy auth-callback
-supabase functions deploy token
-```
-
-### 4. Set secrets
-
-```bash
-supabase secrets set \
-  TOKENBRIDGE_API_KEY=<generate a strong random string> \
-  GOOGLE_HEALTH_CLIENT_ID=<from step 2> \
-  GOOGLE_HEALTH_CLIENT_SECRET=<from step 2>
-```
-
----
-
-## Usage
-
-### Authorize a user
-
-Open this URL in a browser (or send the user to it):
-
-```
-https://dazucslvjgtfxjoocnei.supabase.co/functions/v1/auth-start?provider=google-health&user_id=jack
-```
-
-The user completes Google's OAuth consent screen and lands on a success page.  
-The token is stored automatically.
-
-### Retrieve a valid token (from your scripts/apps)
-
-```bash
-curl -X POST \
-  https://dazucslvjgtfxjoocnei.supabase.co/functions/v1/token \
-  -H "Authorization: Bearer <TOKENBRIDGE_API_KEY>" \
-  -H "Content-Type: application/json" \
-  -d '{"provider": "google-health", "user_id": "jack"}'
-```
-
-Response:
-
-```json
-{
-  "access_token": "ya29.xxx",
-  "expires_at": "2024-01-01T12:00:00.000Z",
-  "scopes": ["https://www.googleapis.com/auth/fitness.activity.read", "..."],
-  "provider": "google-health",
-  "user_id": "jack",
-  "refreshed": false
-}
-```
-
-Tokens are auto-refreshed if they expire within 5 minutes. The `refreshed` flag tells you whether a refresh happened.
-
-### Python example
-
-```python
-import requests, os
-
-def get_token(provider: str, user_id: str) -> str:
-    res = requests.post(
-        "https://dazucslvjgtfxjoocnei.supabase.co/functions/v1/token",
-        headers={"Authorization": f"Bearer {os.environ['TOKENBRIDGE_API_KEY']}"},
-        json={"provider": provider, "user_id": user_id},
-    )
-    res.raise_for_status()
-    return res.json()["access_token"]
-```
-
----
-
-## Adding a new provider
-
-1. Add an entry to [`supabase/functions/_shared/providers.ts`](supabase/functions/_shared/providers.ts)
-2. Add `<PROVIDER>_CLIENT_ID` and `<PROVIDER>_CLIENT_SECRET` to Supabase secrets
-3. Register the callback URL with the provider:
-   ```
-   https://dazucslvjgtfxjoocnei.supabase.co/functions/v1/auth-callback
-   ```
-
-The three edge functions require no changes.
-
----
-
-## Redeploying to a new Supabase project
-
-1. Create a new Supabase project
-2. Update `project_id` in `supabase/config.toml`
-3. Update the callback URL in your OAuth app credentials
-4. Run `supabase db push` and `supabase functions deploy`
-5. Set secrets with `supabase secrets set`
-
----
-
-## Security notes
-
-- The `/token` endpoint is protected by `TOKENBRIDGE_API_KEY`. Keep this secret.
-- The `/auth-start` and `/auth-callback` endpoints are public (required for OAuth).  
-  `auth-start` is safe to expose — it only initiates a flow for a named `user_id`.
-- Tokens are stored in plaintext in Postgres. Supabase encrypts data at rest.  
-  For higher sensitivity, consider enabling [Supabase Vault](https://supabase.com/docs/guides/database/vault) to encrypt the `access_token` and `refresh_token` columns.
+MIT
