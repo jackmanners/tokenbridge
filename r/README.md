@@ -1,13 +1,13 @@
 # TokenBridge R client
 
 Lightweight R client for fetching Google Health data via a
-[TokenBridge](https://github.com/YOUR_USERNAME/tokenbridge) deployment.
+[TokenBridge](https://github.com/jackmanners/tokenbridge) deployment.
 
 ## Install
 
 ```r
 # install.packages("devtools")
-devtools::install_github("YOUR_USERNAME/tokenbridge", subdir = "r")
+devtools::install_github("jackmanners/tokenbridge", subdir = "r")
 ```
 
 ## Setup (once)

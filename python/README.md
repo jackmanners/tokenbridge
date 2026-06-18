@@ -1,12 +1,12 @@
 # TokenBridge Python client
 
 Lightweight Python client for fetching Google Health data via a
-[TokenBridge](https://github.com/YOUR_USERNAME/tokenbridge) deployment.
+[TokenBridge](https://github.com/jackmanners/tokenbridge) deployment.
 
 ## Install
 
 ```bash
-pip install git+https://github.com/YOUR_USERNAME/tokenbridge.git#subdirectory=python
+pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
 ```
 
 ## Setup (once)

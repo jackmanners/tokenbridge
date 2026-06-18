@@ -23,8 +23,8 @@ You need a free [Supabase](https://supabase.com) account and a [Google Cloud](ht
 
 | Language | Install |
 |----------|---------|
-| Python | `pip install git+https://github.com/YOUR_USERNAME/tokenbridge.git#subdirectory=python` |
-| R | `devtools::install_github("YOUR_USERNAME/tokenbridge", subdir = "r")` |
+| Python | `pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python` |
+| R | `devtools::install_github("jackmanners/tokenbridge", subdir = "r")` |
 
 ### Python
 

@@ -1,0 +1,77 @@
+site_name: TokenBridge
+site_description: Self-hosted OAuth token management for health data research
+site_url: https://jackmanners.github.io/tokenbridge
+repo_url: https://github.com/jackmanners/tokenbridge
+repo_name: jackmanners/tokenbridge
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
+    - toc.follow
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [python]
+          options:
+            docstring_style: google
+            show_source: false
+            show_root_heading: true
+            show_category_heading: true
+            members_order: source
+            merge_init_into_class: true
+            show_signature_annotations: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Deployment: deployment.md
+  - Providers: providers.md
+  - Python:
+    - python/index.md
+    - API Reference: python/reference.md
+  - R:
+    - r/index.md
+    - API Reference: r/reference.md

@@ -1,27 +1,26 @@
-"""
-Google Health API v4 provider.
+"""Google Health API v4 provider.
 
-Wraps https://health.googleapis.com/v4 — uses TokenBridge for auth,
+Wraps `https://health.googleapis.com/v4` — uses TokenBridge for auth,
 handles pagination and client-side date filtering internally.
 
-This module is independent of TokenBridge internals; the only coupling is
-HealthProvider._get_token(), which calls the /token endpoint.
+The usual entry point is `tb.fetch()` or `tb.google.fetch()` on a
+`TokenBridge` instance.  Import `GoogleHealth` directly only if you want
+to use it standalone:
 
-Quick start:
-    from tokenbridge import TokenBridge, GoogleHealth
-    tb    = TokenBridge()
-    gh    = GoogleHealth(tb)
-    sleep = gh.fetch_sleep("p001", "2026-05-01", "2026-06-18")
-
-Fetching many types for one user efficiently (one token request):
-    token = tb.get_token("p001")
-    sleep = gh.fetch_sleep("p001", start, end, token=token)
-    steps = gh.fetch_steps("p001", start, end, token=token)
-    rr    = gh.fetch_respiratory_rate("p001", start, end, token=token)
+```python
+from tokenbridge import TokenBridge, GoogleHealth
+tb = TokenBridge()
+gh = GoogleHealth(tb)
+sleep = gh.fetch("p001", "sleep", "2026-05-01", "2026-06-18")
+```
 
 Supported data types:
-    from tokenbridge.providers.google_health import DATA_TYPES
-    print(DATA_TYPES)  # {type_id: "list" | "dailyRollup"}
+```python
+from tokenbridge.providers.google_health import DATA_TYPES
+print(list(DATA_TYPES))   # all type IDs
+```
+
+See `docs/providers.md` for descriptions, units, and device requirements.
 """
 
 import statistics
@@ -89,16 +88,20 @@ DATA_TYPES: dict[str, str] = {
 
 
 class GoogleHealth(HealthProvider):
-    """
-    Fetch data from the Google Health API v4 (Fitbit-backed).
+    """Google Health API v4 provider (Fitbit-backed).
 
-    All fetch_* methods accept an optional `token` argument.  If you are
-    fetching several data types for the same participant, get the token once
-    and pass it through — this avoids a TokenBridge round-trip per call:
+    Usually accessed via `tb.google` rather than instantiated directly.
 
-        token = tb.get_token("p001")
-        sleep = gh.fetch_sleep("p001", start, end, token=token)
-        steps = gh.fetch_steps("p001", start, end, token=token)
+    All public methods accept an optional `token` argument.  Pass a
+    pre-fetched token to avoid one TokenBridge round-trip per call when
+    fetching multiple types for the same participant:
+
+    ```python
+    token = tb.get_token("p001")
+    sleep = gh.fetch("p001", "sleep",  start, end, token=token)
+    steps = gh.fetch("p001", "steps",  start, end, token=token)
+    hrv   = gh.fetch("p001", "heart-rate-variability", start, end, token=token)
+    ```
     """
 
     PROVIDER_ID = "google-health"
@@ -238,16 +241,35 @@ class GoogleHealth(HealthProvider):
         *,
         token: Optional[str] = None,
     ) -> list[dict]:
-        """
-        Fetch any Google Health data type by its ID.
+        """Fetch any Google Health data type by its ID.
 
-        data_type must be one of the keys in DATA_TYPES (e.g. "steps", "sleep").
-        This is the underlying method all named helpers call — use it for types
-        that don't have a dedicated helper, or to fetch many types in a loop:
+        This is the primary method — all named helpers (`fetch_sleep`, etc.)
+        delegate here.  Automatically routes to the correct endpoint type
+        (`list` or `dailyRollup`) based on `DATA_TYPES`.
 
-            from tokenbridge.providers.google_health import DATA_TYPES
+        Args:
+            user_id: TokenBridge participant ID.
+            data_type: Kebab-case type ID, e.g. `"sleep"`, `"steps"`,
+                `"heart-rate-variability"`.  Must be a key in `DATA_TYPES`.
+            start_date: Start of date range, `"YYYY-MM-DD"`.
+            end_date: End of date range, `"YYYY-MM-DD"`.
+            token: Pre-fetched access token.  Pass when fetching multiple
+                types to avoid repeated TokenBridge round-trips.
+
+        Returns:
+            List of flat dicts, one per data point.  Nested API fields are
+            flattened with dot notation, e.g. `startTime.seconds`.
+            Returns an empty list if no data exists for the period.
+
+        Example:
+            ```python
+            sleep = gh.fetch("p001", "sleep", "2026-05-01", "2026-06-18")
+
+            # Loop all types with one token
+            token = tb.get_token("p001")
             for dt in DATA_TYPES:
                 data = gh.fetch("p001", dt, start, end, token=token)
+            ```
         """
         if token is None:
             token = self._get_token(user_id)
@@ -259,16 +281,31 @@ class GoogleHealth(HealthProvider):
     # ── Analysis helpers ──────────────────────────────────────────────────────
 
     def summary(self, user_id: str, start_date: str, end_date: str) -> dict:
-        """
-        Fetch sleep + respiratory rate and return summary statistics.
+        """Summary statistics for one participant (sleep + respiratory rate).
 
-        Gets a single token and reuses it for both requests.  Returns:
-            {
-              "user_id": str,
-              "period_days": int,
-              "sleep":            {"n", "days_with_data", "coverage_pct", ...},
-              "respiratory_rate": {"n", "days_with_data", "coverage_pct", "mean", ...},
-            }
+        Makes a single token request and reuses it for both data fetches.
+
+        Args:
+            user_id: TokenBridge participant ID.
+            start_date: `"YYYY-MM-DD"`.
+            end_date: `"YYYY-MM-DD"`.
+
+        Returns:
+            Dict with keys:
+
+            - `user_id` (str)
+            - `period_days` (int)
+            - `sleep` (dict): `n`, `days_with_data`, `coverage_pct`,
+              `mean_duration_hours`, `std_duration_hours`
+            - `respiratory_rate` (dict): `n`, `days_with_data`,
+              `coverage_pct`, `mean`, `min`, `max`, `std`
+
+        Example:
+            ```python
+            s = tb.google.summary("p001", "2026-05-01", "2026-06-18")
+            print(s["sleep"]["coverage_pct"])       # 92.3
+            print(s["respiratory_rate"]["mean"])    # 15.2
+            ```
         """
         token       = self._get_token(user_id)
         period_days = (date.fromisoformat(end_date) - date.fromisoformat(start_date)).days + 1
@@ -285,10 +322,29 @@ class GoogleHealth(HealthProvider):
     def summary_all(
         self, user_ids: list[str], start_date: str, end_date: str
     ) -> dict[str, dict]:
-        """
-        Run summary() for multiple participants.
-        Returns {user_id: summary_dict}.
-        Errors per user are caught and returned as {"error": str}.
+        """Summary statistics for multiple participants.
+
+        Runs `summary()` for each user ID.  Errors per participant are caught
+        and returned as `{"error": str}` rather than raising.
+
+        Args:
+            user_ids: List of TokenBridge participant IDs.
+            start_date: `"YYYY-MM-DD"`.
+            end_date: `"YYYY-MM-DD"`.
+
+        Returns:
+            Dict mapping `user_id` to the result of `summary()`, or
+            `{"error": "message"}` if that participant failed.
+
+        Example:
+            ```python
+            results = tb.google.summary_all(["p001", "p002", "p003"], start, end)
+            for uid, s in results.items():
+                if "error" in s:
+                    print(uid, "failed:", s["error"])
+                else:
+                    print(uid, s["sleep"]["coverage_pct"])
+            ```
         """
         results = {}
         for uid in user_ids:
@@ -301,11 +357,28 @@ class GoogleHealth(HealthProvider):
     def data_completeness(
         self, user_ids: list[str], start_date: str, end_date: str
     ) -> list[dict]:
-        """
-        Return a flat audit table — one row per participant × data type.
+        """Data completeness audit for multiple participants.
 
-        Columns: user_id, data_type, n, days_with_data, coverage_pct, error.
-        Useful for checking data quality before running analysis.
+        Returns a flat list of records — one per participant × data type —
+        useful for checking data quality before running analysis.
+
+        Args:
+            user_ids: List of TokenBridge participant IDs.
+            start_date: `"YYYY-MM-DD"`.
+            end_date: `"YYYY-MM-DD"`.
+
+        Returns:
+            List of dicts with keys: `user_id`, `data_type`, `n`,
+            `days_with_data`, `coverage_pct`, `error`.
+
+        Example:
+            ```python
+            audit = tb.google.data_completeness(["p001", "p002"], start, end)
+            # Convert to DataFrame for easy inspection
+            import pandas as pd
+            df = pd.DataFrame(audit)
+            print(df[df["coverage_pct"] < 80])   # flag low-coverage participants
+            ```
         """
         rows = []
         for uid in user_ids:
