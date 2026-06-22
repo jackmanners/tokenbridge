@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://jackmanners.github.io/tokenbridge/deployment/">
+        <link rel="canonical" href="https://jackmanners.github.io/tokenbridge/basic-quickstart/">
       
       
-        <link rel="prev" href="../getting-started/">
+        <link rel="prev" href="../deployment/">
       
       
-        <link rel="next" href="../basic-quickstart/">
+        <link rel="next" href="../providers/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Overview - TokenBridge</title>
+        <title>Setup Guide - TokenBridge</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#deploying-tokenbridge" class="md-skip">
+        <a href="#tokenbridge-basic-setup-guide" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Overview
+              Setup Guide
             
           </span>
         </div>
@@ -268,7 +268,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../deployment/" class="md-tabs__link">
           
   
   
@@ -517,6 +517,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -536,7 +564,7 @@
   <span class="md-ellipsis">
     
   
-    Overview
+    Setup Guide
   
 
     
@@ -554,7 +582,7 @@
   <span class="md-ellipsis">
     
   
-    Overview
+    Setup Guide
   
 
     
@@ -580,10 +608,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-youre-deploying" class="md-nav__link">
+  <a href="#1-supabase-create-a-project-5-min" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What you're deploying
+        1. Supabase — create a project (~5 min)
       
     </span>
   </a>
@@ -591,10 +619,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-you-need" class="md-nav__link">
+  <a href="#2-google-cloud-set-up-oauth-10-min" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What you need
+        2. Google Cloud — set up OAuth (~10 min)
       
     </span>
   </a>
@@ -602,10 +630,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#edge-functions" class="md-nav__link">
+  <a href="#3-deploy-the-edge-functions-10-min" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Edge functions
+        3. Deploy the edge functions (~10 min)
       
     </span>
   </a>
@@ -613,10 +641,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#secrets" class="md-nav__link">
+  <a href="#4-set-secrets-2-min" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Secrets
+        4. Set secrets (~2 min)
       
     </span>
   </a>
@@ -624,60 +652,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#google-oauth" class="md-nav__link">
+  <a href="#5-test-it" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Google OAuth
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Google OAuth">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#consent-screen-and-verification" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Consent screen and verification
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#testing-vs-production-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Testing vs Production mode
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#redirect-uri" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Redirect URI
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cli-deployment-alternative-to-the-dashboard" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CLI deployment (alternative to the dashboard)
+        5. Test it
       
     </span>
   </a>
@@ -685,10 +663,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#adding-withings-support" class="md-nav__link">
+  <a href="#6-set-up-the-r-package" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Adding Withings support
+        6. Set up the R package
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Basic usage
       
     </span>
   </a>
@@ -699,34 +688,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../basic-quickstart/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Setup Guide
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1005,10 +966,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-youre-deploying" class="md-nav__link">
+  <a href="#1-supabase-create-a-project-5-min" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What you're deploying
+        1. Supabase — create a project (~5 min)
       
     </span>
   </a>
@@ -1016,10 +977,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-you-need" class="md-nav__link">
+  <a href="#2-google-cloud-set-up-oauth-10-min" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What you need
+        2. Google Cloud — set up OAuth (~10 min)
       
     </span>
   </a>
@@ -1027,10 +988,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#edge-functions" class="md-nav__link">
+  <a href="#3-deploy-the-edge-functions-10-min" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Edge functions
+        3. Deploy the edge functions (~10 min)
       
     </span>
   </a>
@@ -1038,10 +999,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#secrets" class="md-nav__link">
+  <a href="#4-set-secrets-2-min" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Secrets
+        4. Set secrets (~2 min)
       
     </span>
   </a>
@@ -1049,60 +1010,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#google-oauth" class="md-nav__link">
+  <a href="#5-test-it" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Google OAuth
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Google OAuth">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#consent-screen-and-verification" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Consent screen and verification
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#testing-vs-production-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Testing vs Production mode
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#redirect-uri" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Redirect URI
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cli-deployment-alternative-to-the-dashboard" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CLI deployment (alternative to the dashboard)
+        5. Test it
       
     </span>
   </a>
@@ -1110,10 +1021,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#adding-withings-support" class="md-nav__link">
+  <a href="#6-set-up-the-r-package" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Adding Withings support
+        6. Set up the R package
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Basic usage
       
     </span>
   </a>
@@ -1140,127 +1062,150 @@
   
 
 
-<h1 id="deploying-tokenbridge">Deploying TokenBridge<a class="headerlink" href="#deploying-tokenbridge" title="Permanent link">&para;</a></h1>
-<p>TokenBridge is self-hosted. You run your own instance — your participant tokens never leave your infrastructure.</p>
-<p>For a step-by-step setup walkthrough, see the <a href="../basic-quickstart/">Basic Setup Guide</a>.
-This page covers the architecture, configuration options, and anything you might need once you're running.</p>
+<h1 id="tokenbridge-basic-setup-guide">TokenBridge — Basic Setup Guide<a class="headerlink" href="#tokenbridge-basic-setup-guide" title="Permanent link">&para;</a></h1>
+<p>This guide sets up a complete TokenBridge deployment: a hosted token manager
+your whole study can share, plus the R package to fetch data from it.</p>
+<p>You will need free accounts on <a href="https://supabase.com">Supabase</a> and
+<a href="https://console.cloud.google.com">Google Cloud</a>. No credit card required for either.</p>
 <hr />
-<h2 id="what-youre-deploying">What you're deploying<a class="headerlink" href="#what-youre-deploying" title="Permanent link">&para;</a></h2>
-<p>Three things work together:</p>
-<p><strong>Supabase</strong> hosts the database (token storage) and runs the edge functions (the OAuth flow and token API).
-It's the only piece that needs to be publicly reachable — participants click a link to it, and your R/Python scripts call it to get tokens.</p>
-<p><strong>Google Cloud</strong> provides OAuth credentials. You register an app there once;
-it tells Google where to send participants after they authorise (back to your Supabase function).</p>
-<p><strong>The client package</strong> (R or Python) runs on your machine. It talks to Supabase to get tokens, then uses them to call Google Health directly.</p>
+<h2 id="1-supabase-create-a-project-5-min">1. Supabase — create a project (~5 min)<a class="headerlink" href="#1-supabase-create-a-project-5-min" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Sign up at https://supabase.com and create a new project</li>
+<li>Give it a name, choose a region near you, set a database password</li>
+<li>Wait about a minute for it to provision</li>
+<li>Go to <strong>Project Settings → General</strong> and copy your <strong>Project reference ID</strong>
+   (looks like <code>abcdefghijklmnop</code>)</li>
+</ol>
+<p><strong>Set up the database:</strong></p>
+<ol>
+<li>In the left sidebar, click <strong>SQL Editor → New query</strong></li>
+<li>Open <a href="supabase/setup.sql"><code>supabase/setup.sql</code></a> from this repo, copy everything, paste and run it</li>
+<li>You should see "Success. No rows returned"</li>
+</ol>
 <hr />
-<h2 id="what-you-need">What you need<a class="headerlink" href="#what-you-need" title="Permanent link">&para;</a></h2>
-<ul>
-<li>A <a href="https://supabase.com">Supabase</a> account (free tier is fine)</li>
-<li>A <a href="https://console.cloud.google.com">Google Cloud</a> account (free)</li>
-<li>R or Python on your local machine</li>
-</ul>
+<h2 id="2-google-cloud-set-up-oauth-10-min">2. Google Cloud — set up OAuth (~10 min)<a class="headerlink" href="#2-google-cloud-set-up-oauth-10-min" title="Permanent link">&para;</a></h2>
+<p><strong>Create a project and enable the API:</strong></p>
+<ol>
+<li>Go to https://console.cloud.google.com, sign in, create a new project</li>
+<li>Go to <strong>APIs &amp; Services → Library</strong>, search <strong>Google Health API</strong>, enable it</li>
+</ol>
+<p><strong>Configure the consent screen:</strong></p>
+<ol>
+<li>Go to <strong>APIs &amp; Services → OAuth consent screen → Get Started</strong></li>
+<li>Fill in your app name and email, set Audience to <strong>External</strong>, click through</li>
+<li>On the <strong>Data access</strong> step — leave it completely empty, don't add anything</li>
+<li>When asked about publishing status, choose <strong>Production</strong></li>
+</ol>
+<p><strong>Create credentials:</strong></p>
+<ol>
+<li>Go to <strong>APIs &amp; Services → Credentials → Create Credentials → OAuth client ID</strong></li>
+<li>Application type: <strong>Web application</strong></li>
+<li>Under <strong>Authorised redirect URIs</strong>, add:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback
+</code></pre></div>
+   (replace <code>YOUR_PROJECT_REF</code> with your Supabase project reference from Step 1)</li>
+<li>Click <strong>Create</strong> and copy the <strong>Client ID</strong> and <strong>Client Secret</strong></li>
+</ol>
 <hr />
-<h2 id="edge-functions">Edge functions<a class="headerlink" href="#edge-functions" title="Permanent link">&para;</a></h2>
-<p>Three Deno/TypeScript functions run on Supabase:</p>
+<h2 id="3-deploy-the-edge-functions-10-min">3. Deploy the edge functions (~10 min)<a class="headerlink" href="#3-deploy-the-edge-functions-10-min" title="Permanent link">&para;</a></h2>
+<p>In your Supabase dashboard, go to <strong>Edge Functions</strong> in the left sidebar.</p>
+<p>For each of the four functions below, click <strong>Create a new function</strong>, set the name,
+paste the code from the link, then click <strong>Deploy</strong>.
+After creating each one, open it and make sure <strong>Verify JWT</strong> is turned <strong>off</strong>.</p>
 <table>
 <thead>
 <tr>
-<th>Function</th>
-<th>Purpose</th>
+<th>Function name</th>
+<th>Code</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>auth-start</code></td>
-<td>Generates the Google OAuth URL and redirects the participant</td>
+<td><a href="https://raw.githubusercontent.com/jackmanners/tokenbridge/main/supabase/functions/auth-start/index.ts">view code</a></td>
 </tr>
 <tr>
 <td><code>auth-callback</code></td>
-<td>Receives the OAuth code after authorisation, exchanges it for tokens, stores them</td>
+<td><a href="https://raw.githubusercontent.com/jackmanners/tokenbridge/main/supabase/functions/auth-callback/index.ts">view code</a></td>
 </tr>
 <tr>
 <td><code>token</code></td>
-<td>Called by your scripts — returns a valid access token (auto-refreshes if needed)</td>
+<td><a href="https://raw.githubusercontent.com/jackmanners/tokenbridge/main/supabase/functions/token/index.ts">view code</a></td>
 </tr>
 </tbody>
 </table>
-<p>The function code lives in <a href="https://github.com/jackmanners/tokenbridge/tree/main/supabase/functions"><code>supabase/functions/</code></a>.
-Deploy via the <a href="https://supabase.com/dashboard">Supabase dashboard</a> (Edge Functions → paste code) or the CLI (<code>supabase functions deploy</code>).</p>
+<p>Open each link, select all the text (Ctrl+A / Cmd+A), copy it, and paste into the Supabase editor.</p>
 <hr />
-<h2 id="secrets">Secrets<a class="headerlink" href="#secrets" title="Permanent link">&para;</a></h2>
-<p>Set these in <strong>Project Settings → Edge Functions → Secrets</strong>:</p>
+<h2 id="4-set-secrets-2-min">4. Set secrets (~2 min)<a class="headerlink" href="#4-set-secrets-2-min" title="Permanent link">&para;</a></h2>
+<p>In your Supabase dashboard, go to <strong>Project Settings → Edge Functions → Secrets</strong>
+and add these four:</p>
 <table>
 <thead>
 <tr>
-<th>Secret</th>
-<th>Description</th>
+<th>Secret name</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>GOOGLE_HEALTH_CLIENT_ID</code></td>
-<td>From your Google Cloud OAuth credentials</td>
+<td>Client ID from Step 2</td>
 </tr>
 <tr>
 <td><code>GOOGLE_HEALTH_CLIENT_SECRET</code></td>
-<td>From your Google Cloud OAuth credentials</td>
+<td>Client Secret from Step 2</td>
 </tr>
 <tr>
 <td><code>TOKENBRIDGE_API_KEY</code></td>
-<td>A secret you choose — your scripts use this to authenticate</td>
+<td>Make up a long random password — you'll use this in R</td>
 </tr>
 </tbody>
 </table>
+<p>To generate a random string on Mac/Linux: <code>openssl rand -hex 32</code></p>
 <hr />
-<h2 id="google-oauth">Google OAuth<a class="headerlink" href="#google-oauth" title="Permanent link">&para;</a></h2>
-<h3 id="consent-screen-and-verification">Consent screen and verification<a class="headerlink" href="#consent-screen-and-verification" title="Permanent link">&para;</a></h3>
-<p>When setting up the OAuth consent screen, leave the <strong>Data Access</strong> page empty — do not add any scopes there.</p>
-<p>The edge functions request health scopes directly in the OAuth URL at runtime. Declaring them in the console is what triggers Google's verification requirement for restricted scopes. Leaving Data Access empty bypasses this, and the app works for up to 100 participants with no review process.</p>
-<p>Participants will see an "unverified app" warning during authorisation — tell them to click <strong>Advanced → Continue</strong>. This is expected.</p>
-<h3 id="testing-vs-production-mode">Testing vs Production mode<a class="headerlink" href="#testing-vs-production-mode" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Mode</th>
-<th>Who can authorise</th>
-<th>Setup</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Testing</td>
-<td>Only accounts you manually add to the user list</td>
-<td>Default for new apps</td>
-</tr>
-<tr>
-<td>Production</td>
-<td>Any Google account</td>
-<td>Audience → Publish app</td>
-</tr>
-</tbody>
-</table>
-<p>Production is recommended — it removes the need to pre-register every participant's email.
-Both modes have a 100-participant cap for unverified apps using restricted scopes.
-If your study exceeds 100 participants, you will need to go through Google's verification process.</p>
-<h3 id="redirect-uri">Redirect URI<a class="headerlink" href="#redirect-uri" title="Permanent link">&para;</a></h3>
-<p>Set this in your Google Cloud credentials (<strong>Authorised redirect URIs</strong>):
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback
-</code></pre></div></p>
+<h2 id="5-test-it">5. Test it<a class="headerlink" href="#5-test-it" title="Permanent link">&para;</a></h2>
+<p>Open this URL in a browser (replace the placeholders):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=google-health&amp;user_id=test
+</code></pre></div>
+<p>You should be redirected to a Google sign-in page. After signing in you'll see a success message.</p>
+<p>If that works, your deployment is running correctly.</p>
 <hr />
-<h2 id="cli-deployment-alternative-to-the-dashboard">CLI deployment (alternative to the dashboard)<a class="headerlink" href="#cli-deployment-alternative-to-the-dashboard" title="Permanent link">&para;</a></h2>
-<p>If you have the Supabase CLI available:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>supabase<span class="w"> </span>login
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>supabase<span class="w"> </span>link<span class="w"> </span>--project-ref<span class="w"> </span>YOUR_PROJECT_REF
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>supabase<span class="w"> </span>functions<span class="w"> </span>deploy<span class="w"> </span>auth-start<span class="w"> </span>auth-callback<span class="w"> </span>token
+<h2 id="6-set-up-the-r-package">6. Set up the R package<a class="headerlink" href="#6-set-up-the-r-package" title="Permanent link">&para;</a></h2>
+<p>Install R and RStudio: https://posit.co/download/rstudio-desktop/</p>
+<p>Then in RStudio:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;devtools&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">devtools</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;jackmanners/tokenbridge&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">subdir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nf">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nf">tb_setup</span><span class="p">()</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># When prompted:</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1">#   URL:     https://YOUR_PROJECT_REF.supabase.co/functions/v1</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1">#   API key: the TOKENBRIDGE_API_KEY you set in Step 4</span>
 </code></pre></div>
 <hr />
-<h2 id="adding-withings-support">Adding Withings support<a class="headerlink" href="#adding-withings-support" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Create an app at <a href="https://developer.withings.com">developer.withings.com</a></li>
-<li>Set the redirect URI to <code>https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback</code></li>
-<li>Add <code>WITHINGS_CLIENT_ID</code> and <code>WITHINGS_CLIENT_SECRET</code> to Supabase secrets</li>
-<li>Add the Withings provider config to <code>supabase/functions/_shared/providers.ts</code></li>
-</ol>
+<h2 id="7-basic-usage">7. Basic usage<a class="headerlink" href="#7-basic-usage" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nf">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Generate auth links for participants and send them</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">links</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">))</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">links</span><span class="p">))</span><span class="w"> </span><span class="nf">cat</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-&gt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">links</span><span class="p">[[</span><span class="n">id</span><span class="p">]],</span><span class="w"> </span><span class="s">&quot;\n&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># Check who has connected</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="n">status</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tryCatch</span><span class="p">(</span><span class="nf">tb_token_status</span><span class="p">(</span><span class="n">id</span><span class="p">),</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="kc">NULL</span><span class="p">)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="nf">cat</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="nf">is.null</span><span class="p">(</span><span class="n">status</span><span class="p">))</span><span class="w"> </span><span class="s">&quot;NOT connected&quot;</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="s">&quot;connected&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;\n&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="p">}</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1"># Fetch data</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="nf">write.csv</span><span class="p">(</span><span class="n">sleep</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p001_sleep.csv&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">row.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="c1"># Check data coverage across everyone</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="nf">gh_data_completeness</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Participants will see an "unverified app" warning when they click their link —
+tell them to click <strong>Advanced → Continue</strong>. This is expected.</p>
+<p>For full package documentation see the <a href="https://jackmanners.github.io/tokenbridge/r/reference/">R reference</a>.</p>
 
 
 

@@ -265,17 +265,20 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="../deployment/" class="md-tabs__link">
-        
+    
+    
+      <li class="md-tabs__item">
+        <a href="../deployment/" class="md-tabs__link">
+          
   
   
     
   
   Deployment
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -633,9 +636,33 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../deployment/" class="md-nav__link">
+    
+    
+      
         
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
   
   
   <span class="md-ellipsis">
@@ -649,7 +676,79 @@
   
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Deployment
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../basic-quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1135,7 +1234,7 @@
 <div class="admonition warning">
 <p class="admonition-title">Keep .env out of version control</p>
 <p>Your <code>.env</code> file contains your API key. Make sure <code>.env</code> is in your <code>.gitignore</code>.<br />
-This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitignore"><code>.gitignore</code></a> already excludes it.</p>
+This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitignore"><code>.gitignore</code></a> already excludes it, but make sure for repo clones.</p>
 </div>
 <h3 id="manual-configuration">Manual configuration<a class="headerlink" href="#manual-configuration" title="Permanent link">&para;</a></h3>
 <p>If you prefer not to use <code>.env</code>, you can pass credentials directly:</p>
