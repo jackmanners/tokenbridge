@@ -461,10 +461,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#who-is-this-for" class="md-nav__link">
+  <a href="#how-it-works" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Who is this for?
+        How it works
       
     </span>
   </a>
@@ -472,10 +472,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#key-features" class="md-nav__link">
+  <a href="#two-ways-to-use-it" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key features
+        Two ways to use it
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Two ways to use it">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-an-existing-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using an existing deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploying-your-own-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploying your own instance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick start
       
     </span>
   </a>
@@ -483,32 +522,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#quick-install" class="md-nav__link">
+  <a href="#supported-providers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick install
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#30-second-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        30-second example
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next steps
+        Supported providers
       
     </span>
   </a>
@@ -939,10 +956,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#who-is-this-for" class="md-nav__link">
+  <a href="#how-it-works" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Who is this for?
+        How it works
       
     </span>
   </a>
@@ -950,10 +967,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#key-features" class="md-nav__link">
+  <a href="#two-ways-to-use-it" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key features
+        Two ways to use it
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Two ways to use it">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-an-existing-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using an existing deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploying-your-own-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploying your own instance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick start
       
     </span>
   </a>
@@ -961,32 +1017,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#quick-install" class="md-nav__link">
+  <a href="#supported-providers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick install
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#30-second-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        30-second example
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next steps
+        Supported providers
       
     </span>
   </a>
@@ -1014,93 +1048,121 @@
 
 
 <h1 id="tokenbridge">TokenBridge<a class="headerlink" href="#tokenbridge" title="Permanent link">&para;</a></h1>
-<p><strong>Self-hosted OAuth token management for health data research.</strong></p>
-<p>TokenBridge sits between your research scripts and health APIs (Google Health / Fitbit, Withings) and handles the parts that are genuinely hard: the OAuth 2.0 PKCE flow, secure token storage, and automatic refresh before expiry.</p>
-<p>Your scripts call <code>tb.fetch("p001", "sleep", start, end)</code> and get data back. That's it.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>participant (browser, once)
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>      │  visits auth-start URL
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>      ▼
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  TokenBridge  ◄──── your scripts (tb.fetch → valid data)
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>      │
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>      └── Supabase Postgres (token storage + auto-refresh)
+<p><strong>OAuth token management for wearable health data research.</strong></p>
+<p>Getting data out of health APIs — Google Health/Fitbit, Withings — into a research script means implementing OAuth 2.0, securely storing tokens for dozens of participants, and keeping them refreshed across a study that runs for months. TokenBridge handles all of that so you don't have to write any auth code.</p>
+<hr />
+<h2 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Participant (once)               Your research script
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>     │                                  │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>     │  clicks auth link                │  tb.fetch(&quot;p001&quot;, &quot;sleep&quot;, ...)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>     ▼                                  ▼
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a> TokenBridge  ────────────────────  /token endpoint
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>     │                             returns a valid access token
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>     └── Supabase Postgres         script calls the health API directly
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>         token storage + refresh
 </code></pre></div>
+<p>TokenBridge is a small set of Supabase edge functions. It runs the OAuth flow, stores tokens in Postgres, and refreshes them automatically before they expire. Your scripts ask for a token, get one back, and query the provider API directly. No auth logic in your analysis code.</p>
 <hr />
-<h2 id="who-is-this-for">Who is this for?<a class="headerlink" href="#who-is-this-for" title="Permanent link">&para;</a></h2>
-<p><strong>Researchers deploying their own instance</strong> — you have a study, a Supabase account, and a Google Cloud project. You run the deployment once, add participants, and fetch data from Python or R.</p>
-<p><strong>Collaborators and students</strong> — your PI has deployed TokenBridge. You install the Python or R package, point it at their instance, and write analysis scripts without thinking about OAuth.</p>
-<hr />
-<h2 id="key-features">Key features<a class="headerlink" href="#key-features" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Full OAuth 2.0 PKCE flow</strong> — participants click a link, sign in with Google, approve access. Done.</li>
-<li><strong>Automatic token refresh</strong> — tokens are refreshed proactively (5-minute window before expiry). Your scripts never see an expired token.</li>
-<li><strong>Multi-user</strong> — one deployment supports any number of participants. Each has their own token.</li>
-<li><strong>Multi-provider</strong> — Google Health (Fitbit-backed) is fully supported. Withings auth is wired; data fetch is in progress.</li>
-<li><strong>38 Google Health data types</strong> — sleep, activity, heart rate, HRV, SpO2, weight, nutrition, and more. See <a href="providers/">Providers</a>.</li>
-<li><strong>Python + R</strong> — identical API shape in both languages. Type IDs are the same kebab-case strings.</li>
-<li><strong>Self-hosted</strong> — your tokens never leave your Supabase instance.</li>
-</ul>
-<hr />
-<h2 id="quick-install">Quick install<a class="headerlink" href="#quick-install" title="Permanent link">&para;</a></h2>
+<h2 id="two-ways-to-use-it">Two ways to use it<a class="headerlink" href="#two-ways-to-use-it" title="Permanent link">&para;</a></h2>
+<h3 id="using-an-existing-deployment">Using an existing deployment<a class="headerlink" href="#using-an-existing-deployment" title="Permanent link">&para;</a></h3>
+<p>If your institution or PI has deployed TokenBridge, you only need the client package. Ask them for the URL and API key, then point the package at their instance.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python</label><label for="__tabbed_1_2">R</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/jackmanners/tokenbridge.git#subdirectory<span class="o">=</span>python
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>python<span class="w"> </span>-m<span class="w"> </span>tokenbridge<span class="w">   </span><span class="c1"># interactive setup wizard</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>python<span class="w"> </span>-m<span class="w"> </span>tokenbridge<span class="w">   </span><span class="c1"># interactive setup — saves credentials to .env</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">devtools</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;jackmanners/tokenbridge&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">subdir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">)</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nf">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nf">tb_setup</span><span class="p">()</span><span class="w">   </span><span class="c1"># interactive setup wizard</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nf">tb_setup</span><span class="p">()</span><span class="w">   </span><span class="c1"># interactive setup — saves credentials to .env</span>
 </code></pre></div>
 </div>
 </div>
 </div>
+<p>→ Continue with <a href="getting-started/">Getting Started</a></p>
+<h3 id="deploying-your-own-instance">Deploying your own instance<a class="headerlink" href="#deploying-your-own-instance" title="Permanent link">&para;</a></h3>
+<p>You need a free <a href="https://supabase.com">Supabase</a> account and a <a href="https://console.cloud.google.com">Google Cloud</a> project. Setup takes around 20–30 minutes.</p>
+<p>→ <a href="basic-quickstart/">Basic setup walkthrough</a> — step-by-step from scratch<br />
+→ <a href="deployment/">Deployment overview</a> — architecture, config options, adding providers</p>
 <hr />
-<h2 id="30-second-example">30-second example<a class="headerlink" href="#30-second-example" title="Permanent link">&para;</a></h2>
+<h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Python</label><label for="__tabbed_2_2">R</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenBridge</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">()</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">()</span>   <span class="c1"># reads .env</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1"># Send this link to your participant — they authorise once</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">tb</span><span class="o">.</span><span class="n">auth_url</span><span class="p">(</span><span class="s2">&quot;participant-001&quot;</span><span class="p">))</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c1"># Fetch their data</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">sleep</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;participant-001&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-06-18&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">steps</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;participant-001&quot;</span><span class="p">,</span> <span class="s2">&quot;steps&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-06-18&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="c1"># Audit your whole cohort</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="n">tb</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">data_completeness</span><span class="p">([</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;p002&quot;</span><span class="p">,</span> <span class="s2">&quot;p003&quot;</span><span class="p">],</span> <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-06-18&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1"># Generate a link for each participant and send it to them</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1"># They click once, sign in with Google, and approve access — done</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">tb</span><span class="o">.</span><span class="n">auth_url</span><span class="p">(</span><span class="s2">&quot;participant-001&quot;</span><span class="p">))</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c1"># Fetch data as soon as they&#39;ve authorised</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">sleep</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;participant-001&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-06-18&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="n">steps</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;participant-001&quot;</span><span class="p">,</span> <span class="s2">&quot;steps&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-06-18&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1"># One token request for multiple data types</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="n">token</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="s2">&quot;participant-001&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="n">sleep</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;participant-001&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep&quot;</span><span class="p">,</span>                   <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="n">hrv</span>   <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;participant-001&quot;</span><span class="p">,</span> <span class="s2">&quot;heart-rate-variability&quot;</span><span class="p">,</span>  <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="c1"># Audit data coverage across your cohort</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="n">tb</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">data_completeness</span><span class="p">(</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>    <span class="p">[</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;p002&quot;</span><span class="p">,</span> <span class="s2">&quot;p003&quot;</span><span class="p">],</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>    <span class="n">data_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sleep&quot;</span><span class="p">,</span> <span class="s2">&quot;steps&quot;</span><span class="p">,</span> <span class="s2">&quot;heart-rate-variability&quot;</span><span class="p">],</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="p">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nf">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Send this link to your participant</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nf">tb_auth_url</span><span class="p">(</span><span class="s">&quot;participant-001&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Generate links for your cohort</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">links</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">))</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1"># Fetch their data</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;participant-001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">steps</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;participant-001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;steps&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1"># Fetch data</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">steps</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;steps&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="c1"># Audit your whole cohort</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="nf">gh_data_completeness</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="c1"># One token for multiple data types</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="n">tok</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_get_token</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w">                  </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="n">hrv</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;heart-rate-variability&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="c1"># Audit data coverage</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="nf">gh_data_completeness</span><span class="p">(</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">  </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">  </span><span class="n">data_types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;steps&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;heart-rate-variability&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="p">)</span>
 </code></pre></div>
 </div>
 </div>
 </div>
 <hr />
-<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="getting-started/">Getting Started</a> — install, configure, and fetch your first data point</li>
-<li><a href="deployment/">Deployment</a> — set up your own TokenBridge instance (20–30 minutes)</li>
-<li><a href="providers/">Providers</a> — all supported data types with units and notes</li>
-<li><a href="python/reference/">Python reference</a> — full API documentation</li>
-<li><a href="r/reference/">R reference</a> — full API documentation</li>
-</ul>
+<h2 id="supported-providers">Supported providers<a class="headerlink" href="#supported-providers" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Provider ID</th>
+<th>Status</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>google-health</code></td>
+<td>Supported</td>
+<td>Requires Fitbit app linked to a Google account</td>
+</tr>
+<tr>
+<td><code>withings</code></td>
+<td>Auth only</td>
+<td>OAuth flow works; data fetch in progress</td>
+</tr>
+</tbody>
+</table>
+<p>Full list of data types, units, and endpoint notes: <a href="providers/">Providers</a></p>
 
 
 
