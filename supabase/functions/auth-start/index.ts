@@ -2,14 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { providers, envPrefix } from '../_shared/providers.ts'
 import { generateCodeVerifier, generateCodeChallenge } from '../_shared/pkce.ts'
 
-const cors = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
-
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors })
-
   const url = new URL(req.url)
   const providerName = url.searchParams.get('provider')
   const userId = url.searchParams.get('user_id')
@@ -75,6 +68,6 @@ Deno.serve(async (req) => {
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { ...cors, 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
   })
 }

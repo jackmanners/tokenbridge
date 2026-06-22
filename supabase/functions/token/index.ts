@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { providers, envPrefix } from '../_shared/providers.ts'
+import { providers, envPrefix, type Provider } from '../_shared/providers.ts'
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -117,7 +117,7 @@ Deno.serve(async (req) => {
 
 async function doRefresh(
   providerName: string,
-  provider: { tokenUrl: string; unwrapTokenResponse?: (r: Record<string, unknown>) => Record<string, unknown> },
+  provider: Provider,
   refreshToken: string,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; error: unknown }> {
   const clientId = Deno.env.get(`${envPrefix(providerName)}_CLIENT_ID`)!

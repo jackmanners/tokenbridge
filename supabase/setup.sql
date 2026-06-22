@@ -39,8 +39,15 @@ create trigger oauth_tokens_updated_at
   before update on oauth_tokens
   for each row execute function set_updated_at();
 
--- Clean up expired state rows — called opportunistically from auth-callback
+-- Clean up expired state rows
 create or replace function cleanup_oauth_states()
 returns void language sql as $$
   delete from oauth_states where expires_at < now();
 $$;
+
+-- Schedule cleanup every 10 minutes via pg_cron (built into Supabase)
+select cron.schedule(
+  'cleanup-oauth-states',
+  '*/10 * * * *',
+  'select cleanup_oauth_states()'
+);
