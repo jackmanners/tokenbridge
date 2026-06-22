@@ -14,10 +14,11 @@ participant (browser, once)
 
 Designed for researchers who want a self-hosted, minimal, open-source alternative to managed wearable data platforms.
 
-## Deploy your own instance
+## Documentation
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for step-by-step setup.  
-You need a free [Supabase](https://supabase.com) account and a [Google Cloud](https://console.cloud.google.com) project.
+**[jackmanners.github.io/tokenbridge](https://jackmanners.github.io/tokenbridge)**
+
+Includes deployment guide, basic setup walkthrough, full API reference for both packages, and provider data type reference.
 
 ## Client packages
 
