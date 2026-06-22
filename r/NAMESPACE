@@ -6,7 +6,6 @@ export(tb_fetch)
 export(tb_auth_url)
 export(tb_auth_urls)
 export(tb_get_token)
-export(tb_token_status)
 
 # Google Health
 export(GH_DATA_TYPES)

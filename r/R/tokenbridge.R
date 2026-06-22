@@ -30,6 +30,8 @@
     if (grepl("^#", line) || !grepl("=", line)) next
     key <- trimws(sub("=.*",    "", line))
     val <- trimws(sub("[^=]*=", "", line))
+    # strip surrounding quotes (single or double)
+    val <- gsub('^["\']|["\']$', "", val)
     if (nchar(Sys.getenv(key)) == 0)
       do.call(Sys.setenv, setNames(list(val), key))
   }
@@ -216,34 +218,17 @@ tb_get_token <- function(user_id, provider = tb_get_provider(), env_file = ".env
     encode = "json",
     httr::timeout(15)
   )
-  if (httr::status_code(resp) != 200)
-    stop("TokenBridge error: ", httr::content(resp)$error, call. = FALSE)
+  status <- httr::status_code(resp)
+  if (status == 404) {
+    auth_url <- tb_auth_url(user_id, provider = provider, env_file = env_file)
+    stop("No token found for user '", user_id, "' (provider: ", provider, "). ",
+         "Send them this link to authorise: ", auth_url, call. = FALSE)
+  }
+  if (status == 401)
+    stop("Token for '", user_id, "' has expired and cannot be refreshed — ",
+         "they need to re-authorise: ", tb_auth_url(user_id, provider, env_file),
+         call. = FALSE)
+  if (status != 200)
+    stop("TokenBridge error (", status, "): ", httr::content(resp)$error, call. = FALSE)
   httr::content(resp)$access_token
-}
-
-#' Return token metadata for a participant without exposing the raw token
-#'
-#' @param user_id  TokenBridge user ID
-#' @param provider Health data provider. Defaults to tb_get_provider().
-#' @param env_file Path to .env file (default ".env")
-#' @return Named list with expires_at, refreshed, scopes
-#' @export
-tb_token_status <- function(user_id, provider = tb_get_provider(), env_file = ".env") {
-  .tb_load_env(env_file)
-  resp <- httr::POST(
-    url    = paste0(.tb_env("TOKENBRIDGE_URL"), "/token"),
-    httr::add_headers(Authorization = paste("Bearer", .tb_env("TOKENBRIDGE_API_KEY"))),
-    body   = list(provider = provider, user_id = user_id),
-    encode = "json",
-    httr::timeout(15)
-  )
-  if (httr::status_code(resp) != 200)
-    stop("TokenBridge error: ", httr::content(resp)$error, call. = FALSE)
-
-  body <- httr::content(resp)
-  Filter(Negate(is.null), list(
-    expires_at = body$expires_at,
-    refreshed  = body$refreshed,
-    scopes     = body$scopes
-  ))
 }

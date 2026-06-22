@@ -11,11 +11,7 @@ This page covers installation and first use. If you need to deploy your own Toke
     Requires Python 3.10+.
 
     ```bash
-<<<<<<< HEAD
     pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
-=======
-    pip install git+https://github.com/YOUR_USERNAME/tokenbridge.git#subdirectory=python
->>>>>>> e656476530cbfcd464560310f0bbb5cd10018519
     ```
 
     Dependencies installed automatically: `requests`, `python-dotenv`.
@@ -28,11 +24,7 @@ This page covers installation and first use. If you need to deploy your own Toke
     # Install devtools if you don't have it
     install.packages("devtools")
 
-<<<<<<< HEAD
     devtools::install_github("jackmanners/tokenbridge", subdir = "r")
-=======
-    devtools::install_github("YOUR_USERNAME/tokenbridge", subdir = "r")
->>>>>>> e656476530cbfcd464560310f0bbb5cd10018519
     ```
 
     Dependencies installed automatically: `httr`.
@@ -69,11 +61,7 @@ The recommended way to store these is in a `.env` file in your project directory
 
 !!! warning "Keep .env out of version control"
     Your `.env` file contains your API key. Make sure `.env` is in your `.gitignore`.  
-<<<<<<< HEAD
     This repo's [`.gitignore`](https://github.com/jackmanners/tokenbridge/blob/main/.gitignore) already excludes it, but make sure for repo clones.
-=======
-    This repo's [`.gitignore`](https://github.com/YOUR_USERNAME/tokenbridge/blob/main/.gitignore) already excludes it.
->>>>>>> e656476530cbfcd464560310f0bbb5cd10018519
 
 ### Manual configuration
 

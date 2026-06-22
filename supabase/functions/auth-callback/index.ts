@@ -32,8 +32,9 @@ Deno.serve(async (req) => {
     return html('<h1>Invalid or expired state</h1><p>Try authorizing again.</p>', 400)
   }
 
-  // Consume state (one-time use)
+  // Consume state (one-time use) and opportunistically clean up any other expired rows
   await supabase.from('oauth_states').delete().eq('state', state)
+  supabase.rpc('cleanup_oauth_states').then(() => {}).catch(() => {})
 
   const provider = providers[stateRow.provider]
   if (!provider) {
@@ -50,15 +51,11 @@ Deno.serve(async (req) => {
     client_secret: clientSecret,
     redirect_uri: callbackUrl,
     grant_type: 'authorization_code',
+    ...provider.extraTokenParams,
   }
 
   if (stateRow.code_verifier) {
     tokenParams.code_verifier = stateRow.code_verifier
-  }
-
-  // Withings requires action=requesttoken
-  if (stateRow.provider === 'withings') {
-    tokenParams.action = 'requesttoken'
   }
 
   const tokenRes = await fetch(provider.tokenUrl, {
@@ -83,30 +80,15 @@ Deno.serve(async (req) => {
   const scopeStr = tokenData.scope as string | undefined
   const scopes = scopeStr ? scopeStr.split(/[\s,]+/) : provider.scopes
 
-  // Fetch the provider's internal user ID so webhooks can map back to our user_id
-  let healthUserId: string | null = null
-  if (stateRow.provider === 'google-health') {
-    const profileRes = await fetch('https://health.googleapis.com/v4/users/me/profile', {
-      headers: { Authorization: `Bearer ${tokenData.access_token}` },
-    })
-    if (profileRes.ok) {
-      const profile = await profileRes.json() as Record<string, unknown>
-      // name field is in the format "users/{healthUserId}"
-      const name = profile.name as string | undefined
-      healthUserId = name ? name.split('/').pop() ?? null : null
-    }
-  }
-
   const { error: upsertError } = await supabase.from('oauth_tokens').upsert(
     {
       user_id: stateRow.user_id,
       provider: stateRow.provider,
       access_token: tokenData.access_token as string,
-      refresh_token: (tokenData.refresh_token as string) ?? null,
+      refresh_token: (tokenData.refresh_token as string | undefined) ?? null,
       expires_at: expiresAt,
       scopes,
       raw,
-      health_user_id: healthUserId,
     },
     { onConflict: 'user_id,provider' },
   )

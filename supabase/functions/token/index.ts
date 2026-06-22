@@ -128,10 +128,7 @@ async function doRefresh(
     refresh_token: refreshToken,
     client_id: clientId,
     client_secret: clientSecret,
-  }
-
-  if (providerName === 'withings') {
-    params.action = 'requesttoken'
+    ...provider.extraTokenParams,
   }
 
   const res = await fetch(provider.tokenUrl, {

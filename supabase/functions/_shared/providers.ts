@@ -3,8 +3,10 @@ export interface Provider {
   tokenUrl: string
   scopes: string[]
   pkce: boolean
-  /** extra static params for the auth URL (e.g. Google needs access_type=offline) */
+  /** extra static params added to the auth redirect URL */
   authParams?: Record<string, string>
+  /** extra static params added to every token exchange / refresh request body */
+  extraTokenParams?: Record<string, string>
   /** transform token response body before storage (e.g. Withings wraps in .body) */
   unwrapTokenResponse?: (raw: Record<string, unknown>) => Record<string, unknown>
 }
@@ -38,6 +40,8 @@ export const providers: Record<string, Provider> = {
     scopes: ['user.activity', 'user.metrics', 'user.sleepevents'],
     pkce: false,
     authParams: { response_type: 'code' },
+    // Withings requires action= on both token exchange and refresh
+    extraTokenParams: { action: 'requesttoken' },
     // Withings wraps the token payload in a `.body` key
     unwrapTokenResponse: (raw) => (raw.body as Record<string, unknown>) ?? raw,
   },

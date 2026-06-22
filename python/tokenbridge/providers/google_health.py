@@ -25,7 +25,7 @@ See `docs/providers.md` for descriptions, units, and device requirements.
 
 import statistics
 from datetime import date, datetime, timezone
-from typing import Optional
+from typing import Optional, Sequence
 
 import requests
 
@@ -106,131 +106,7 @@ class GoogleHealth(HealthProvider):
 
     PROVIDER_ID = "google-health"
 
-    # ── Sleep ─────────────────────────────────────────────────────────────────
-
-    def fetch_sleep(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Sleep sessions. One dict per session."""
-        return self.fetch(user_id, "sleep", start_date, end_date, token=token)
-
-    def fetch_respiratory_rate(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Per-sleep respiratory rate summaries (breaths/min)."""
-        return self.fetch(user_id, "respiratory-rate-sleep-summary", start_date, end_date, token=token)
-
-    def fetch_sleep_temperature(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Daily skin temperature deviation during sleep."""
-        return self.fetch(user_id, "daily-sleep-temperature-derivations", start_date, end_date, token=token)
-
-    # ── Activity ──────────────────────────────────────────────────────────────
-
-    def fetch_steps(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Step count intervals."""
-        return self.fetch(user_id, "steps", start_date, end_date, token=token)
-
-    def fetch_distance(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Distance intervals (millimetres)."""
-        return self.fetch(user_id, "distance", start_date, end_date, token=token)
-
-    def fetch_exercise(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Exercise sessions with type, duration and GPS if available."""
-        return self.fetch(user_id, "exercise", start_date, end_date, token=token)
-
-    def fetch_active_zone_minutes(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Active Zone Minutes broken down by heart rate zone."""
-        return self.fetch(user_id, "active-zone-minutes", start_date, end_date, token=token)
-
-    def fetch_active_energy(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Active (non-resting) energy burned in kilocalories."""
-        return self.fetch(user_id, "active-energy-burned", start_date, end_date, token=token)
-
-    def fetch_sedentary(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Sedentary intervals."""
-        return self.fetch(user_id, "sedentary-period", start_date, end_date, token=token)
-
-    def fetch_floors(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Floors climbed per day. Uses daily rollup (no raw datapoints available)."""
-        return self.fetch(user_id, "floors", start_date, end_date, token=token)
-
-    def fetch_vo2_max(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Daily VO2 max estimate."""
-        return self.fetch(user_id, "daily-vo2-max", start_date, end_date, token=token)
-
-    # ── Heart & circulation ───────────────────────────────────────────────────
-
-    def fetch_heart_rate(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Resting heart rate per day."""
-        return self.fetch(user_id, "daily-resting-heart-rate", start_date, end_date, token=token)
-
-    def fetch_heart_rate_raw(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Raw continuous heart rate samples (high volume — may be slow)."""
-        return self.fetch(user_id, "heart-rate", start_date, end_date, token=token)
-
-    def fetch_heart_rate_zones(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Daily time spent in each heart rate zone."""
-        return self.fetch(user_id, "daily-heart-rate-zones", start_date, end_date, token=token)
-
-    def fetch_hrv(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Heart rate variability samples (RMSSD in milliseconds)."""
-        return self.fetch(user_id, "heart-rate-variability", start_date, end_date, token=token)
-
-    def fetch_hrv_daily(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Daily HRV summaries."""
-        return self.fetch(user_id, "daily-heart-rate-variability", start_date, end_date, token=token)
-
-    def fetch_ecg(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Electrocardiogram recordings (requires ECG-capable device)."""
-        return self.fetch(user_id, "electrocardiogram", start_date, end_date, token=token)
-
-    def fetch_irregular_rhythm(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Irregular heart rhythm notifications."""
-        return self.fetch(user_id, "irregular-rhythm-notification", start_date, end_date, token=token)
-
-    # ── Vitals ────────────────────────────────────────────────────────────────
-
-    def fetch_oxygen_saturation(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Blood oxygen saturation (SpO2) samples."""
-        return self.fetch(user_id, "oxygen-saturation", start_date, end_date, token=token)
-
-    def fetch_oxygen_saturation_daily(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Daily SpO2 summaries."""
-        return self.fetch(user_id, "daily-oxygen-saturation", start_date, end_date, token=token)
-
-    def fetch_respiratory_rate_daily(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Daily resting respiratory rate (distinct from sleep-specific RR)."""
-        return self.fetch(user_id, "daily-respiratory-rate", start_date, end_date, token=token)
-
-    def fetch_core_temperature(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Core body temperature samples."""
-        return self.fetch(user_id, "core-body-temperature", start_date, end_date, token=token)
-
-    def fetch_blood_glucose(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Blood glucose measurements."""
-        return self.fetch(user_id, "blood-glucose", start_date, end_date, token=token)
-
-    # ── Body measurements ─────────────────────────────────────────────────────
-
-    def fetch_weight(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Weight measurements (kilograms)."""
-        return self.fetch(user_id, "weight", start_date, end_date, token=token)
-
-    def fetch_body_fat(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Body fat percentage measurements."""
-        return self.fetch(user_id, "body-fat", start_date, end_date, token=token)
-
-    def fetch_height(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Height measurements (millimetres)."""
-        return self.fetch(user_id, "height", start_date, end_date, token=token)
-
-    # ── Nutrition ─────────────────────────────────────────────────────────────
-
-    def fetch_nutrition(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Nutrition log entries."""
-        return self.fetch(user_id, "nutrition-log", start_date, end_date, token=token)
-
-    def fetch_hydration(self, user_id, start_date, end_date, *, token=None) -> list[dict]:
-        """Hydration log entries (millilitres)."""
-        return self.fetch(user_id, "hydration-log", start_date, end_date, token=token)
-
-    # ── Generic fetch ─────────────────────────────────────────────────────────
+    # ── Fetch ─────────────────────────────────────────────────────────────────
 
     def fetch(
         self,
@@ -271,6 +147,7 @@ class GoogleHealth(HealthProvider):
                 data = gh.fetch("p001", dt, start, end, token=token)
             ```
         """
+        _validate_dates(start_date, end_date)
         if token is None:
             token = self._get_token(user_id)
         endpoint = DATA_TYPES.get(data_type, "list")
@@ -355,17 +232,24 @@ class GoogleHealth(HealthProvider):
         return results
 
     def data_completeness(
-        self, user_ids: list[str], start_date: str, end_date: str
+        self,
+        user_ids: list[str],
+        start_date: str,
+        end_date: str,
+        data_types: Optional[Sequence[str]] = None,
     ) -> list[dict]:
-        """Data completeness audit for multiple participants.
+        """Data completeness audit — how many days of data each participant has.
 
-        Returns a flat list of records — one per participant × data type —
-        useful for checking data quality before running analysis.
+        Fetches each requested data type for each participant and returns a
+        flat table of counts. One row per participant × data type.
 
         Args:
             user_ids: List of TokenBridge participant IDs.
             start_date: `"YYYY-MM-DD"`.
             end_date: `"YYYY-MM-DD"`.
+            data_types: Data type IDs to check. Defaults to
+                `["sleep", "steps", "heart-rate-variability"]`. Pass any
+                subset of `DATA_TYPES` keys.
 
         Returns:
             List of dicts with keys: `user_id`, `data_type`, `n`,
@@ -373,51 +257,78 @@ class GoogleHealth(HealthProvider):
 
         Example:
             ```python
-            audit = tb.google.data_completeness(["p001", "p002"], start, end)
-            # Convert to DataFrame for easy inspection
+            audit = tb.google.data_completeness(
+                ["p001", "p002"],
+                "2026-05-01", "2026-06-18",
+                data_types=["sleep", "steps"],
+            )
             import pandas as pd
             df = pd.DataFrame(audit)
-            print(df[df["coverage_pct"] < 80])   # flag low-coverage participants
+            print(df[df["coverage_pct"] < 80])
             ```
         """
+        _validate_dates(start_date, end_date)
+        if data_types is None:
+            data_types = ["sleep", "steps", "heart-rate-variability"]
+        period_days = (date.fromisoformat(end_date) - date.fromisoformat(start_date)).days + 1
         rows = []
         for uid in user_ids:
             try:
-                s = self.summary(uid, start_date, end_date)
-                for dtype, stats in (
-                    ("sleep",            s["sleep"]),
-                    ("respiratory_rate", s["respiratory_rate"]),
-                ):
-                    rows.append({
-                        "user_id":        uid,
-                        "data_type":      dtype,
-                        "n":              stats.get("n", 0),
-                        "days_with_data": stats.get("days_with_data", 0),
-                        "coverage_pct":   stats.get("coverage_pct", 0.0),
-                        "error":          None,
-                    })
+                token = self._get_token(uid)
+                for dtype in data_types:
+                    try:
+                        points = self.fetch(uid, dtype, start_date, end_date, token=token)
+                        days = len({
+                            datetime.fromtimestamp(int(p["startTime.seconds"]), tz=timezone.utc).date()
+                            for p in points if "startTime.seconds" in p
+                        })
+                        rows.append({
+                            "user_id":        uid,
+                            "data_type":      dtype,
+                            "n":              len(points),
+                            "days_with_data": days,
+                            "coverage_pct":   round(days / period_days * 100, 1) if period_days else 0.0,
+                            "error":          None,
+                        })
+                    except Exception as e:
+                        rows.append({"user_id": uid, "data_type": dtype,
+                                     "n": None, "days_with_data": None,
+                                     "coverage_pct": None, "error": str(e)})
             except Exception as e:
-                rows.append({"user_id": uid, "data_type": "all",
-                             "n": None, "days_with_data": None,
-                             "coverage_pct": None, "error": str(e)})
+                for dtype in data_types:
+                    rows.append({"user_id": uid, "data_type": dtype,
+                                 "n": None, "days_with_data": None,
+                                 "coverage_pct": None, "error": str(e)})
         return rows
 
 
 # ── Module-level fetch functions (reusable without an instance) ───────────────
 
+def _validate_dates(start_date: str, end_date: str) -> None:
+    try:
+        s = date.fromisoformat(start_date)
+        e = date.fromisoformat(end_date)
+    except ValueError as exc:
+        raise ValueError(f"Dates must be YYYY-MM-DD format: {exc}") from exc
+    if s > e:
+        raise ValueError(f"start_date ({start_date}) must not be after end_date ({end_date})")
+
+
 def _fetch_datapoints(
     token: str, data_type: str, start_date: str, end_date: str
 ) -> list[dict]:
-    """Paginate the dataPoints list endpoint, filter to the study window."""
-    url         = f"{_BASE}/dataTypes/{data_type}/dataPoints"
-    start_epoch = int(datetime.fromisoformat(f"{start_date}T00:00:00+00:00").timestamp())
-    end_epoch   = int(datetime.fromisoformat(f"{end_date}T23:59:59+00:00").timestamp())
-    headers     = {"Authorization": f"Bearer {token}"}
-    points      = []
-    page_token  = None
+    """Paginate the dataPoints list endpoint with server-side date filtering."""
+    url     = f"{_BASE}/dataTypes/{data_type}/dataPoints"
+    headers = {"Authorization": f"Bearer {token}"}
+    points  = []
+    page_token = None
 
     while True:
-        params = {"pageSize": 1000}
+        params: dict = {
+            "pageSize":  1000,
+            "startTime": f"{start_date}T00:00:00Z",
+            "endTime":   f"{end_date}T23:59:59Z",
+        }
         if page_token:
             params["pageToken"] = page_token
 
@@ -425,10 +336,7 @@ def _fetch_datapoints(
         resp.raise_for_status()
 
         body = resp.json()
-        for pt in body.get("dataPoints", []):
-            pt_start = int(pt.get("startTime", {}).get("seconds", 0))
-            if start_epoch <= pt_start <= end_epoch:
-                points.append(_flatten(pt))
+        points.extend(_flatten(pt) for pt in body.get("dataPoints", []))
 
         page_token = body.get("nextPageToken")
         if not page_token:

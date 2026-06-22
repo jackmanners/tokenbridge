@@ -42,22 +42,14 @@ participant (browser, once)
 === "Python"
 
     ```bash
-<<<<<<< HEAD
     pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
-=======
-    pip install git+https://github.com/YOUR_USERNAME/tokenbridge.git#subdirectory=python
->>>>>>> e656476530cbfcd464560310f0bbb5cd10018519
     python -m tokenbridge   # interactive setup wizard
     ```
 
 === "R"
 
     ```r
-<<<<<<< HEAD
     devtools::install_github("jackmanners/tokenbridge", subdir = "r")
-=======
-    devtools::install_github("YOUR_USERNAME/tokenbridge", subdir = "r")
->>>>>>> e656476530cbfcd464560310f0bbb5cd10018519
     library(tokenbridge)
     tb_setup()   # interactive setup wizard
     ```

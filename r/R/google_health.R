@@ -107,6 +107,7 @@ GH_DATA_TYPES <- c(
 #' @export
 gh_fetch <- function(user_id, data_type, start_date, end_date,
                      token = NULL, env_file = ".env") {
+  .gh_validate_dates(start_date, end_date)
   if (!data_type %in% names(GH_DATA_TYPES))
     warning("'", data_type, "' is not in GH_DATA_TYPES. ",
             "See names(GH_DATA_TYPES) or docs/providers.md.", call. = FALSE)
@@ -169,41 +170,66 @@ gh_summary_all <- function(user_ids, start_date, end_date, env_file = ".env") {
 
 #' Data completeness audit for multiple participants
 #'
-#' Returns a data.frame with one row per participant x data type.
+#' Fetches each requested data type for each participant and returns a
+#' data.frame with one row per participant x data type.
 #' Columns: user_id, data_type, n, days_with_data, coverage_pct, error.
 #'
 #' @param user_ids   Character vector of TokenBridge user IDs
 #' @param start_date "YYYY-MM-DD"
 #' @param end_date   "YYYY-MM-DD"
+#' @param data_types Character vector of data type IDs to check.
+#'   Defaults to c("sleep", "steps", "heart-rate-variability").
+#'   Pass any subset of names(GH_DATA_TYPES).
 #' @param env_file   Path to .env file (default ".env")
 #' @return data.frame
 #' @export
-gh_data_completeness <- function(user_ids, start_date, end_date, env_file = ".env") {
+gh_data_completeness <- function(user_ids, start_date, end_date,
+                                  data_types = c("sleep", "steps", "heart-rate-variability"),
+                                  env_file = ".env") {
+  .gh_validate_dates(start_date, end_date)
+  period_days <- as.numeric(as.Date(end_date) - as.Date(start_date)) + 1L
   rows <- list()
+
   for (uid in user_ids) {
-    s <- tryCatch(
-      gh_summary(uid, start_date, end_date, env_file = env_file),
-      error = function(e) list(error = conditionMessage(e))
+    token <- tryCatch(
+      tb_get_token(uid, provider = "google-health", env_file = env_file),
+      error = function(e) conditionMessage(e)
     )
-    if (!is.null(s$error)) {
-      rows <- c(rows, list(data.frame(
-        user_id = uid, data_type = "all", n = NA_integer_,
-        days_with_data = NA_integer_, coverage_pct = NA_real_,
-        error = s$error, stringsAsFactors = FALSE
-      )))
-    } else {
-      for (dtype in c("sleep", "respiratory_rate")) {
-        st <- s[[dtype]]
+    if (is.character(token) && !startsWith(token, "ya29.")) {
+      # token fetch failed — record error for all types
+      for (dtype in data_types) {
         rows <- c(rows, list(data.frame(
-          user_id        = uid,
-          data_type      = dtype,
-          n              = st$n,
-          days_with_data = st$days_with_data,
-          coverage_pct   = st$coverage_pct,
-          error          = NA_character_,
-          stringsAsFactors = FALSE
+          user_id = uid, data_type = dtype, n = NA_integer_,
+          days_with_data = NA_integer_, coverage_pct = NA_real_,
+          error = token, stringsAsFactors = FALSE
         )))
       }
+      next
+    }
+
+    for (dtype in data_types) {
+      result <- tryCatch({
+        df   <- gh_fetch(uid, dtype, start_date, end_date, token = token, env_file = env_file)
+        days <- 0L
+        if (nrow(df) && "startTime.seconds" %in% names(df)) {
+          ts   <- suppressWarnings(as.numeric(df[["startTime.seconds"]]))
+          days <- length(unique(as.Date(as.POSIXct(ts[!is.na(ts)], origin = "1970-01-01", tz = "UTC"))))
+        }
+        data.frame(
+          user_id        = uid,
+          data_type      = dtype,
+          n              = nrow(df),
+          days_with_data = days,
+          coverage_pct   = if (period_days > 0) round(days / period_days * 100, 1) else NA_real_,
+          error          = NA_character_,
+          stringsAsFactors = FALSE
+        )
+      }, error = function(e) {
+        data.frame(user_id = uid, data_type = dtype, n = NA_integer_,
+                   days_with_data = NA_integer_, coverage_pct = NA_real_,
+                   error = conditionMessage(e), stringsAsFactors = FALSE)
+      })
+      rows <- c(rows, list(result))
     }
   }
   do.call(rbind, rows)
@@ -211,16 +237,28 @@ gh_data_completeness <- function(user_ids, start_date, end_date, env_file = ".en
 
 # ── Internal ───────────────────────────────────────────────────────────────────
 
+.gh_validate_dates <- function(start_date, end_date) {
+  s <- tryCatch(as.Date(start_date), error = function(e) NA)
+  e <- tryCatch(as.Date(end_date),   error = function(e) NA)
+  if (is.na(s) || is.na(e))
+    stop("Dates must be in YYYY-MM-DD format.", call. = FALSE)
+  if (s > e)
+    stop("start_date (", start_date, ") must not be after end_date (", end_date, ").",
+         call. = FALSE)
+}
+
 .gh_fetch_datapoints <- function(token, data_type, start_date, end_date) {
-  url         <- paste0("https://health.googleapis.com/v4/users/me/dataTypes/",
-                        data_type, "/dataPoints")
-  start_epoch <- as.numeric(as.POSIXct(paste0(start_date, " 00:00:00"), tz = "UTC"))
-  end_epoch   <- as.numeric(as.POSIXct(paste0(end_date,   " 23:59:59"), tz = "UTC"))
-  all_points  <- list()
-  page_token  <- NULL
+  url        <- paste0("https://health.googleapis.com/v4/users/me/dataTypes/",
+                       data_type, "/dataPoints")
+  all_points <- list()
+  page_token <- NULL
 
   repeat {
-    query <- list(pageSize = 1000)
+    query <- list(
+      pageSize  = 1000,
+      startTime = paste0(start_date, "T00:00:00Z"),
+      endTime   = paste0(end_date,   "T23:59:59Z")
+    )
     if (!is.null(page_token)) query$pageToken <- page_token
 
     resp <- httr::GET(
@@ -238,12 +276,7 @@ gh_data_completeness <- function(user_ids, start_date, end_date, env_file = ".en
 
     body       <- httr::content(resp)
     page_token <- body$nextPageToken
-
-    for (pt in body$dataPoints) {
-      pt_start <- as.numeric(pt$startTime$seconds)
-      if (!is.null(pt_start) && pt_start >= start_epoch && pt_start <= end_epoch)
-        all_points <- c(all_points, list(pt))
-    }
+    all_points <- c(all_points, body$dataPoints)
 
     if (is.null(page_token) || !nchar(page_token)) break
   }

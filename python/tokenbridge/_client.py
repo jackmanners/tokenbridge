@@ -290,30 +290,6 @@ class TokenBridge:
         """
         return self._token_response(user_id, provider or self.provider)["access_token"]
 
-    def token_status(self, user_id: str, provider: Optional[str] = None) -> dict:
-        """Return token metadata without exposing the raw token.
-
-        Args:
-            user_id: TokenBridge participant ID.
-            provider: Provider.  Defaults to `tb.provider`.
-
-        Returns:
-            Dict with fields:
-
-            - `expires_at` (str): ISO 8601 expiry timestamp.
-            - `refreshed` (bool): `True` if the token was refreshed on this call.
-            - `scopes` (list[str]): Granted OAuth scopes.
-
-        Example:
-            ```python
-            s = tb.token_status("p001")
-            print(s["expires_at"])   # "2026-06-18T14:32:00Z"
-            print(s["refreshed"])    # False
-            ```
-        """
-        data = self._token_response(user_id, provider or self.provider)
-        return {k: data[k] for k in ("expires_at", "refreshed", "scopes") if k in data}
-
     # ── Internal ──────────────────────────────────────────────────────────────
 
     def _get_provider(self, provider_id: str):
@@ -339,10 +315,21 @@ class TokenBridge:
             json={"provider": provider, "user_id": user_id},
             timeout=15,
         )
+        if resp.status_code == 404:
+            auth_url = self.auth_url(user_id, provider)
+            raise RuntimeError(
+                f"No token found for user '{user_id}' (provider: {provider}). "
+                f"Send them this link to authorise: {auth_url}"
+            )
+        if resp.status_code == 401:
+            raise RuntimeError(
+                f"Token for '{user_id}' has expired and cannot be refreshed — "
+                f"they need to re-authorise: {self.auth_url(user_id, provider)}"
+            )
         resp.raise_for_status()
         data = resp.json()
         if "access_token" not in data:
-            raise RuntimeError(f"No access_token in response: {resp.text}")
+            raise RuntimeError(f"Unexpected response from TokenBridge: {resp.text}")
         return data
 
 
