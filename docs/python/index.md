@@ -5,7 +5,11 @@ The `tokenbridge` Python package provides a single `TokenBridge` client with bui
 ## Installation
 
 ```bash
+<<<<<<< HEAD
 pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
+=======
+pip install git+https://github.com/YOUR_USERNAME/tokenbridge.git#subdirectory=python
+>>>>>>> e656476530cbfcd464560310f0bbb5cd10018519
 ```
 
 Requires Python 3.10+. Dependencies: `requests`, `python-dotenv`.

@@ -67,7 +67,13 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
+<<<<<<< HEAD
+  - Deployment:
+    - Overview: deployment.md
+    - Setup Guide: basic-quickstart.md
+=======
   - Deployment: deployment.md
+>>>>>>> e656476530cbfcd464560310f0bbb5cd10018519
   - Providers: providers.md
   - Python:
     - python/index.md

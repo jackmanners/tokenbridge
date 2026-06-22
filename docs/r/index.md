@@ -6,7 +6,11 @@ in place of object namespacing (which is idiomatic in R).
 ## Installation
 
 ```r
+<<<<<<< HEAD
 devtools::install_github("jackmanners/tokenbridge", subdir = "r")
+=======
+devtools::install_github("YOUR_USERNAME/tokenbridge", subdir = "r")
+>>>>>>> e656476530cbfcd464560310f0bbb5cd10018519
 ```
 
 Requires R 4.0+. Dependencies: `httr`.
