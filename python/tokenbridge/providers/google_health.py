@@ -23,7 +23,6 @@ print(list(DATA_TYPES))   # all type IDs
 See `docs/providers.md` for descriptions, units, and device requirements.
 """
 
-import statistics
 from datetime import date, datetime, timezone
 from typing import Optional, Sequence
 
@@ -156,80 +155,6 @@ class GoogleHealth(HealthProvider):
         return _fetch_datapoints(token, data_type, start_date, end_date)
 
     # ── Analysis helpers ──────────────────────────────────────────────────────
-
-    def summary(self, user_id: str, start_date: str, end_date: str) -> dict:
-        """Summary statistics for one participant (sleep + respiratory rate).
-
-        Makes a single token request and reuses it for both data fetches.
-
-        Args:
-            user_id: TokenBridge participant ID.
-            start_date: `"YYYY-MM-DD"`.
-            end_date: `"YYYY-MM-DD"`.
-
-        Returns:
-            Dict with keys:
-
-            - `user_id` (str)
-            - `period_days` (int)
-            - `sleep` (dict): `n`, `days_with_data`, `coverage_pct`,
-              `mean_duration_hours`, `std_duration_hours`
-            - `respiratory_rate` (dict): `n`, `days_with_data`,
-              `coverage_pct`, `mean`, `min`, `max`, `std`
-
-        Example:
-            ```python
-            s = tb.google.summary("p001", "2026-05-01", "2026-06-18")
-            print(s["sleep"]["coverage_pct"])       # 92.3
-            print(s["respiratory_rate"]["mean"])    # 15.2
-            ```
-        """
-        token       = self._get_token(user_id)
-        period_days = (date.fromisoformat(end_date) - date.fromisoformat(start_date)).days + 1
-        sleep       = _fetch_datapoints(token, "sleep", start_date, end_date)
-        rr          = _fetch_datapoints(token, "respiratory-rate-sleep-summary", start_date, end_date)
-
-        return {
-            "user_id":           user_id,
-            "period_days":       period_days,
-            "sleep":             _summarise_sleep(sleep, period_days),
-            "respiratory_rate":  _summarise_rr(rr, period_days),
-        }
-
-    def summary_all(
-        self, user_ids: list[str], start_date: str, end_date: str
-    ) -> dict[str, dict]:
-        """Summary statistics for multiple participants.
-
-        Runs `summary()` for each user ID.  Errors per participant are caught
-        and returned as `{"error": str}` rather than raising.
-
-        Args:
-            user_ids: List of TokenBridge participant IDs.
-            start_date: `"YYYY-MM-DD"`.
-            end_date: `"YYYY-MM-DD"`.
-
-        Returns:
-            Dict mapping `user_id` to the result of `summary()`, or
-            `{"error": "message"}` if that participant failed.
-
-        Example:
-            ```python
-            results = tb.google.summary_all(["p001", "p002", "p003"], start, end)
-            for uid, s in results.items():
-                if "error" in s:
-                    print(uid, "failed:", s["error"])
-                else:
-                    print(uid, s["sleep"]["coverage_pct"])
-            ```
-        """
-        results = {}
-        for uid in user_ids:
-            try:
-                results[uid] = self.summary(uid, start_date, end_date)
-            except Exception as e:
-                results[uid] = {"error": str(e)}
-        return results
 
     def data_completeness(
         self,
@@ -374,63 +299,3 @@ def _flatten(obj, prefix: str = "") -> dict:
     return items
 
 
-def _summarise_sleep(sessions: list[dict], period_days: int) -> dict:
-    if not sessions:
-        return {"n": 0, "days_with_data": 0, "coverage_pct": 0.0}
-
-    days, durations = set(), []
-
-    for s in sessions:
-        if ts := s.get("startTime.seconds"):
-            days.add(datetime.fromtimestamp(int(ts), tz=timezone.utc).date().isoformat())
-        for key in ("duration.seconds", "duration"):
-            if key in s:
-                try:
-                    durations.append(float(s[key]) / 3600)
-                    break
-                except (TypeError, ValueError):
-                    pass
-
-    result: dict = {
-        "n":             len(sessions),
-        "days_with_data": len(days),
-        "coverage_pct":  round(len(days) / period_days * 100, 1) if period_days else 0.0,
-    }
-    if durations:
-        result["mean_duration_hours"] = round(statistics.mean(durations), 2)
-        if len(durations) > 1:
-            result["std_duration_hours"] = round(statistics.stdev(durations), 2)
-    return result
-
-
-def _summarise_rr(measurements: list[dict], period_days: int) -> dict:
-    if not measurements:
-        return {"n": 0, "days_with_data": 0, "coverage_pct": 0.0}
-
-    days, values = set(), []
-
-    for m in measurements:
-        if ts := m.get("startTime.seconds"):
-            days.add(datetime.fromtimestamp(int(ts), tz=timezone.utc).date().isoformat())
-        for key, val in m.items():
-            if any(x in key.lower() for x in ("fpval", "intval", "value")):
-                try:
-                    v = float(val)
-                    if 4 < v < 40:
-                        values.append(v)
-                        break
-                except (TypeError, ValueError):
-                    pass
-
-    result: dict = {
-        "n":             len(measurements),
-        "days_with_data": len(days),
-        "coverage_pct":  round(len(days) / period_days * 100, 1) if period_days else 0.0,
-    }
-    if values:
-        result["mean"] = round(statistics.mean(values), 2)
-        result["min"]  = round(min(values), 2)
-        result["max"]  = round(max(values), 2)
-        if len(values) > 1:
-            result["std"] = round(statistics.stdev(values), 2)
-    return result

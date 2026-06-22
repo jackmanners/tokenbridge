@@ -45,7 +45,8 @@ returns void language sql as $$
   delete from oauth_states where expires_at < now();
 $$;
 
--- Schedule cleanup every 10 minutes via pg_cron (built into Supabase)
+-- Schedule cleanup every 10 minutes via pg_cron
+create extension if not exists pg_cron;
 select cron.schedule(
   'cleanup-oauth-states',
   '*/10 * * * *',

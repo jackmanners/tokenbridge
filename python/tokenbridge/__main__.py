@@ -70,8 +70,8 @@ def main() -> None:
     print('    print(tb.auth_url("participant-001"))')
     print()
     print("    # Once they have authorised, fetch their data:")
-    print('    sleep = tb.fetch_sleep("participant-001", "2026-05-01", "2026-06-18")')
-    print('    rr    = tb.fetch_respiratory_rate("participant-001", "2026-05-01", "2026-06-18")')
+    print('    sleep = tb.fetch("participant-001", "sleep", "2026-05-01", "2026-06-18")')
+    print('    steps = tb.fetch("participant-001", "steps", "2026-05-01", "2026-06-18")')
     print()
 
 

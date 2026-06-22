@@ -1,27 +1,20 @@
 # Withings provider — stub
 #
-# Not yet implemented. The structure mirrors google_health.R so adding it
-# later is straightforward: implement .wt_fetch against the Withings API
-# and wire PROVIDER_ID = "withings" to the TokenBridge /token endpoint.
+# Auth is wired (the edge functions handle the OAuth flow).
+# Data fetching is not yet implemented.
 #
-# Withings API docs: https://developer.withings.com/developer-guide/v3/
-#
-# Function prefix: wt_   (Withings)
+# Withings API: https://developer.withings.com/developer-guide/v3/
 
-#' Fetch sleep data from Withings (not yet implemented)
+#' Fetch Withings data for a participant (not yet implemented)
+#'
+#' @param user_id    TokenBridge user ID
+#' @param data_type  Data type ID
+#' @param start_date "YYYY-MM-DD"
+#' @param end_date   "YYYY-MM-DD"
+#' @param token      Pre-fetched access token (optional)
+#' @param env_file   Path to .env file (default ".env")
 #' @export
-wt_fetch_sleep <- function(user_id, start_date, end_date, env_file = ".env") {
-  stop("Withings provider is not yet implemented.", call. = FALSE)
-}
-
-#' Fetch heart rate data from Withings (not yet implemented)
-#' @export
-wt_fetch_heart_rate <- function(user_id, start_date, end_date, env_file = ".env") {
-  stop("Withings provider is not yet implemented.", call. = FALSE)
-}
-
-#' Generic fetch from Withings (not yet implemented)
-#' @export
-wt_fetch <- function(user_id, measure_type, start_date, end_date, env_file = ".env") {
-  stop("Withings provider is not yet implemented.", call. = FALSE)
+wt_fetch <- function(user_id, data_type, start_date, end_date,
+                     token = NULL, env_file = ".env") {
+  stop("Withings data fetching is not yet implemented.", call. = FALSE)
 }

@@ -10,9 +10,7 @@ export(tb_get_token)
 # Google Health
 export(GH_DATA_TYPES)
 export(gh_fetch)
-export(gh_summary)
-export(gh_summary_all)
 export(gh_data_completeness)
 
-# Withings (stub)
+# Withings (stub — auth only, data fetch not yet implemented)
 export(wt_fetch)

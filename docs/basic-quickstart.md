@@ -51,21 +51,22 @@ You will need free accounts on [Supabase](https://supabase.com) and
 
 ---
 
-## 3. Deploy the edge functions (~10 min)
+## 3. Deploy the edge functions (~5 min)
 
-In your Supabase dashboard, go to **Edge Functions** in the left sidebar.
+The functions use shared code so they need to be deployed via the Supabase CLI rather than copy-pasting.
+This is a one-time setup — after this, pushing to `main` deploys automatically.
 
-For each of the four functions below, click **Create a new function**, set the name,
-paste the code from the link, then click **Deploy**.
-After creating each one, open it and make sure **Verify JWT** is turned **off**.
+Install the CLI and deploy:
 
-| Function name | Code |
-|---|---|
-| `auth-start` | [view code](https://raw.githubusercontent.com/jackmanners/tokenbridge/main/supabase/functions/auth-start/index.ts) |
-| `auth-callback` | [view code](https://raw.githubusercontent.com/jackmanners/tokenbridge/main/supabase/functions/auth-callback/index.ts) |
-| `token` | [view code](https://raw.githubusercontent.com/jackmanners/tokenbridge/main/supabase/functions/token/index.ts) |
+```bash
+npm install -g supabase
+supabase login
+supabase link --project-ref YOUR_PROJECT_REF
+supabase functions deploy auth-start auth-callback token --no-verify-jwt
+```
 
-Open each link, select all the text (Ctrl+A / Cmd+A), copy it, and paste into the Supabase editor.
+If you don't have Node/npm, ask whoever manages your IT to run this once, or see the
+[Supabase CLI docs](https://supabase.com/docs/guides/cli) for alternative install methods.
 
 ---
 
