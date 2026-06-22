@@ -1,49 +1,39 @@
 # TokenBridge
 
-**Self-hosted OAuth token management for health data research.**
+**OAuth token management for wearable health data research.**
 
-TokenBridge sits between your research scripts and health APIs (Google Health / Fitbit, Withings) and handles the parts that are genuinely hard: the OAuth 2.0 PKCE flow, secure token storage, and automatic refresh before expiry.
+Getting data out of health APIs — Google Health/Fitbit, Withings — into a research script means implementing OAuth 2.0, securely storing tokens for dozens of participants, and keeping them refreshed across a study that runs for months. TokenBridge handles all of that so you don't have to write any auth code.
 
-Your scripts call `tb.fetch("p001", "sleep", start, end)` and get data back. That's it.
+---
+
+## How it works
 
 ```
-participant (browser, once)
-      │  visits auth-start URL
-      ▼
-  TokenBridge  ◄──── your scripts (tb.fetch → valid data)
-      │
-      └── Supabase Postgres (token storage + auto-refresh)
+Participant (once)               Your research script
+     │                                  │
+     │  clicks auth link                │  tb.fetch("p001", "sleep", ...)
+     ▼                                  ▼
+ TokenBridge  ────────────────────  /token endpoint
+     │                             returns a valid access token
+     └── Supabase Postgres         script calls the health API directly
+         token storage + refresh
 ```
 
----
-
-## Who is this for?
-
-**Researchers deploying their own instance** — you have a study, a Supabase account, and a Google Cloud project. You run the deployment once, add participants, and fetch data from Python or R.
-
-**Collaborators and students** — your PI has deployed TokenBridge. You install the Python or R package, point it at their instance, and write analysis scripts without thinking about OAuth.
+TokenBridge is a small set of Supabase edge functions. It runs the OAuth flow, stores tokens in Postgres, and refreshes them automatically before they expire. Your scripts ask for a token, get one back, and query the provider API directly. No auth logic in your analysis code.
 
 ---
 
-## Key features
+## Two ways to use it
 
-- **Full OAuth 2.0 PKCE flow** — participants click a link, sign in with Google, approve access. Done.
-- **Automatic token refresh** — tokens are refreshed proactively (5-minute window before expiry). Your scripts never see an expired token.
-- **Multi-user** — one deployment supports any number of participants. Each has their own token.
-- **Multi-provider** — Google Health (Fitbit-backed) is fully supported. Withings auth is wired; data fetch is in progress.
-- **38 Google Health data types** — sleep, activity, heart rate, HRV, SpO2, weight, nutrition, and more. See [Providers](providers.md).
-- **Python + R** — identical API shape in both languages. Type IDs are the same kebab-case strings.
-- **Self-hosted** — your tokens never leave your Supabase instance.
+### Using an existing deployment
 
----
-
-## Quick install
+If your institution or PI has deployed TokenBridge, you only need the client package. Ask them for the URL and API key, then point the package at their instance.
 
 === "Python"
 
     ```bash
     pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
-    python -m tokenbridge   # interactive setup wizard
+    python -m tokenbridge   # interactive setup — saves credentials to .env
     ```
 
 === "R"
@@ -51,29 +41,47 @@ participant (browser, once)
     ```r
     devtools::install_github("jackmanners/tokenbridge", subdir = "r")
     library(tokenbridge)
-    tb_setup()   # interactive setup wizard
+    tb_setup()   # interactive setup — saves credentials to .env
     ```
+
+→ Continue with [Getting Started](getting-started.md)
+
+### Deploying your own instance
+
+You need a free [Supabase](https://supabase.com) account and a [Google Cloud](https://console.cloud.google.com) project. Setup takes around 20–30 minutes.
+
+→ [Basic setup walkthrough](basic-quickstart.md) — step-by-step from scratch  
+→ [Deployment overview](deployment.md) — architecture, config options, adding providers
 
 ---
 
-## 30-second example
+## Quick start
 
 === "Python"
 
     ```python
     from tokenbridge import TokenBridge
 
-    tb = TokenBridge()
+    tb = TokenBridge()   # reads .env
 
-    # Send this link to your participant — they authorise once
+    # Generate a link for each participant and send it to them
+    # They click once, sign in with Google, and approve access — done
     print(tb.auth_url("participant-001"))
 
-    # Fetch their data
+    # Fetch data as soon as they've authorised
     sleep = tb.fetch("participant-001", "sleep", "2026-05-01", "2026-06-18")
     steps = tb.fetch("participant-001", "steps", "2026-05-01", "2026-06-18")
 
-    # Audit your whole cohort
-    tb.google.data_completeness(["p001", "p002", "p003"], "2026-05-01", "2026-06-18")
+    # One token request for multiple data types
+    token = tb.get_token("participant-001")
+    sleep = tb.fetch("participant-001", "sleep",                   start, end, token=token)
+    hrv   = tb.fetch("participant-001", "heart-rate-variability",  start, end, token=token)
+
+    # Audit data coverage across your cohort
+    tb.google.data_completeness(
+        ["p001", "p002", "p003"], start, end,
+        data_types=["sleep", "steps", "heart-rate-variability"],
+    )
     ```
 
 === "R"
@@ -81,23 +89,32 @@ participant (browser, once)
     ```r
     library(tokenbridge)
 
-    # Send this link to your participant
-    tb_auth_url("participant-001")
+    # Generate links for your cohort
+    links <- tb_auth_urls(c("p001", "p002", "p003"))
 
-    # Fetch their data
-    sleep <- tb_fetch("participant-001", "sleep", "2026-05-01", "2026-06-18")
-    steps <- tb_fetch("participant-001", "steps", "2026-05-01", "2026-06-18")
+    # Fetch data
+    sleep <- tb_fetch("p001", "sleep", "2026-05-01", "2026-06-18")
+    steps <- tb_fetch("p001", "steps", "2026-05-01", "2026-06-18")
 
-    # Audit your whole cohort
-    gh_data_completeness(c("p001", "p002", "p003"), "2026-05-01", "2026-06-18")
+    # One token for multiple data types
+    tok <- tb_get_token("p001")
+    sleep <- tb_fetch("p001", "sleep",                  start, end, token = tok)
+    hrv   <- tb_fetch("p001", "heart-rate-variability", start, end, token = tok)
+
+    # Audit data coverage
+    gh_data_completeness(
+      c("p001", "p002", "p003"), start, end,
+      data_types = c("sleep", "steps", "heart-rate-variability")
+    )
     ```
 
 ---
 
-## Next steps
+## Supported providers
 
-- [Getting Started](getting-started.md) — install, configure, and fetch your first data point
-- [Deployment](deployment.md) — set up your own TokenBridge instance (20–30 minutes)
-- [Providers](providers.md) — all supported data types with units and notes
-- [Python reference](python/reference.md) — full API documentation
-- [R reference](r/reference.md) — full API documentation
+| Provider ID | Status | Notes |
+|---|---|---|
+| `google-health` | Supported | Requires Fitbit app linked to a Google account |
+| `withings` | Auth only | OAuth flow works; data fetch in progress |
+
+Full list of data types, units, and endpoint notes: [Providers](providers.md)

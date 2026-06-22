@@ -1,121 +1,121 @@
 # TokenBridge
 
-Centralised OAuth token management for health data research APIs.  
-Point your scripts at TokenBridge instead of handling OAuth yourself — it manages the full auth flow, stores tokens in Supabase Postgres, and auto-refreshes before expiry.
+**OAuth token management for wearable health data research.**
+
+Getting data out of health APIs (Google Health/Fitbit, Withings) into a research script means implementing OAuth 2.0, storing tokens securely, handling refresh before expiry, and doing it across dozens of participants. TokenBridge handles all of that so you don't have to.
+
+---
+
+## How it works
 
 ```
-participant (browser, once)
-      │  visits auth-start URL
-      ▼
-  TokenBridge  ◄──── your scripts (POST /token → valid access token)
-      │
-      └── Supabase Postgres (token storage + auto-refresh)
+Participant (once)               Researcher script
+     │                                  │
+     │  clicks auth link                │  tb.fetch("p001", "sleep", ...)
+     ▼                                  ▼
+ TokenBridge  ────────────────────  /token endpoint
+     │                             returns valid access token
+     └── Supabase Postgres         script calls Google Health API directly
+         token storage
+         auto-refresh
 ```
 
-Designed for researchers who want a self-hosted, minimal, open-source alternative to managed wearable data platforms.
+TokenBridge is a small set of Supabase edge functions. It manages the OAuth flow, stores tokens in Postgres, and refreshes them automatically. Your scripts call one endpoint to get a valid token, then query the health API directly.
+
+---
+
+## Two ways to use it
+
+### Someone has already deployed TokenBridge
+
+If your PI or institution runs a TokenBridge instance, you just need the client package. Ask them for the deployment URL and API key, then:
+
+```bash
+pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
+python -m tokenbridge   # saves credentials to .env
+```
+```r
+devtools::install_github("jackmanners/tokenbridge", subdir = "r")
+library(tokenbridge)
+tb_setup()   # saves credentials to .env
+```
+
+### Deploy your own instance
+
+You need a free [Supabase](https://supabase.com) account and a [Google Cloud](https://console.cloud.google.com) project. Setup takes around 20–30 minutes.
+
+→ [Deployment guide](https://jackmanners.github.io/tokenbridge/deployment/)  
+→ [Basic setup walkthrough](https://jackmanners.github.io/tokenbridge/basic-quickstart/)
+
+---
+
+## Quick start
+
+Once configured, the API is the same in both languages:
+
+```python
+from tokenbridge import TokenBridge
+
+tb = TokenBridge()
+
+# Generate an auth link for each participant and send it to them
+# They click it once, sign in with Google, and approve access
+print(tb.auth_url("participant-001"))
+
+# Fetch data as soon as they've authorised
+sleep = tb.fetch("participant-001", "sleep", "2026-05-01", "2026-06-18")
+steps = tb.fetch("participant-001", "steps", "2026-05-01", "2026-06-18")
+hrv   = tb.fetch("participant-001", "heart-rate-variability", "2026-05-01", "2026-06-18")
+
+# Fetch multiple types efficiently with one token request
+token = tb.get_token("participant-001")
+sleep = tb.fetch("participant-001", "sleep", start, end, token=token)
+steps = tb.fetch("participant-001", "steps", start, end, token=token)
+
+# Audit data coverage across your cohort
+tb.google.data_completeness(["p001", "p002", "p003"], start, end,
+                             data_types=["sleep", "steps", "heart-rate-variability"])
+```
+
+```r
+library(tokenbridge)
+
+# Generate auth links for your cohort
+links <- tb_auth_urls(c("p001", "p002", "p003"))
+
+# Fetch data
+sleep <- tb_fetch("p001", "sleep", "2026-05-01", "2026-06-18")
+steps <- tb_fetch("p001", "steps", "2026-05-01", "2026-06-18")
+
+# Efficient multi-type fetch with one token
+tok <- tb_get_token("p001")
+sleep <- tb_fetch("p001", "sleep", start, end, token = tok)
+hrv   <- tb_fetch("p001", "heart-rate-variability", start, end, token = tok)
+
+# Audit data coverage
+gh_data_completeness(c("p001", "p002", "p003"), start, end,
+                     data_types = c("sleep", "steps", "heart-rate-variability"))
+```
+
+---
+
+## Supported providers
+
+| Provider | Status | Notes |
+|---|---|---|
+| `google-health` | Supported | Requires Fitbit app linked to a Google account |
+| `withings` | Auth only | OAuth flow works; data fetch not yet implemented |
+
+38 Google Health data types are supported — sleep, activity, heart rate, HRV, SpO2, ECG, temperature, weight, nutrition, and more. See the [provider reference](https://jackmanners.github.io/tokenbridge/providers/).
+
+---
 
 ## Documentation
 
 **[jackmanners.github.io/tokenbridge](https://jackmanners.github.io/tokenbridge)**
 
-Includes deployment guide, basic setup walkthrough, full API reference for both packages, and provider data type reference.
-
-## Client packages
-
-| Language | Install |
-|----------|---------|
-| Python | `pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python` |
-| R | `devtools::install_github("jackmanners/tokenbridge", subdir = "r")` |
-
-### Python
-
-```python
-from tokenbridge import TokenBridge
-
-tb = TokenBridge()              # reads TOKENBRIDGE_URL + TOKENBRIDGE_API_KEY from .env
-tb.provider = "google-health"   # set default provider once at the top of your script
-
-# Onboard participants — send them this URL
-tb.auth_url("participant-001")
-tb.auth_urls(["p001", "p002", "p003"])   # batch
-
-# Fetch data using the default provider
-tb.fetch("p001", "sleep",                "2026-05-01", "2026-06-18")
-tb.fetch("p001", "steps",                "2026-05-01", "2026-06-18")
-tb.fetch("p001", "heart-rate-variability","2026-05-01", "2026-06-18")
-
-# Provider namespace — always Google Health regardless of tb.provider
-tb.google.fetch("p001", "sleep", "2026-05-01", "2026-06-18")
-
-# Override provider for a single call
-tb.fetch("p001", "sleep", start, end, provider="withings")
-
-# Efficient: one token request for multiple fetches
-token = tb.get_token("p001")
-tb.fetch("p001", "sleep", start, end, token=token)
-tb.fetch("p001", "steps", start, end, token=token)
-
-# Analysis
-tb.google.summary("p001", "2026-05-01", "2026-06-18")
-tb.google.data_completeness(["p001", "p002", "p003"], "2026-05-01", "2026-06-18")
-```
-
-### R
-
-```r
-library(tokenbridge)
-
-tb_set_provider("google-health")   # set default once (optional — it's the default)
-
-# Onboard participants
-tb_auth_url("p001")
-tb_auth_urls(c("p001", "p002", "p003"))
-
-# Fetch data using the default provider
-tb_fetch("p001", "sleep",                 "2026-05-01", "2026-06-18")
-tb_fetch("p001", "steps",                 "2026-05-01", "2026-06-18")
-tb_fetch("p001", "heart-rate-variability","2026-05-01", "2026-06-18")
-
-# Google Health shorthand (always uses google-health)
-gh_fetch("p001", "sleep", "2026-05-01", "2026-06-18")
-
-# Override provider for a single call
-tb_fetch("p001", "sleep", start, end, provider = "withings")
-
-# Efficient: one token for multiple fetches
-tok <- tb_get_token("p001")
-tb_fetch("p001", "sleep", start, end, token = tok)
-tb_fetch("p001", "steps", start, end, token = tok)
-
-# Analysis
-gh_summary("p001", "2026-05-01", "2026-06-18")
-gh_data_completeness(c("p001", "p002", "p003"), "2026-05-01", "2026-06-18")
-
-# Browse available data types
-names(GH_DATA_TYPES)
-```
-
-## Supported data types
-
-All data types use their kebab-case API ID — the same string in both languages.  
-See [docs/providers.md](docs/providers.md) for the full reference including units, endpoint types, and device requirements.
-
-| Category | Example type IDs |
-|---|---|
-| Sleep | `sleep`, `respiratory-rate-sleep-summary`, `daily-sleep-temperature-derivations` |
-| Activity | `steps`, `distance`, `exercise`, `active-zone-minutes`, `floors`, `daily-vo2-max` |
-| Heart | `daily-resting-heart-rate`, `heart-rate-variability`, `daily-heart-rate-zones`, `electrocardiogram` |
-| Vitals | `oxygen-saturation`, `daily-respiratory-rate`, `core-body-temperature`, `blood-glucose` |
-| Body | `weight`, `body-fat`, `height` |
-| Nutrition | `nutrition-log`, `hydration-log` |
-
-## Supported providers
-
-| Provider ID | Status |
-|---|---|
-| `google-health` | Supported — requires Fitbit app linked to a Google account |
-| `withings` | Stub — auth wired, data fetch not yet implemented |
+---
 
 ## License
 
-MIT
+[Polyform Noncommercial 1.0.0](LICENSE) — free for personal, research, and educational use. Commercial use requires permission.

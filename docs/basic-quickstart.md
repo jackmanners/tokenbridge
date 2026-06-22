@@ -127,12 +127,6 @@ library(tokenbridge)
 links <- tb_auth_urls(c("p001", "p002", "p003"))
 for (id in names(links)) cat(id, "->", links[[id]], "\n")
 
-# Check who has connected
-for (id in c("p001", "p002", "p003")) {
-  status <- tryCatch(tb_token_status(id), error = function(e) NULL)
-  cat(id, if (is.null(status)) "NOT connected" else "connected", "\n")
-}
-
 # Fetch data
 sleep <- tb_fetch("p001", "sleep", "2026-05-01", "2026-06-18")
 write.csv(sleep, "p001_sleep.csv", row.names = FALSE)

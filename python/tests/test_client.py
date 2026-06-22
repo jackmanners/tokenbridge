@@ -14,18 +14,15 @@ def tb():
     )
 
 
-def _mock_token_resp(extra: dict = None):
-    data = {
-        "access_token": "tok_abc123",
-        "expires_at":   "2026-06-19T00:00:00Z",
-        "refreshed":    False,
-        "scopes":       ["https://www.googleapis.com/auth/googlehealth.sleep.readonly"],
-    }
-    if extra:
-        data.update(extra)
+def _mock_post(status: int = 200, body: dict = None):
+    body = body or {"access_token": "tok_abc123", "expires_at": "2026-06-19T00:00:00Z", "refreshed": False}
     mock = MagicMock()
-    mock.json.return_value = data
-    mock.raise_for_status = MagicMock()
+    mock.status_code = status
+    mock.json.return_value = body
+    mock.text = str(body)
+    mock.raise_for_status = MagicMock(
+        side_effect=None if status < 400 else Exception(f"HTTP {status}")
+    )
     return mock
 
 
@@ -68,34 +65,51 @@ def test_auth_urls_empty_list(tb):
 # ── Token retrieval ───────────────────────────────────────────────────────────
 
 def test_get_token_success(tb):
-    with patch("tokenbridge._client.requests.post", return_value=_mock_token_resp()):
+    with patch("tokenbridge._client.requests.post", return_value=_mock_post()):
         token = tb.get_token("p001")
     assert token == "tok_abc123"
 
 
-def test_get_token_missing_raises(tb):
-    mock = MagicMock()
-    mock.json.return_value = {"error": "user not found"}
-    mock.text = '{"error": "user not found"}'
-    mock.raise_for_status = MagicMock()
-
+def test_get_token_missing_raises_with_auth_url(tb):
+    """404 → error includes user ID and auth URL."""
+    mock = _mock_post(status=404, body={"error": "not found"})
     with patch("tokenbridge._client.requests.post", return_value=mock):
-        with pytest.raises(RuntimeError, match="No access_token"):
+        with pytest.raises(RuntimeError) as exc:
             tb.get_token("unknown")
+    msg = str(exc.value)
+    assert "unknown" in msg
+    assert "auth-start" in msg   # auth URL included in error
 
 
-def test_token_status_excludes_raw_token(tb):
-    with patch("tokenbridge._client.requests.post", return_value=_mock_token_resp()):
-        status = tb.token_status("p001")
-    assert "access_token" not in status
-    assert "expires_at" in status
-    assert "refreshed" in status
-    assert "scopes" in status
+def test_get_token_expired_raises_with_reauth_url(tb):
+    """401 → error tells user to re-authorise and includes auth URL."""
+    mock = _mock_post(status=401, body={"error": "refresh failed"})
+    with patch("tokenbridge._client.requests.post", return_value=mock):
+        with pytest.raises(RuntimeError) as exc:
+            tb.get_token("p001")
+    msg = str(exc.value)
+    assert "p001" in msg
+    assert "auth-start" in msg
 
 
-def test_token_status_missing_keys_skipped(tb):
-    with patch("tokenbridge._client.requests.post",
-               return_value=_mock_token_resp({"scopes": None})):
-        status = tb.token_status("p001")
-    # scopes key should still appear (value is None, key exists in response)
-    assert "expires_at" in status
+def test_get_token_unexpected_body_raises(tb):
+    """200 but no access_token key → RuntimeError."""
+    mock = _mock_post(body={"something": "else"})
+    with patch("tokenbridge._client.requests.post", return_value=mock):
+        with pytest.raises(RuntimeError, match="Unexpected response"):
+            tb.get_token("p001")
+
+
+# ── Provider proxy ────────────────────────────────────────────────────────────
+
+def test_google_proxy_repr(tb):
+    assert "google-health" in repr(tb.google)
+
+
+def test_withings_proxy_repr(tb):
+    assert "withings" in repr(tb.withings)
+
+
+def test_unknown_provider_raises(tb):
+    with pytest.raises(ValueError, match="Unknown provider"):
+        tb.fetch("p001", "sleep", "2026-05-01", "2026-05-31", provider="nonexistent")

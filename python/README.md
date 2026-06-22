@@ -1,7 +1,6 @@
-# TokenBridge Python client
+# tokenbridge (Python)
 
-Lightweight Python client for fetching Google Health data via a
-[TokenBridge](https://github.com/jackmanners/tokenbridge) deployment.
+Python client for [TokenBridge](https://github.com/jackmanners/tokenbridge) — fetches health data from Google Health (Fitbit-backed) and Withings via a self-hosted OAuth token manager.
 
 ## Install
 
@@ -9,7 +8,7 @@ Lightweight Python client for fetching Google Health data via a
 pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
 ```
 
-## Setup (once)
+## Setup
 
 ```bash
 python -m tokenbridge
@@ -20,67 +19,35 @@ Prompts for your TokenBridge URL and API key and saves them to `.env`.
 ## Usage
 
 ```python
-from tokenbridge import TokenBridge, GoogleHealth
+from tokenbridge import TokenBridge
 
-tb = TokenBridge()    # reads .env automatically
-gh = GoogleHealth(tb) # Google Health API (Fitbit-backed)
+tb = TokenBridge()   # reads TOKENBRIDGE_URL + TOKENBRIDGE_API_KEY from .env
 
-# Onboard a participant — send them this URL
-print(tb.auth_url("participant-001"))
+# Send each participant their auth link — they click once to authorise
+print(tb.auth_url("p001"))
+urls = tb.auth_urls(["p001", "p002", "p003"])   # batch
 
-# Check multiple participants at once
-urls = tb.auth_urls(["p001", "p002", "p003"])
+# Fetch data
+sleep = tb.fetch("p001", "sleep", "2026-05-01", "2026-06-18")
+steps = tb.fetch("p001", "steps", "2026-05-01", "2026-06-18")
 
-# Check token status (expiry, scopes) without exposing the raw token
-print(tb.token_status("participant-001"))
+# One token for multiple fetches (avoids repeated round-trips)
+token = tb.get_token("p001")
+sleep = tb.fetch("p001", "sleep",                  start, end, token=token)
+hrv   = tb.fetch("p001", "heart-rate-variability", start, end, token=token)
 
-# Fetch data once they've authorised
-sleep = gh.fetch_sleep("participant-001", "2026-05-01", "2026-06-18")
-rr    = gh.fetch_respiratory_rate("participant-001", "2026-05-01", "2026-06-18")
-hr    = gh.fetch_heart_rate("participant-001", "2026-05-01", "2026-06-18")
+# Use a specific provider namespace
+tb.google.fetch("p001", "sleep", start, end)
 
-# Or any data type by ID (see Google Health API discovery doc)
-steps = gh.fetch("participant-001", "steps", "2026-05-01", "2026-06-18")
-
-# Summary statistics for one participant
-s = gh.summary("participant-001", "2026-05-01", "2026-06-18")
-# {"period_days": 48, "sleep": {"n": 42, "coverage_pct": 87.5, ...}, ...}
-
-# Data completeness audit across a cohort
-audit = gh.data_completeness(["p001", "p002", "p003"], "2026-05-01", "2026-06-18")
-
-# Convert any result to a DataFrame
-import pandas as pd
-df = pd.DataFrame(sleep)
+# Audit data coverage across your cohort
+tb.google.data_completeness(
+    ["p001", "p002", "p003"], start, end,
+    data_types=["sleep", "steps", "heart-rate-variability"],
+)
 ```
 
-## API reference
+All data type IDs are kebab-case strings. See [`DATA_TYPES`](tokenbridge/providers/google_health.py) or the [provider reference](https://jackmanners.github.io/tokenbridge/providers/).
 
-### TokenBridge (auth layer)
+## Documentation
 
-| Method | Description |
-|--------|-------------|
-| `TokenBridge(url, api_key, env_file)` | Constructor — reads `.env` if args not provided |
-| `tb.auth_url(user_id)` | Auth URL to send to one participant |
-| `tb.auth_urls(user_ids)` | `{user_id: url}` dict for multiple participants |
-| `tb.get_token(user_id)` | Raw access token (rarely needed directly) |
-| `tb.token_status(user_id)` | Token metadata: expiry, refreshed, scopes |
-
-### GoogleHealth (data layer)
-
-| Method | Description |
-|--------|-------------|
-| `gh.fetch_sleep(user_id, start, end)` | Sleep sessions |
-| `gh.fetch_respiratory_rate(user_id, start, end)` | Respiratory rate sleep summaries |
-| `gh.fetch_heart_rate(user_id, start, end)` | Daily resting heart rate |
-| `gh.fetch(user_id, data_type, start, end)` | Any data type by ID |
-| `gh.summary(user_id, start, end)` | Coverage + stats for sleep and RR |
-| `gh.summary_all(user_ids, start, end)` | Same, for multiple participants |
-| `gh.data_completeness(user_ids, start, end)` | Flat audit table |
-
-## Development
-
-```bash
-pip install -e ".[dev]"
-pytest
-```
+[jackmanners.github.io/tokenbridge](https://jackmanners.github.io/tokenbridge)

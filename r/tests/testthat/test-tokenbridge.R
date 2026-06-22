@@ -1,12 +1,19 @@
 test_that("tb_auth_url contains user_id and provider", {
-  # Set env vars directly so tb_auth_url doesn't need a .env file
   Sys.setenv(TOKENBRIDGE_URL = "https://test.supabase.co/functions/v1")
   on.exit(Sys.unsetenv("TOKENBRIDGE_URL"))
 
   url <- tb_auth_url("p001")
-  expect_true(grepl("user_id=p001",        url))
+  expect_true(grepl("user_id=p001",          url))
   expect_true(grepl("provider=google-health", url))
-  expect_true(grepl("auth-start",           url))
+  expect_true(grepl("auth-start",             url))
+})
+
+test_that("tb_auth_url uses custom provider", {
+  Sys.setenv(TOKENBRIDGE_URL = "https://test.supabase.co/functions/v1")
+  on.exit(Sys.unsetenv("TOKENBRIDGE_URL"))
+
+  url <- tb_auth_url("p001", provider = "withings")
+  expect_true(grepl("provider=withings", url))
 })
 
 test_that("tb_auth_urls returns named character vector", {
@@ -23,7 +30,6 @@ test_that("tb_setup writes to env file", {
   tmp <- tempfile(fileext = ".env")
   on.exit(unlink(tmp))
 
-  # Simulate user input
   with_mocked_bindings(
     readline = function(prompt = "") {
       if (grepl("URL",     prompt)) return("https://custom.supabase.co/functions/v1")
@@ -56,9 +62,7 @@ test_that("tb_get_token returns access token on success", {
   )
 
   with_mocked_bindings(
-    POST = function(...) {
-      structure(mock_resp, class = "response")
-    },
+    POST        = function(...) structure(mock_resp, class = "response"),
     status_code = function(r) r$status_code,
     content     = function(r, ...) r$content,
     .package    = "httr",
@@ -69,7 +73,7 @@ test_that("tb_get_token returns access token on success", {
   )
 })
 
-test_that("tb_token_status returns metadata without raw token", {
+test_that("tb_get_token raises on 404 with auth URL in message", {
   Sys.setenv(
     TOKENBRIDGE_URL     = "https://test.supabase.co/functions/v1",
     TOKENBRIDGE_API_KEY = "test-key"
@@ -80,12 +84,8 @@ test_that("tb_token_status returns metadata without raw token", {
   })
 
   mock_resp <- list(
-    status_code = 200,
-    content     = list(
-      access_token = "tok_abc123",
-      expires_at   = "2026-06-19T00:00:00Z",
-      refreshed    = FALSE
-    )
+    status_code = 404,
+    content     = list(error = "not found")
   )
 
   with_mocked_bindings(
@@ -94,10 +94,39 @@ test_that("tb_token_status returns metadata without raw token", {
     content     = function(r, ...) r$content,
     .package    = "httr",
     {
-      status <- tb_token_status("p001")
-      expect_true("expires_at" %in% names(status))
-      expect_true("refreshed"  %in% names(status))
-      expect_false("access_token" %in% names(status))
+      expect_error(
+        tb_get_token("unknown"),
+        regexp = "auth-start"  # auth URL should appear in error message
+      )
+    }
+  )
+})
+
+test_that("tb_get_token raises on 401 with re-auth message", {
+  Sys.setenv(
+    TOKENBRIDGE_URL     = "https://test.supabase.co/functions/v1",
+    TOKENBRIDGE_API_KEY = "test-key"
+  )
+  on.exit({
+    Sys.unsetenv("TOKENBRIDGE_URL")
+    Sys.unsetenv("TOKENBRIDGE_API_KEY")
+  })
+
+  mock_resp <- list(
+    status_code = 401,
+    content     = list(error = "refresh failed")
+  )
+
+  with_mocked_bindings(
+    POST        = function(...) structure(mock_resp, class = "response"),
+    status_code = function(r) r$status_code,
+    content     = function(r, ...) r$content,
+    .package    = "httr",
+    {
+      expect_error(
+        tb_get_token("p001"),
+        regexp = "re-authorise|re-auth"
+      )
     }
   )
 })

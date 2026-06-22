@@ -9,7 +9,7 @@ Description: Lightweight client for fetching health data via a TokenBridge
     provides the R interface for auth URLs, token retrieval, and health data
     fetching. Currently supports Google Health API (Fitbit-backed), with
     Withings support planned.
-License: MIT + file LICENSE
+License: file LICENSE
 Imports:
     httr
 Suggests:
