@@ -46,7 +46,7 @@ class TokenBridge:
     pre-bind the provider and forward every call to the underlying provider
     instance, so `tb.google.summary(...)` also works.
 
-    See `docs/providers.md` for supported providers and data type IDs.
+    See `docs/providers/index.md` for supported providers and data type IDs.
 
     Attributes:
         provider: Default provider ID used by `fetch()`, `auth_url()`,
@@ -188,7 +188,7 @@ class TokenBridge:
         e.g. `startTime.seconds`.
 
         `data_type` is the kebab-case type ID — e.g. `"sleep"`, `"steps"`,
-        `"heart-rate-variability"`.  See `docs/providers.md` or:
+        `"heart-rate-variability"`.  See `docs/providers/index.md` or:
 
         ```python
         from tokenbridge.providers.google_health import DATA_TYPES
@@ -319,7 +319,7 @@ class TokenBridge:
             else:
                 raise ValueError(
                     f"Unknown provider {provider_id!r}. "
-                    "See docs/providers.md for supported providers."
+                    "See docs/providers/index.md for supported providers."
                 )
         return self._provider_cache[provider_id]
 

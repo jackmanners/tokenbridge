@@ -14,7 +14,7 @@
 #   wt_fetch("p001", "sleep-summary", start, end, token = tok)
 #   wt_fetch("p001", "weight",        start, end, token = tok)
 #
-# Data type IDs: see names(WT_DATA_TYPES) or docs/providers.md
+# Data type IDs: see names(WT_DATA_TYPES) or docs/providers/index.md
 #
 # Function prefix: wt_   (Withings)
 

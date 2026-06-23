@@ -59,4 +59,4 @@ tb.fetch("p001", "sleep", start, end, provider="withings")
 
 - [Getting Started](../getting-started.md)
 - [API Reference](reference.md)
-- [Providers](../providers.md)
+- [Providers](../providers/index.md)

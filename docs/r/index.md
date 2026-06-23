@@ -60,4 +60,4 @@ names(OU_DATA_TYPES)
 
 - [Getting Started](../getting-started.md)
 - [API Reference](reference.md)
-- [Providers](../providers.md)
+- [Providers](../providers/index.md)

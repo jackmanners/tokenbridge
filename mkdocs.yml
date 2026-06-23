@@ -11,6 +11,7 @@ theme:
     - content.code.select
     - content.code.copy
     - content.tabs.link
+    - navigation.indexes
 
 plugins:
   - search
@@ -28,7 +29,6 @@ plugins:
             show_signature_annotations: true
 
 markdown_extensions:
-  - navigation.indexes
   - admonition
   - fenced_code
   - codehilite

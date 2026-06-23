@@ -32,7 +32,7 @@ Quick start:
     tb.google.summary("p001", "2026-05-01", "2026-06-18")
     tb.google.data_completeness(["p001", "p002"], "2026-05-01", "2026-06-18")
 
-Data type IDs: see docs/providers.md, or:
+Data type IDs: see docs/providers/index.md, or:
     from tokenbridge.providers.google_health import DATA_TYPES
     print(list(DATA_TYPES))
 """

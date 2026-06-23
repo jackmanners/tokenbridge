@@ -14,7 +14,7 @@
 #   ou_fetch("p001", "sleep",           start, end, token = tok)
 #   ou_fetch("p001", "daily-readiness", start, end, token = tok)
 #
-# Data type IDs: see names(OU_DATA_TYPES) or docs/providers.md
+# Data type IDs: see names(OU_DATA_TYPES) or docs/providers/index.md
 #
 # Function prefix: ou_   (Oura)
 

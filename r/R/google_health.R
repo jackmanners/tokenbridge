@@ -20,7 +20,7 @@
 #   gh_fetch("p001", "sleep", start, end, token = tok)
 #   gh_fetch("p001", "steps", start, end, token = tok)
 #
-# Data type IDs: see names(GH_DATA_TYPES) or docs/providers.md
+# Data type IDs: see names(GH_DATA_TYPES) or docs/providers/index.md
 #
 # Function prefix: gh_   (Google Health)
 
@@ -35,7 +35,7 @@
 #' \code{names(GH_DATA_TYPES)}  — list all type IDs
 #' \code{GH_DATA_TYPES["sleep"]}  — check endpoint type for a specific ID
 #'
-#' Full descriptions and units: see docs/providers.md
+#' Full descriptions and units: see docs/providers/index.md
 #'
 #' @export
 GH_DATA_TYPES <- c(
@@ -91,7 +91,7 @@ GH_DATA_TYPES <- c(
 #'
 #' data_type is the kebab-case type ID — e.g. "sleep", "steps",
 #' "heart-rate-variability". See \code{names(GH_DATA_TYPES)} or
-#' docs/providers.md for the full list.
+#' docs/providers/index.md for the full list.
 #'
 #' This function is the Google-Health shorthand for tb_fetch().
 #' It always uses the google-health provider regardless of tb_get_provider().
@@ -110,7 +110,7 @@ gh_fetch <- function(user_id, data_type, start_date, end_date,
   .gh_validate_dates(start_date, end_date)
   if (!data_type %in% names(GH_DATA_TYPES))
     warning("'", data_type, "' is not in GH_DATA_TYPES. ",
-            "See names(GH_DATA_TYPES) or docs/providers.md.", call. = FALSE)
+            "See names(GH_DATA_TYPES) or docs/providers/index.md.", call. = FALSE)
   if (is.null(token))
     token <- tb_get_token(user_id, provider = "google-health", env_file = env_file)
   if (isTRUE(GH_DATA_TYPES[[data_type]] == "dailyRollup")) {

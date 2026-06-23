@@ -18,7 +18,7 @@
 #   tb_set_provider("withings")
 #   tb_fetch("p001", "sleep", start, end)            # now uses Withings
 #
-# See docs/providers.md for all supported providers and data type IDs.
+# See docs/providers/index.md for all supported providers and data type IDs.
 #
 # Function prefix: tb_   (TokenBridge platform)
 
@@ -57,7 +57,7 @@
 #' Can be changed mid-script to switch providers.
 #'
 #' @param provider Provider ID string — e.g. "google-health", "withings".
-#'   See docs/providers.md for the full list.
+#'   See docs/providers/index.md for the full list.
 #' @return Invisibly returns the provider string
 #' @export
 tb_set_provider <- function(provider) {
@@ -65,7 +65,7 @@ tb_set_provider <- function(provider) {
   if (!provider %in% supported)
     warning("Unknown provider '", provider, "'. ",
             "Supported: ", paste(supported, collapse = ", "),
-            ". See docs/providers.md.", call. = FALSE)
+            ". See docs/providers/index.md.", call. = FALSE)
   .tb_state$provider <- provider
   invisible(provider)
 }
@@ -164,10 +164,10 @@ tb_auth_urls <- function(user_ids, provider = tb_get_provider(), env_file = ".en
 #' The canonical fetch function. data_type is the kebab-case type ID from the
 #' provider — e.g. "sleep", "steps", "heart-rate-variability".
 #'
-#' See docs/providers.md for the full list, or print names(GH_DATA_TYPES).
+#' See docs/providers/index.md for the full list, or print names(GH_DATA_TYPES).
 #'
 #' @param user_id    TokenBridge user ID
-#' @param data_type  Data type ID (kebab-case). See docs/providers.md.
+#' @param data_type  Data type ID (kebab-case). See docs/providers/index.md.
 #' @param start_date "YYYY-MM-DD"
 #' @param end_date   "YYYY-MM-DD"
 #' @param token      Pre-fetched access token (optional). Pass this when fetching
@@ -188,7 +188,7 @@ tb_fetch <- function(user_id, data_type, start_date, end_date,
                                token = token, env_file = env_file),
     "withings"      = wt_fetch(user_id, data_type, start_date, end_date,
                                token = token, env_file = env_file),
-    stop("Unknown provider '", provider, "'. See docs/providers.md.", call. = FALSE)
+    stop("Unknown provider '", provider, "'. See docs/providers/index.md.", call. = FALSE)
   )
 }
 

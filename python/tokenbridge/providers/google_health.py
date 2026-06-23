@@ -20,7 +20,7 @@ from tokenbridge.providers.google_health import DATA_TYPES
 print(list(DATA_TYPES))   # all type IDs
 ```
 
-See `docs/providers.md` for descriptions, units, and device requirements.
+See `docs/providers/index.md` for descriptions, units, and device requirements.
 """
 
 from datetime import date, datetime, timezone
