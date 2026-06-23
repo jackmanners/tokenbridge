@@ -18,7 +18,7 @@ This page shows the minimal code to get from zero to a valid access token. What 
 
 Generate an auth link and send it to them. This is just a URL - you can print it, email it, put it in a Qualtrics survey, whatever.
 
-/// tab \| Python
+/// tab | Python
 
 ```         
 :::python
@@ -33,7 +33,7 @@ print(auth_url)
 
 ///
 
-/// tab \| R
+/// tab | R
 
 ```         
 :::r
