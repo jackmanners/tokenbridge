@@ -28,11 +28,12 @@ Two phases:
 
 The functions use shared code so they must be deployed via the Supabase CLI. This is a one-time step — after this, pushing to `main` deploys automatically.
 
-:::bash
+```bash
 npm install -g supabase
 supabase login
 supabase link --project-ref YOUR_PROJECT_REF
 supabase functions deploy auth-start auth-callback token token-keepalive --no-verify-jwt
+```
 
 If you don't have Node/npm, see the [Supabase CLI docs](https://supabase.com/docs/guides/cli) for alternative install methods.
 
