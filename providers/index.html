@@ -709,6 +709,56 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Withings (withings)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#endpoint-types_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Endpoint types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-types_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#measure-value-decoding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Measure value decoding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#known-limitations_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Known limitations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1038,6 +1088,56 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Withings (withings)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#endpoint-types_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Endpoint types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-types_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#measure-value-decoding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Measure value decoding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#known-limitations_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Known limitations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1093,8 +1193,8 @@ then propagate changes to <code>python/tokenbridge/providers/</code> and <code>r
 </tr>
 <tr>
 <td><code>withings</code></td>
-<td>Stub</td>
-<td>Auth flow wired; data fetch not yet implemented</td>
+<td>Supported</td>
+<td>Requires Withings device (scale, BPM cuff, sleep mat, etc.)</td>
 </tr>
 </tbody>
 </table>
@@ -1459,39 +1559,151 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 <hr />
 <h2 id="withings-withings">Withings (<code>withings</code>)<a class="headerlink" href="#withings-withings" title="Permanent link">&para;</a></h2>
 <p><strong>API base:</strong> <code>https://wbsapi.withings.net</code><br />
-<strong>Status:</strong> Auth flow wired; fetch not yet implemented.</p>
-<p>Planned data types (post-implementation):</p>
+<strong>Auth:</strong> OAuth 2.0 (no PKCE), scopes <code>user.info user.metrics user.activity user.sleepevents</code><br />
+<strong>Backend:</strong> Withings devices (scales, blood pressure monitors, sleep mats, activity trackers)<br />
+<strong>Response envelope:</strong> All responses are <code>{ "status": 0, "body": { ... } }</code> — status 0 = success</p>
+<h3 id="endpoint-types_1">Endpoint types<a class="headerlink" href="#endpoint-types_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Date params</th>
+<th>Pagination</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YMD endpoints (<code>/v2/sleep getsummary</code>, <code>/v2/measure getactivity</code>, <code>/v2/measure getworkouts</code>)</td>
+<td><code>startdateymd</code> / <code>enddateymd</code> (YYYY-MM-DD)</td>
+<td><code>more</code> boolean + <code>offset</code> integer</td>
+</tr>
+<tr>
+<td>Unix endpoints (<code>/measure getmeas</code>, <code>/v2/sleep get</code>, <code>/v2/heart list</code>)</td>
+<td><code>startdate</code> / <code>enddate</code> (epoch seconds)</td>
+<td><code>more</code> boolean + <code>offset</code> integer</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-types_1">Data types<a class="headerlink" href="#data-types_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
 <th>Type ID</th>
 <th>Category</th>
 <th>Description</th>
+<th>Unit</th>
+<th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>sleep</code></td>
+<td><code>sleep-summary</code></td>
 <td>Sleep</td>
-<td>Sleep summary with stages</td>
+<td>Daily sleep summary with stages</td>
+<td>s</td>
+<td>One row per sleep session; total_sleep_time, rem/light/deep durations, efficiency</td>
 </tr>
 <tr>
-<td><code>heart-rate</code></td>
-<td>Heart</td>
-<td>Resting HR from Withings devices</td>
+<td><code>sleep-detail</code></td>
+<td>Sleep</td>
+<td>High-frequency sleep stage data</td>
+<td>—</td>
+<td>Raw 30-second epoch data; best for detailed analysis</td>
+</tr>
+<tr>
+<td><code>activity</code></td>
+<td>Activity</td>
+<td>Daily activity summary</td>
+<td>—</td>
+<td>steps, distance, calories, active_calories, elevation</td>
+</tr>
+<tr>
+<td><code>workouts</code></td>
+<td>Activity</td>
+<td>Individual workout sessions</td>
+<td>—</td>
+<td>category, duration, calories, intensity</td>
 </tr>
 <tr>
 <td><code>weight</code></td>
 <td>Body</td>
-<td>Weight from Withings scale</td>
+<td>Weight measurements</td>
+<td>kg</td>
+<td>Value decoded from Withings int+exponent encoding</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td>Body</td>
+<td>Height measurements</td>
+<td>m</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fat-ratio</code></td>
+<td>Body</td>
+<td>Body fat percentage</td>
+<td>%</td>
+<td>Requires BIA-capable Withings scale</td>
+</tr>
+<tr>
+<td><code>fat-mass</code></td>
+<td>Body</td>
+<td>Fat mass</td>
+<td>kg</td>
+<td>Requires BIA-capable Withings scale</td>
 </tr>
 <tr>
 <td><code>blood-pressure</code></td>
 <td>Vitals</td>
-<td>Systolic / diastolic from Withings cuff</td>
+<td>Blood pressure (systolic + diastolic in same row)</td>
+<td>mmHg</td>
+<td>Requires Withings blood pressure monitor</td>
+</tr>
+<tr>
+<td><code>heart-rate</code></td>
+<td>Vitals</td>
+<td>Resting heart rate from BPM/scale devices</td>
+<td>bpm</td>
+<td>Distinct from activity HR</td>
+</tr>
+<tr>
+<td><code>spo2</code></td>
+<td>Vitals</td>
+<td>Blood oxygen saturation</td>
+<td>%</td>
+<td>Requires compatible Withings device</td>
+</tr>
+<tr>
+<td><code>muscle-mass</code></td>
+<td>Body</td>
+<td>Muscle mass</td>
+<td>kg</td>
+<td>Requires BIA-capable scale</td>
+</tr>
+<tr>
+<td><code>bone-mass</code></td>
+<td>Body</td>
+<td>Bone mass</td>
+<td>kg</td>
+<td>Requires BIA-capable scale</td>
+</tr>
+<tr>
+<td><code>ecg</code></td>
+<td>Heart</td>
+<td>ECG recording metadata (signal IDs)</td>
+<td>—</td>
+<td>Use Withings Heart v2 - Get for raw signal</td>
 </tr>
 </tbody>
 </table>
+<h3 id="measure-value-decoding">Measure value decoding<a class="headerlink" href="#measure-value-decoding" title="Permanent link">&para;</a></h3>
+<p>Body measurement values from <code>/measure getmeas</code> are encoded as <code>value × 10^unit</code> (e.g. <code>value=800</code> <code>unit=-1</code> → <code>80.0 kg</code>). The client decodes this automatically — returned dicts already have the real numeric value under named columns like <code>weight_kg</code>, <code>fat_ratio_pct</code>, etc.</p>
+<h3 id="known-limitations_1">Known limitations<a class="headerlink" href="#known-limitations_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The Withings API requires re-authorisation when the refresh token expires (unlike Google, which issues long-lived refresh tokens). If a user's token is invalidated, <code>tb_get_token()</code> raises an error with a re-auth link.</li>
+<li>Some data types (BIA measurements, ECG) require specific Withings hardware.</li>
+<li>Test accounts (demo mode) have dummy data — use <code>action=getdemoaccess</code> in the Withings developer dashboard to access it.</li>
+</ul>
 <hr />
 <h2 id="adding-a-new-provider">Adding a new provider<a class="headerlink" href="#adding-a-new-provider" title="Permanent link">&para;</a></h2>
 <ol>
