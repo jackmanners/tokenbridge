@@ -701,28 +701,21 @@
     <p>Installation and first use. If you're setting up your own instance first, see <a href="../deployment/">Deployment</a>.</p>
 <hr />
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Python</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="n">Requires</span><span class="w"> </span><span class="n">Python</span><span class="w"> </span><span class="mf">3.10</span><span class="o">+</span><span class="p">.</span>
-
-<span class="o">:::</span><span class="n">bash</span>
-<span class="n">pip</span><span class="w"> </span><span class="k">install</span><span class="w"> </span><span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="o">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">jackmanners</span><span class="o">/</span><span class="n">tokenbridge</span><span class="p">.</span><span class="n">git</span><span class="c1">#subdirectory=python</span>
-
-<span class="n">Dependencies</span><span class="w"> </span><span class="n">installed</span><span class="w"> </span><span class="n">automatically</span><span class="o">:</span><span class="w"> </span><span class="n n-Quoted">`requests`</span><span class="p">,</span><span class="w"> </span><span class="n n-Quoted">`python-dotenv`</span><span class="p">.</span>
+<p>/// tab | Python (bash)
+    :::bash
+    pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Dependencies</span><span class="w"> </span><span class="n">installed</span><span class="w"> </span><span class="n">automatically</span><span class="o">:</span><span class="w"> </span><span class="n n-Quoted">`requests`</span><span class="p">,</span><span class="w"> </span><span class="n n-Quoted">`python-dotenv`</span><span class="p">.</span>
 </code></pre></div>
 
-</div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">R</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="n">Requires</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="mf">4.0</span><span class="o">+</span><span class="p">.</span>
-
-<span class="o">:::</span><span class="n">r</span>
-<span class="k">install</span><span class="p">.</span><span class="n">packages</span><span class="p">(</span><span class="s2">&quot;devtools&quot;</span><span class="p">)</span>
-<span class="n">devtools</span><span class="o">::</span><span class="n">install_github</span><span class="p">(</span><span class="s2">&quot;jackmanners/tokenbridge&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">subdir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
-
-<span class="n">Dependencies</span><span class="w"> </span><span class="n">installed</span><span class="w"> </span><span class="n">automatically</span><span class="o">:</span><span class="w"> </span><span class="n n-Quoted">`httr`</span><span class="p">.</span>
+<p>///</p>
+<p>/// tab | R
+    :::r
+    install.packages("devtools")
+    devtools::install_github("jackmanners/tokenbridge", subdir = "r")</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Dependencies</span><span class="w"> </span><span class="n">installed</span><span class="w"> </span><span class="n">automatically</span><span class="o">:</span><span class="w"> </span><span class="n n-Quoted">`httr`</span><span class="p">.</span>
 </code></pre></div>
 
-</div>
-</div>
+<p>///</p>
 <hr />
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <p>TokenBridge needs two values to connect to your deployment:</p>
@@ -745,18 +738,20 @@
 </tbody>
 </table></div>
 <p>The recommended way to store these is in a <code>.env</code> file in your project directory. Run the setup wizard once:</p>
-<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Python</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Python (bash)</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>tokenbridge
 
-The<span class="w"> </span>wizard<span class="w"> </span>prompts<span class="w"> </span><span class="k">for</span><span class="w"> </span>your<span class="w"> </span>URL<span class="w"> </span>and<span class="w"> </span>API<span class="w"> </span>key,<span class="w"> </span>verifies<span class="w"> </span>the<span class="w"> </span>connection,<span class="w"> </span>and<span class="w"> </span>saves<span class="w"> </span>them<span class="w"> </span>to<span class="w"> </span><span class="sb">`</span>.env<span class="sb">`</span>.
+<span class="c1"># Requires Python 3.10+.</span>
+<span class="c1"># The wizard prompts for your URL and API key, verifies the connection, and saves them to `.env`.</span>
 </code></pre></div>
 
 </div>
-<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">R</label><div class="tabbed-content">
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">R</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="nf">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
 <span class="nf">tb_setup</span><span class="p">()</span>
 
-<span class="n">Same</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">Python</span><span class="w"> </span><span class="n">wizard</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">prompts</span><span class="p">,</span><span class="w"> </span><span class="n">verifies</span><span class="p">,</span><span class="w"> </span><span class="n">saves</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">`.env`.</span>
+<span class="c1"># Requires R 4.0+.</span>
+<span class="c1"># Same as the Python wizard - prompts, verifies, saves to `.env`.</span>
 </code></pre></div>
 
 </div>
@@ -768,7 +763,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 </div>
 <h3 id="manual-configuration">Manual configuration<a class="headerlink" href="#manual-configuration" title="Permanent link">&para;</a></h3>
 <p>If you prefer not to use <code>.env</code>, you can pass credentials directly:</p>
-<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Python</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Python</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenBridge</span>
 
 <span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">(</span>
@@ -778,7 +773,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 </code></pre></div>
 
 </div>
-<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">R</label><div class="tabbed-content">
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">R</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="nf">Sys.setenv</span><span class="p">(</span>
 <span class="w">  </span><span class="n">TOKENBRIDGE_URL</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://abcdef.supabase.co/functions/v1&quot;</span><span class="p">,</span>
 <span class="w">  </span><span class="n">TOKENBRIDGE_API_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;your-api-key&quot;</span>
@@ -791,7 +786,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 <hr />
 <h2 id="onboarding-participants">Onboarding participants<a class="headerlink" href="#onboarding-participants" title="Permanent link">&para;</a></h2>
 <p>Each participant needs to authorise their account once. Generate a unique URL for each person and send it to them (email, SMS, whatever works for your study).</p>
-<div class="tabbed-set" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><label for="__tabbed_4_1">Python</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Python</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenBridge</span>
 
 <span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">()</span>
@@ -807,7 +802,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 </code></pre></div>
 
 </div>
-<input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><label for="__tabbed_4_2">R</label><div class="tabbed-content">
+<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">R</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="c1"># Single participant</span>
 <span class="nf">tb_auth_url</span><span class="p">(</span><span class="s">&quot;participant-001&quot;</span><span class="p">)</span>
 
@@ -837,7 +832,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 <h2 id="fetching-data">Fetching data<a class="headerlink" href="#fetching-data" title="Permanent link">&para;</a></h2>
 <p>Once a participant has authorised, you can fetch any of their data types immediately.</p>
 <h3 id="basic-fetch">Basic fetch<a class="headerlink" href="#basic-fetch" title="Permanent link">&para;</a></h3>
-<div class="tabbed-set" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><label for="__tabbed_5_1">Python</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><label for="__tabbed_4_1">Python</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenBridge</span>
 
 <span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">()</span>
@@ -851,7 +846,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 </code></pre></div>
 
 </div>
-<input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><label for="__tabbed_5_2">R</label><div class="tabbed-content">
+<input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><label for="__tabbed_4_2">R</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
 <span class="n">steps</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;steps&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
 <span class="n">hrv</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;heart-rate-variability&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
@@ -864,7 +859,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 </div>
 <p>Results are returned as flat records (Python: <code>list[dict]</code>, R: <code>data.frame</code>). Nested API fields are flattened with dot notation - e.g. <code>startTime.seconds</code>.</p>
 <h3 id="setting-a-default-provider">Setting a default provider<a class="headerlink" href="#setting-a-default-provider" title="Permanent link">&para;</a></h3>
-<div class="tabbed-set" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><label for="__tabbed_6_1">Python</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><label for="__tabbed_5_1">Python</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">()</span>
 <span class="n">tb</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="s2">&quot;google-health&quot;</span>    <span class="c1"># default; change to switch providers</span>
 
@@ -872,7 +867,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 </code></pre></div>
 
 </div>
-<input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><label for="__tabbed_6_2">R</label><div class="tabbed-content">
+<input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><label for="__tabbed_5_2">R</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="nf">tb_set_provider</span><span class="p">(</span><span class="s">&quot;google-health&quot;</span><span class="p">)</span><span class="w">    </span><span class="c1"># persists for the session</span>
 
 <span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">)</span><span class="w">    </span><span class="c1"># uses the default</span>
@@ -889,7 +884,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 
 <h3 id="token-reuse">Token reuse<a class="headerlink" href="#token-reuse" title="Permanent link">&para;</a></h3>
 <p>Each call to <code>tb.fetch()</code> / <code>tb_fetch()</code> makes one request to TokenBridge to get a valid token. When fetching several data types for the same participant in one script, get the token once and pass it through:</p>
-<div class="tabbed-set" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><label for="__tabbed_7_1">Python</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><label for="__tabbed_6_1">Python</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="n">token</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">)</span>
 
 <span class="n">sleep</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep&quot;</span><span class="p">,</span>                    <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
@@ -899,7 +894,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 </code></pre></div>
 
 </div>
-<input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><label for="__tabbed_7_2">R</label><div class="tabbed-content">
+<input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><label for="__tabbed_6_2">R</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="n">tok</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_get_token</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">)</span>
 
 <span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w">                    </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
@@ -913,7 +908,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 <hr />
 <h2 id="auditing-your-cohort">Auditing your cohort<a class="headerlink" href="#auditing-your-cohort" title="Permanent link">&para;</a></h2>
 <p>Before running analysis, check data completeness across participants:</p>
-<div class="tabbed-set" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><label for="__tabbed_8_1">Python</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><label for="__tabbed_7_1">Python</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="n">audit</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">data_completeness</span><span class="p">(</span>
     <span class="p">[</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;p002&quot;</span><span class="p">,</span> <span class="s2">&quot;p003&quot;</span><span class="p">],</span>
     <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-06-18&quot;</span><span class="p">,</span>
@@ -923,7 +918,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 </code></pre></div>
 
 </div>
-<input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><label for="__tabbed_8_2">R</label><div class="tabbed-content">
+<input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><label for="__tabbed_7_2">R</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="n">audit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">gh_data_completeness</span><span class="p">(</span>
 <span class="w">  </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">),</span>
 <span class="w">  </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">,</span>
@@ -937,7 +932,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 <hr />
 <h2 id="available-data-types">Available data types<a class="headerlink" href="#available-data-types" title="Permanent link">&para;</a></h2>
 <p>Data type IDs are kebab-case strings passed as the <code>data_type</code> argument. Each provider has its own set:</p>
-<div class="tabbed-set" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><label for="__tabbed_9_1">Python</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><label for="__tabbed_8_1">Python</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge.providers.google_health</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_TYPES</span> <span class="k">as</span> <span class="n">GH_DATA_TYPES</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge.providers.withings</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_TYPES</span> <span class="k">as</span> <span class="n">WT_DATA_TYPES</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge.providers.oura</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_TYPES</span> <span class="k">as</span> <span class="n">OU_DATA_TYPES</span>
@@ -948,7 +943,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 </code></pre></div>
 
 </div>
-<input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><label for="__tabbed_9_2">R</label><div class="tabbed-content">
+<input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><label for="__tabbed_8_2">R</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="nf">names</span><span class="p">(</span><span class="n">GH_DATA_TYPES</span><span class="p">)</span><span class="w">   </span><span class="c1"># Google Health</span>
 <span class="nf">names</span><span class="p">(</span><span class="n">WT_DATA_TYPES</span><span class="p">)</span><span class="w">   </span><span class="c1"># Withings</span>
 <span class="nf">names</span><span class="p">(</span><span class="n">OU_DATA_TYPES</span><span class="p">)</span><span class="w">   </span><span class="c1"># Oura</span>

@@ -6,10 +6,7 @@ Installation and first use. If you're setting up your own instance first, see [D
 
 ## Installation
 
-/// tab | Python
-
-    Requires Python 3.10+.
-
+/// tab | Python (bash)
     :::bash
     pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
 
@@ -18,9 +15,6 @@ Installation and first use. If you're setting up your own instance first, see [D
 ///
 
 /// tab | R
-
-    Requires R 4.0+.
-
     :::r
     install.packages("devtools")
     devtools::install_github("jackmanners/tokenbridge", subdir = "r")
@@ -42,12 +36,13 @@ TokenBridge needs two values to connect to your deployment:
 
 The recommended way to store these is in a `.env` file in your project directory. Run the setup wizard once:
 
-/// tab | Python
+/// tab | Python (bash)
 
     :::bash
     python -m tokenbridge
 
-    The wizard prompts for your URL and API key, verifies the connection, and saves them to `.env`.
+    # Requires Python 3.10+.
+    # The wizard prompts for your URL and API key, verifies the connection, and saves them to `.env`.
 
 ///
 
@@ -57,7 +52,8 @@ The recommended way to store these is in a `.env` file in your project directory
     library(tokenbridge)
     tb_setup()
 
-    Same as the Python wizard - prompts, verifies, saves to `.env`.
+    # Requires R 4.0+.
+    # Same as the Python wizard - prompts, verifies, saves to `.env`.
 
 ///
 
