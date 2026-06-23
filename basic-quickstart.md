@@ -74,7 +74,7 @@ Both need these repository secrets (**Settings → Secrets → Actions**):
 
 Add one or more providers. Each requires its own OAuth app and two secrets in Supabase.
 
-=== "Google Health (Fitbit)"
+/// tab | Google Health (Fitbit)
 
     **Requires:** A Google Cloud project. Data comes from Fitbit devices linked to a Google account.
 
@@ -117,7 +117,9 @@ Add one or more providers. Each requires its own OAuth app and two secrets in Su
         Participants will see an "unverified app" warning — tell them to click **Advanced → Continue**.
         This goes away once Google verifies your app (optional for small studies).
 
-=== "Withings"
+///
+
+/// tab | Withings
 
     **Requires:** A Withings developer account. Data comes from Withings devices
     (scales, blood pressure monitors, sleep mats, activity trackers).
@@ -146,7 +148,9 @@ Add one or more providers. Each requires its own OAuth app and two secrets in Su
     ```
     You should be redirected to the Withings authorisation page.
 
-=== "Oura"
+///
+
+/// tab | Oura
 
     **Requires:** An Oura developer account. Data comes from Oura Ring devices.
 
@@ -173,11 +177,13 @@ Add one or more providers. Each requires its own OAuth app and two secrets in Su
     ```
     You should be redirected to the Oura authorisation page.
 
+///
+
 ---
 
 ## Part 3 — Install the client package
 
-=== "Python"
+/// tab | Python
 
     ```bash
     pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
@@ -187,7 +193,9 @@ Add one or more providers. Each requires its own OAuth app and two secrets in Su
     #   API key: the TOKENBRIDGE_API_KEY you set in Step 3
     ```
 
-=== "R"
+///
+
+/// tab | R
 
     ```r
     install.packages("devtools")
@@ -199,6 +207,8 @@ Add one or more providers. Each requires its own OAuth app and two secrets in Su
     #   URL:     https://YOUR_PROJECT_REF.supabase.co/functions/v1
     #   API key: the TOKENBRIDGE_API_KEY you set in Step 3
     ```
+
+///
 
 ---
 
@@ -219,7 +229,7 @@ ou_links  <- tb_auth_urls(c("p001", "p002"), provider = "oura")
 sleep <- tb_fetch("p001", "sleep", "2026-05-01", "2026-06-18")
 
 # Provider-specific fetchers
-activity <- wt_fetch("p001", "activity",      "2026-05-01", "2026-06-18")
+activity <- wt_fetch("p001", "activity",        "2026-05-01", "2026-06-18")
 readiness <- ou_fetch("p001", "daily-readiness", "2026-05-01", "2026-06-18")
 
 # Audit data coverage

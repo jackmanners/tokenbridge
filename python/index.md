@@ -5,11 +5,7 @@ The `tokenbridge` Python package provides a single `TokenBridge` client with bui
 ## Installation
 
 ```bash
-<<<<<<< HEAD
 pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
-=======
-pip install git+https://github.com/YOUR_USERNAME/tokenbridge.git#subdirectory=python
->>>>>>> e656476530cbfcd464560310f0bbb5cd10018519
 ```
 
 Requires Python 3.10+. Dependencies: `requests`, `python-dotenv`.
@@ -22,13 +18,12 @@ TokenBridge (tb)           — auth, token management, and top-level fetch
   ├── tb.fetch(...)        — canonical data fetch, uses tb.provider
   ├── tb.google            — _ProviderProxy, pre-binds "google-health"
   │     ├── .fetch(...)
-  │     ├── .summary(...)
   │     └── .data_completeness(...)
   ├── tb.withings          — _ProviderProxy, pre-binds "withings"
+  │     └── .fetch(...)
+  ├── tb.oura              — _ProviderProxy, pre-binds "oura"
+  │     └── .fetch(...)
   └── tb.auth_url(...)     — participant onboarding
-
-GoogleHealth               — can also be used directly (advanced)
-  └── .fetch(user, dtype, start, end, token=None)
 ```
 
 ## Quick start
@@ -51,9 +46,10 @@ token = tb.get_token("p001")
 sleep = tb.fetch("p001", "sleep",  start, end, token=token)
 hrv   = tb.fetch("p001", "heart-rate-variability", start, end, token=token)
 
-# Provider namespace
+# Provider namespaces
 tb.google.fetch("p001", "sleep", start, end)
-tb.google.summary("p001", start, end)
+tb.withings.fetch("p001", "activity", start, end)
+tb.oura.fetch("p001", "daily-readiness", start, end)
 
 # One-off override
 tb.fetch("p001", "sleep", start, end, provider="withings")

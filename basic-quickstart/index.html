@@ -66,6 +66,16 @@
     <link href="../css/geist.css" rel="stylesheet" />
 
     
+    
+
+<link id="pygments-light" rel="stylesheet"
+    href="../css/pygments/shadcn-light.css">
+<link id="pygments-dark" rel="stylesheet"
+    href="../css/pygments/github-dark.css"
+    media="(prefers-color-scheme: dark)">
+
+
+    
 
     <style>
         :root {
@@ -393,6 +403,25 @@
 </li>
             
             
+            
+            <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
+    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
+        data-size="default" href="../without-packages/"
+        class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
+
+        
+        Without Packages
+        
+
+        
+
+        
+
+        
+    </a>
+</li>
+            
+            
         </ul>
     </div>
 </div>
@@ -600,11 +629,12 @@
 <h3 id="2-deploy-the-edge-functions-5-min">2. Deploy the edge functions (~5 min)<a class="headerlink" href="#2-deploy-the-edge-functions-5-min" title="Permanent link">&para;</a></h3>
 <p>The functions use shared code so they must be deployed via the Supabase CLI.
 This is a one-time step — after this, pushing to <code>main</code> deploys automatically.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>supabase
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>supabase<span class="w"> </span>login
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>supabase<span class="w"> </span>link<span class="w"> </span>--project-ref<span class="w"> </span>YOUR_PROJECT_REF
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>supabase<span class="w"> </span>functions<span class="w"> </span>deploy<span class="w"> </span>auth-start<span class="w"> </span>auth-callback<span class="w"> </span>token<span class="w"> </span>token-keepalive<span class="w"> </span>--no-verify-jwt
+<div class="codehilite"><pre><span></span><code>npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>supabase
+supabase<span class="w"> </span>login
+supabase<span class="w"> </span>link<span class="w"> </span>--project-ref<span class="w"> </span>YOUR_PROJECT_REF
+supabase<span class="w"> </span>functions<span class="w"> </span>deploy<span class="w"> </span>auth-start<span class="w"> </span>auth-callback<span class="w"> </span>token<span class="w"> </span>token-keepalive<span class="w"> </span>--no-verify-jwt
 </code></pre></div>
+
 <p>If you don't have Node/npm, see the <a href="https://supabase.com/docs/guides/cli">Supabase CLI docs</a> for alternative install methods.</p>
 <hr />
 <h3 id="3-set-core-secrets-1-min">3. Set core secrets (~1 min)<a class="headerlink" href="#3-set-core-secrets-1-min" title="Permanent link">&para;</a></h3>
@@ -657,181 +687,160 @@ This is a one-time step — after this, pushing to <code>main</code> deploys aut
 <hr />
 <h2 id="part-2-provider-setup">Part 2 — Provider setup<a class="headerlink" href="#part-2-provider-setup" title="Permanent link">&para;</a></h2>
 <p>Add one or more providers. Each requires its own OAuth app and two secrets in Supabase.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Google Health (Fitbit)</label><label for="__tabbed_1_2">Withings</label><label for="__tabbed_1_3">Oura</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<p><strong>Requires:</strong> A Google Cloud project. Data comes from Fitbit devices linked to a Google account.</p>
-<p><strong>Create a project and enable the API:</strong></p>
-<ol>
-<li>Go to <a href="https://console.cloud.google.com">console.cloud.google.com</a>, sign in, create a new project</li>
-<li>Go to <strong>APIs &amp; Services → Library</strong>, search <strong>Google Health API</strong>, enable it</li>
-</ol>
-<p><strong>Configure the consent screen:</strong></p>
-<ol>
-<li>Go to <strong>APIs &amp; Services → OAuth consent screen → Get Started</strong></li>
-<li>Fill in your app name and email, set Audience to <strong>External</strong>, click through</li>
-<li>On the <strong>Data access</strong> step — leave it completely empty</li>
-<li>When asked about publishing status, choose <strong>Production</strong></li>
-</ol>
-<p><strong>Create credentials:</strong></p>
-<ol>
-<li>Go to <strong>APIs &amp; Services → Credentials → Create Credentials → OAuth client ID</strong></li>
-<li>Application type: <strong>Web application</strong></li>
-<li>Under <strong>Authorised redirect URIs</strong>, add:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback
-</code></pre></div></li>
-<li>Click <strong>Create</strong> and copy the <strong>Client ID</strong> and <strong>Client Secret</strong></li>
-</ol>
-<p><strong>Add secrets to Supabase</strong> (<strong>Project Settings → Edge Functions → Secrets</strong>):</p>
-<div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>Secret name</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>GOOGLE_HEALTH_CLIENT_ID</code></td>
-<td>Client ID from above</td>
-</tr>
-<tr>
-<td><code>GOOGLE_HEALTH_CLIENT_SECRET</code></td>
-<td>Client Secret from above</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Test:</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=google-health&amp;user_id=test
+<div class="tabbed-set" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Google Health (Fitbit)</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code>**<span class="n">Requires:</span>** <span class="n">A</span> <span class="n">Google</span> <span class="n">Cloud</span> <span class="n">project</span>. <span class="n">Data</span> <span class="n">comes</span> <span class="nb">from</span> <span class="n">Fitbit</span> <span class="n">devices</span> <span class="n">linked</span> <span class="nb">to</span> <span class="n">a</span> <span class="n">Google</span> <span class="n">account</span>.
+
+**<span class="n">Create</span> <span class="n">a</span> <span class="n">project</span> <span class="o">and</span> <span class="n">enable</span> <span class="n">the</span> <span class="n">API:</span>**
+
+<span class="mi">1</span>. <span class="n">Go</span> <span class="nb">to</span> [<span class="n">console</span>.<span class="n">cloud</span>.<span class="n">google</span>.<span class="n">com</span>](<span class="n">https:</span>//<span class="n">console</span>.<span class="n">cloud</span>.<span class="n">google</span>.<span class="n">com</span>), <span class="nb">sign</span> <span class="nb">in</span>, <span class="n">create</span> <span class="n">a</span> <span class="nb">new</span> <span class="n">project</span>
+<span class="mi">2</span>. <span class="n">Go</span> <span class="nb">to</span> **<span class="n">APIs</span> &amp; <span class="n">Services</span> → <span class="n">Library</span>**, <span class="n">search</span> **<span class="n">Google</span> <span class="n">Health</span> <span class="n">API</span>**, <span class="n">enable</span> <span class="n">it</span>
+
+**<span class="n">Configure</span> <span class="n">the</span> <span class="n">consent</span> <span class="n">screen:</span>**
+
+<span class="mi">1</span>. <span class="n">Go</span> <span class="nb">to</span> **<span class="n">APIs</span> &amp; <span class="n">Services</span> → <span class="n">OAuth</span> <span class="n">consent</span> <span class="n">screen</span> → <span class="n">Get</span> <span class="n">Started</span>**
+<span class="mi">2</span>. <span class="n">Fill</span> <span class="nb">in</span> <span class="n">your</span> <span class="n">app</span> <span class="nb">name</span> <span class="o">and</span> <span class="n">email</span>, <span class="n">set</span> <span class="n">Audience</span> <span class="nb">to</span> **<span class="n">External</span>**, <span class="n">click</span> <span class="n">through</span>
+<span class="mi">3</span>. <span class="n">On</span> <span class="n">the</span> **<span class="n">Data</span> <span class="n">access</span>** <span class="n">step</span> — <span class="n">leave</span> <span class="n">it</span> <span class="n">completely</span> <span class="n">empty</span>
+<span class="mi">4</span>. <span class="n">When</span> <span class="n">asked</span> <span class="n">about</span> <span class="n">publishing</span> <span class="nb">status</span>, <span class="n">choose</span> **<span class="n">Production</span>**
+
+**<span class="n">Create</span> <span class="n">credentials:</span>**
+
+<span class="mi">1</span>. <span class="n">Go</span> <span class="nb">to</span> **<span class="n">APIs</span> &amp; <span class="n">Services</span> → <span class="n">Credentials</span> → <span class="n">Create</span> <span class="n">Credentials</span> → <span class="n">OAuth</span> <span class="n">client</span> <span class="n">ID</span>**
+<span class="mi">2</span>. <span class="n">Application</span> <span class="n">type:</span> **<span class="n">Web</span> <span class="n">application</span>**
+<span class="mi">3</span>. <span class="n">Under</span> **<span class="n">Authorised</span> <span class="n">redirect</span> <span class="n">URIs</span>**, <span class="n">add:</span>
+   ```
+   <span class="n">https:</span>//<span class="n">YOUR_PROJECT_REF</span>.<span class="n">supabase</span>.<span class="n">co</span><span class="o">/</span><span class="n">functions</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">auth-callback</span>
+   ```
+<span class="mi">4</span>. <span class="n">Click</span> **<span class="n">Create</span>** <span class="o">and</span> <span class="nb">copy</span> <span class="n">the</span> **<span class="n">Client</span> <span class="n">ID</span>** <span class="o">and</span> **<span class="n">Client</span> <span class="n">Secret</span>**
+
+**<span class="n">Add</span> <span class="n">secrets</span> <span class="nb">to</span> <span class="n">Supabase</span>** (**<span class="n">Project</span> <span class="n">Settings</span> → <span class="n">Edge</span> <span class="n">Functions</span> → <span class="n">Secrets</span>**):
+
+| <span class="n">Secret</span> <span class="nb">name</span> | <span class="n">Value</span> |
+|---|---|
+| `<span class="n">GOOGLE_HEALTH_CLIENT_ID</span>` | <span class="n">Client</span> <span class="n">ID</span> <span class="nb">from</span> <span class="n">above</span> |
+| `<span class="n">GOOGLE_HEALTH_CLIENT_SECRET</span>` | <span class="n">Client</span> <span class="n">Secret</span> <span class="nb">from</span> <span class="n">above</span> |
+
+**<span class="n">Test:</span>**
+```
+<span class="n">https:</span>//<span class="n">YOUR_PROJECT_REF</span>.<span class="n">supabase</span>.<span class="n">co</span><span class="o">/</span><span class="n">functions</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">auth-start</span><span class="o">?</span><span class="n">provider</span>=<span class="n">google-health</span><span class="nv">&amp;user_id</span>=<span class="n">test</span>
+```
+<span class="n">You</span> <span class="n">should</span> <span class="n">be</span> <span class="n">redirected</span> <span class="nb">to</span> <span class="n">a</span> <span class="n">Google</span> <span class="n">sign-in</span> <span class="n">page</span>.
+
+!!! <span class="nb">note</span>
+    <span class="n">Participants</span> <span class="n">will</span> <span class="n">see</span> <span class="n">an</span> <span class="s">&quot;unverified app&quot;</span> <span class="n">warning</span> — <span class="nb">tell</span> <span class="n">them</span> <span class="nb">to</span> <span class="n">click</span> **<span class="n">Advanced</span> → <span class="n">Continue</span>**.
+    <span class="n">This</span> <span class="n">goes</span> <span class="n">away</span> <span class="n">once</span> <span class="n">Google</span> <span class="n">verifies</span> <span class="n">your</span> <span class="n">app</span> (<span class="nb">optional</span> <span class="k">for</span> <span class="n">small</span> <span class="n">studies</span>).
 </code></pre></div>
-You should be redirected to a Google sign-in page.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Participants will see an "unverified app" warning — tell them to click <strong>Advanced → Continue</strong>.
-This goes away once Google verifies your app (optional for small studies).</p>
+
 </div>
-</div>
-<div class="tabbed-block">
-<p><strong>Requires:</strong> A Withings developer account. Data comes from Withings devices
-(scales, blood pressure monitors, sleep mats, activity trackers).</p>
-<p><strong>Create a Withings app:</strong></p>
-<ol>
-<li>Sign up at <a href="https://developer.withings.com">developer.withings.com</a> and go to your <a href="https://developer.withings.com/dashboard/">Dashboard</a></li>
-<li>Click <strong>Create an application</strong></li>
-<li>Fill in app name and description</li>
-<li>Under <strong>Callback URL</strong>, add:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback
-</code></pre></div></li>
-<li>Save and copy the <strong>Client ID</strong> and <strong>Consumer Secret</strong></li>
-</ol>
-<p><strong>Add secrets to Supabase</strong> (<strong>Project Settings → Edge Functions → Secrets</strong>):</p>
-<div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>Secret name</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>WITHINGS_CLIENT_ID</code></td>
-<td>Client ID from above</td>
-</tr>
-<tr>
-<td><code>WITHINGS_CLIENT_SECRET</code></td>
-<td>Consumer Secret from above</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Test:</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=withings&amp;user_id=test
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Withings</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="o">**</span><span class="n">Requires</span><span class="o">:**</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="n">Withings</span><span class="w"> </span><span class="n">developer</span><span class="w"> </span><span class="k">account</span><span class="p">.</span><span class="w"> </span><span class="k">Data</span><span class="w"> </span><span class="n">comes</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">Withings</span><span class="w"> </span><span class="n">devices</span>
+<span class="p">(</span><span class="n">scales</span><span class="p">,</span><span class="w"> </span><span class="n">blood</span><span class="w"> </span><span class="n">pressure</span><span class="w"> </span><span class="n">monitors</span><span class="p">,</span><span class="w"> </span><span class="n">sleep</span><span class="w"> </span><span class="n">mats</span><span class="p">,</span><span class="w"> </span><span class="n">activity</span><span class="w"> </span><span class="n">trackers</span><span class="p">).</span>
+
+<span class="o">**</span><span class="k">Create</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">Withings</span><span class="w"> </span><span class="n">app</span><span class="o">:**</span>
+
+<span class="mf">1.</span><span class="w"> </span><span class="n">Sign</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="k">at</span><span class="w"> </span><span class="err">[</span><span class="n">developer</span><span class="p">.</span><span class="n">withings</span><span class="p">.</span><span class="n">com</span><span class="err">]</span><span class="p">(</span><span class="n">https</span><span class="o">://</span><span class="n">developer</span><span class="p">.</span><span class="n">withings</span><span class="p">.</span><span class="n">com</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">go</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="err">[</span><span class="n">Dashboard</span><span class="err">]</span><span class="p">(</span><span class="n">https</span><span class="o">://</span><span class="n">developer</span><span class="p">.</span><span class="n">withings</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">dashboard</span><span class="o">/</span><span class="p">)</span>
+<span class="mf">2.</span><span class="w"> </span><span class="n">Click</span><span class="w"> </span><span class="o">**</span><span class="k">Create</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">application</span><span class="o">**</span>
+<span class="mf">3.</span><span class="w"> </span><span class="n">Fill</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">app</span><span class="w"> </span><span class="k">name</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">description</span>
+<span class="mf">4.</span><span class="w"> </span><span class="n">Under</span><span class="w"> </span><span class="o">**</span><span class="n">Callback</span><span class="w"> </span><span class="k">URL</span><span class="o">**</span><span class="p">,</span><span class="w"> </span><span class="k">add</span><span class="o">:</span>
+<span class="w">   </span><span class="n n-Quoted">`</span><span class="n n-Quoted n-Quoted-Escape">``</span>
+<span class="n n-Quoted">   https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback</span>
+<span class="n n-Quoted">   </span><span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">`</span>
+<span class="mf">5.</span><span class="w"> </span><span class="n">Save</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">copy</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="o">**</span><span class="k">Client</span><span class="w"> </span><span class="n">ID</span><span class="o">**</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="o">**</span><span class="n">Consumer</span><span class="w"> </span><span class="n">Secret</span><span class="o">**</span>
+
+<span class="o">**</span><span class="k">Add</span><span class="w"> </span><span class="n">secrets</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">Supabase</span><span class="o">**</span><span class="w"> </span><span class="p">(</span><span class="o">**</span><span class="n">Project</span><span class="w"> </span><span class="k">Set</span><span class="n">tings</span><span class="w"> </span><span class="n">→</span><span class="w"> </span><span class="n">Edge</span><span class="w"> </span><span class="n">Functions</span><span class="w"> </span><span class="n">→</span><span class="w"> </span><span class="n">Secrets</span><span class="o">**</span><span class="p">)</span><span class="o">:</span>
+
+<span class="o">|</span><span class="w"> </span><span class="n">Secret</span><span class="w"> </span><span class="k">name</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Value</span><span class="w"> </span><span class="o">|</span>
+<span class="o">|---|---|</span>
+<span class="o">|</span><span class="w"> </span><span class="n n-Quoted">`WITHINGS_CLIENT_ID`</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Client</span><span class="w"> </span><span class="n">ID</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">above</span><span class="w"> </span><span class="o">|</span>
+<span class="o">|</span><span class="w"> </span><span class="n n-Quoted">`WITHINGS_CLIENT_SECRET`</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Consumer</span><span class="w"> </span><span class="n">Secret</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">above</span><span class="w"> </span><span class="o">|</span>
+
+<span class="o">**</span><span class="n">Test</span><span class="o">:**</span>
+<span class="n n-Quoted">`</span><span class="n n-Quoted n-Quoted-Escape">``</span>
+<span class="n n-Quoted">https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=withings&amp;user_id=test</span>
+<span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">`</span>
+<span class="n">You</span><span class="w"> </span><span class="n">should</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">redirected</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">Withings</span><span class="w"> </span><span class="n">authorisation</span><span class="w"> </span><span class="k">page</span><span class="p">.</span>
 </code></pre></div>
-You should be redirected to the Withings authorisation page.</p>
+
 </div>
-<div class="tabbed-block">
-<p><strong>Requires:</strong> An Oura developer account. Data comes from Oura Ring devices.</p>
-<p><strong>Create an Oura app:</strong></p>
-<ol>
-<li>Sign in at <a href="https://cloud.ouraring.com">cloud.ouraring.com</a> and go to <strong>My Apps → Create New App</strong></li>
-<li>Fill in your app name and description</li>
-<li>Under <strong>Redirect URIs</strong>, add:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback
-</code></pre></div></li>
-<li>Save and copy the <strong>Client ID</strong> and <strong>Client Secret</strong></li>
-</ol>
-<p><strong>Add secrets to Supabase</strong> (<strong>Project Settings → Edge Functions → Secrets</strong>):</p>
-<div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>Secret name</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>OURA_CLIENT_ID</code></td>
-<td>Client ID from above</td>
-</tr>
-<tr>
-<td><code>OURA_CLIENT_SECRET</code></td>
-<td>Client Secret from above</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Test:</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=oura&amp;user_id=test
+<input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><label for="__tabbed_1_3">Oura</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="o">**</span><span class="n">Requires</span><span class="o">:**</span><span class="w"> </span><span class="n">An</span><span class="w"> </span><span class="n">Oura</span><span class="w"> </span><span class="n">developer</span><span class="w"> </span><span class="k">account</span><span class="p">.</span><span class="w"> </span><span class="k">Data</span><span class="w"> </span><span class="n">comes</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">Oura</span><span class="w"> </span><span class="n">Ring</span><span class="w"> </span><span class="n">devices</span><span class="p">.</span>
+
+<span class="o">**</span><span class="k">Create</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">Oura</span><span class="w"> </span><span class="n">app</span><span class="o">:**</span>
+
+<span class="mf">1.</span><span class="w"> </span><span class="n">Sign</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">at</span><span class="w"> </span><span class="err">[</span><span class="n">cloud</span><span class="p">.</span><span class="n">ouraring</span><span class="p">.</span><span class="n">com</span><span class="err">]</span><span class="p">(</span><span class="n">https</span><span class="o">://</span><span class="n">cloud</span><span class="p">.</span><span class="n">ouraring</span><span class="p">.</span><span class="n">com</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">go</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="o">**</span><span class="n">My</span><span class="w"> </span><span class="n">Apps</span><span class="w"> </span><span class="n">→</span><span class="w"> </span><span class="k">Create</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="n">App</span><span class="o">**</span>
+<span class="mf">2.</span><span class="w"> </span><span class="n">Fill</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="n">app</span><span class="w"> </span><span class="k">name</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">description</span>
+<span class="mf">3.</span><span class="w"> </span><span class="n">Under</span><span class="w"> </span><span class="o">**</span><span class="n">Redirect</span><span class="w"> </span><span class="n">URIs</span><span class="o">**</span><span class="p">,</span><span class="w"> </span><span class="k">add</span><span class="o">:</span>
+<span class="w">   </span><span class="n n-Quoted">`</span><span class="n n-Quoted n-Quoted-Escape">``</span>
+<span class="n n-Quoted">   https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback</span>
+<span class="n n-Quoted">   </span><span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">`</span>
+<span class="mf">4.</span><span class="w"> </span><span class="n">Save</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">copy</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="o">**</span><span class="k">Client</span><span class="w"> </span><span class="n">ID</span><span class="o">**</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="o">**</span><span class="k">Client</span><span class="w"> </span><span class="n">Secret</span><span class="o">**</span>
+
+<span class="o">**</span><span class="k">Add</span><span class="w"> </span><span class="n">secrets</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">Supabase</span><span class="o">**</span><span class="w"> </span><span class="p">(</span><span class="o">**</span><span class="n">Project</span><span class="w"> </span><span class="k">Set</span><span class="n">tings</span><span class="w"> </span><span class="n">→</span><span class="w"> </span><span class="n">Edge</span><span class="w"> </span><span class="n">Functions</span><span class="w"> </span><span class="n">→</span><span class="w"> </span><span class="n">Secrets</span><span class="o">**</span><span class="p">)</span><span class="o">:</span>
+
+<span class="o">|</span><span class="w"> </span><span class="n">Secret</span><span class="w"> </span><span class="k">name</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Value</span><span class="w"> </span><span class="o">|</span>
+<span class="o">|---|---|</span>
+<span class="o">|</span><span class="w"> </span><span class="n n-Quoted">`OURA_CLIENT_ID`</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Client</span><span class="w"> </span><span class="n">ID</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">above</span><span class="w"> </span><span class="o">|</span>
+<span class="o">|</span><span class="w"> </span><span class="n n-Quoted">`OURA_CLIENT_SECRET`</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Client</span><span class="w"> </span><span class="n">Secret</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">above</span><span class="w"> </span><span class="o">|</span>
+
+<span class="o">**</span><span class="n">Test</span><span class="o">:**</span>
+<span class="n n-Quoted">`</span><span class="n n-Quoted n-Quoted-Escape">``</span>
+<span class="n n-Quoted">https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=oura&amp;user_id=test</span>
+<span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">`</span>
+<span class="n">You</span><span class="w"> </span><span class="n">should</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">redirected</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">Oura</span><span class="w"> </span><span class="n">authorisation</span><span class="w"> </span><span class="k">page</span><span class="p">.</span>
 </code></pre></div>
-You should be redirected to the Oura authorisation page.</p>
-</div>
+
 </div>
 </div>
 <hr />
 <h2 id="part-3-install-the-client-package">Part 3 — Install the client package<a class="headerlink" href="#part-3-install-the-client-package" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Python</label><label for="__tabbed_2_2">R</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/jackmanners/tokenbridge.git#subdirectory<span class="o">=</span>python
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>python<span class="w"> </span>-m<span class="w"> </span>tokenbridge
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># When prompted:</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1">#   URL:     https://YOUR_PROJECT_REF.supabase.co/functions/v1</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1">#   API key: the TOKENBRIDGE_API_KEY you set in Step 3</span>
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Python</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code>```bash
+pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
+python -m tokenbridge
+<span class="gh">#</span> When prompted:
+<span class="gh">#</span>   URL:     https://YOUR_PROJECT_REF.supabase.co/functions/v1
+<span class="gh">#</span>   API key: the TOKENBRIDGE_API_KEY you set in Step 3
+```
 </code></pre></div>
+
 </div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;devtools&quot;</span><span class="p">)</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">devtools</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;jackmanners/tokenbridge&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">subdir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">)</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nf">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nf">tb_setup</span><span class="p">()</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="c1"># When prompted:</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1">#   URL:     https://YOUR_PROJECT_REF.supabase.co/functions/v1</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="c1">#   API key: the TOKENBRIDGE_API_KEY you set in Step 3</span>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">R</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="nx">r</span>
+<span class="nx">install</span><span class="p">.</span><span class="nx">packages</span><span class="p">(</span><span class="s">&quot;devtools&quot;</span><span class="p">)</span>
+<span class="nx">devtools</span><span class="o">::</span><span class="nx">install_github</span><span class="p">(</span><span class="s">&quot;jackmanners/tokenbridge&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">subdir</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">)</span>
+
+<span class="kn">library</span><span class="p">(</span><span class="nx">tokenbridge</span><span class="p">)</span>
+<span class="nx">tb_setup</span><span class="p">()</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">When</span><span class="w"> </span><span class="nx">prompted</span><span class="p">:</span>
+<span class="err">#</span><span class="w">   </span><span class="nx">URL</span><span class="p">:</span><span class="w">     </span><span class="nx">https</span><span class="p">:</span><span class="c1">//YOUR_PROJECT_REF.supabase.co/functions/v1</span>
+<span class="err">#</span><span class="w">   </span><span class="nx">API</span><span class="w"> </span><span class="nx">key</span><span class="p">:</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">TOKENBRIDGE_API_KEY</span><span class="w"> </span><span class="nx">you</span><span class="w"> </span><span class="nx">set</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">Step</span><span class="w"> </span><span class="mi">3</span>
+<span class="err">```</span>
 </code></pre></div>
-</div>
+
 </div>
 </div>
 <hr />
 <h2 id="part-4-basic-usage">Part 4 — Basic usage<a class="headerlink" href="#part-4-basic-usage" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nf">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1"># Generate auth links for participants and send them</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">links</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">))</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">links</span><span class="p">))</span><span class="w"> </span><span class="nf">cat</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-&gt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">links</span><span class="p">[[</span><span class="n">id</span><span class="p">]],</span><span class="w"> </span><span class="s">&quot;\n&quot;</span><span class="p">)</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1"># Withings or Oura participants get provider-specific links</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="n">wt_links</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;withings&quot;</span><span class="p">)</span>
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="n">ou_links</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;oura&quot;</span><span class="p">)</span>
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="c1"># Fetch data (once participants have authorised)</span>
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>
-<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="c1"># Provider-specific fetchers</span>
-<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="n">activity</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;activity&quot;</span><span class="p">,</span><span class="w">      </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
-<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="n">readiness</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ou_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;daily-readiness&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
-<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>
-<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="c1"># Audit data coverage</span>
-<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="nf">gh_data_completeness</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><code><span class="nf">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
+
+<span class="c1"># Generate auth links for participants and send them</span>
+<span class="n">links</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">))</span>
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">links</span><span class="p">))</span><span class="w"> </span><span class="nf">cat</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-&gt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">links</span><span class="p">[[</span><span class="n">id</span><span class="p">]],</span><span class="w"> </span><span class="s">&quot;\n&quot;</span><span class="p">)</span>
+
+<span class="c1"># Withings or Oura participants get provider-specific links</span>
+<span class="n">wt_links</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;withings&quot;</span><span class="p">)</span>
+<span class="n">ou_links</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;oura&quot;</span><span class="p">)</span>
+
+<span class="c1"># Fetch data (once participants have authorised)</span>
+<span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
+
+<span class="c1"># Provider-specific fetchers</span>
+<span class="n">activity</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;activity&quot;</span><span class="p">,</span><span class="w">        </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
+<span class="n">readiness</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ou_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;daily-readiness&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
+
+<span class="c1"># Audit data coverage</span>
+<span class="nf">gh_data_completeness</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
 </code></pre></div>
+
 <p>For full package documentation see the <a href="../python/reference.md">Python reference</a> and <a href="../r/reference.md">R reference</a>.</p>
   </div>
   
@@ -930,6 +939,12 @@ You should be redirected to the Oura authorisation page.</p>
                         <a class="text-2xl font-medium" href="../providers/">
                             
                             Providers
+                            
+                        </a>
+                        
+                        <a class="text-2xl font-medium" href="../without-packages/">
+                            
+                            Without Packages
                             
                         </a>
                         

@@ -29,20 +29,24 @@ It's a small set of Supabase edge functions. It runs the OAuth flow, stores toke
 
 If someone in your lab has already set this up, you just need the client package. Get the URL and API key from them and point the package at their instance.
 
-=== "Python"
+/// tab | Python
 
     ```bash
     pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
     python -m tokenbridge   # interactive setup â€” saves credentials to .env
     ```
 
-=== "R"
+///
+
+/// tab | R
 
     ```r
     devtools::install_github("jackmanners/tokenbridge", subdir = "r")
     library(tokenbridge)
     tb_setup()   # interactive setup â€” saves credentials to .env
     ```
+
+///
 
 â†’ Continue with [Getting Started](getting-started.md)
 
@@ -57,7 +61,7 @@ You need a free [Supabase](https://supabase.com) account. Setup takes around 20â
 
 ## Quick start
 
-=== "Python"
+/// tab | Python
 
     ```python
     from tokenbridge import TokenBridge
@@ -84,7 +88,9 @@ You need a free [Supabase](https://supabase.com) account. Setup takes around 20â
     )
     ```
 
-=== "R"
+///
+
+/// tab | R
 
     ```r
     library(tokenbridge)
@@ -107,6 +113,8 @@ You need a free [Supabase](https://supabase.com) account. Setup takes around 20â
       data_types = c("sleep", "steps", "heart-rate-variability")
     )
     ```
+
+///
 
 ---
 

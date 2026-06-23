@@ -66,6 +66,16 @@
     <link href="../css/geist.css" rel="stylesheet" />
 
     
+    
+
+<link id="pygments-light" rel="stylesheet"
+    href="../css/pygments/shadcn-light.css">
+<link id="pygments-dark" rel="stylesheet"
+    href="../css/pygments/github-dark.css"
+    media="(prefers-color-scheme: dark)">
+
+
+    
 
     <style>
         :root {
@@ -393,6 +403,25 @@
 </li>
             
             
+            
+            <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
+    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
+        data-size="default" href="../without-packages/"
+        class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
+
+        
+        Without Packages
+        
+
+        
+
+        
+
+        
+    </a>
+</li>
+            
+            
         </ul>
     </div>
 </div>
@@ -578,23 +607,30 @@
     <p>Installation and first use. If you're setting up your own instance first, see <a href="../deployment/">Deployment</a>.</p>
 <hr />
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python</label><label for="__tabbed_1_2">R</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<p>Requires Python 3.10+.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/jackmanners/tokenbridge.git#subdirectory<span class="o">=</span>python
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Python</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="n">Requires</span><span class="w"> </span><span class="n">Python</span><span class="w"> </span><span class="mf">3.10</span><span class="o">+</span><span class="p">.</span>
+
+<span class="n n-Quoted">`</span><span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">bash</span>
+<span class="n n-Quoted">pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python</span>
+<span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">`</span>
+
+<span class="n">Dependencies</span><span class="w"> </span><span class="n">installed</span><span class="w"> </span><span class="n">automatically</span><span class="o">:</span><span class="w"> </span><span class="n n-Quoted">`requests`</span><span class="p">,</span><span class="w"> </span><span class="n n-Quoted">`python-dotenv`</span><span class="p">.</span>
 </code></pre></div>
-<p>Dependencies installed automatically: <code>requests</code>, <code>python-dotenv</code>.</p>
+
 </div>
-<div class="tabbed-block">
-<p>Requires R 4.0+.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Install devtools if you don&#39;t have it</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;devtools&quot;</span><span class="p">)</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">devtools</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;jackmanners/tokenbridge&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">subdir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">)</span>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">R</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="n">Requires</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="mf">4.0</span><span class="o">+</span><span class="p">.</span>
+
+<span class="n n-Quoted">`</span><span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">r</span>
+<span class="n n-Quoted"># Install devtools if you don&#39;t have it</span>
+<span class="n n-Quoted">install.packages(&quot;devtools&quot;)</span>
+
+<span class="n n-Quoted">devtools::install_github(&quot;jackmanners/tokenbridge&quot;, subdir = &quot;r&quot;)</span>
+<span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">`</span>
+
+<span class="n">Dependencies</span><span class="w"> </span><span class="n">installed</span><span class="w"> </span><span class="n">automatically</span><span class="o">:</span><span class="w"> </span><span class="n n-Quoted">`httr`</span><span class="p">.</span>
 </code></pre></div>
-<p>Dependencies installed automatically: <code>httr</code>.</p>
-</div>
+
 </div>
 </div>
 <hr />
@@ -619,19 +655,24 @@
 </tbody>
 </table></div>
 <p>The recommended way to store these is in a <code>.env</code> file in your project directory. Run the setup wizard once:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Python</label><label for="__tabbed_2_2">R</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>-m<span class="w"> </span>tokenbridge
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Python</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code>```<span class="nv">bash</span>
+<span class="nv">python</span><span class="w"> </span><span class="o">-</span><span class="nv">m</span><span class="w"> </span><span class="nv">tokenbridge</span>
+```
+
+<span class="nv">The</span><span class="w"> </span><span class="nv">wizard</span><span class="w"> </span><span class="nv">prompts</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">your</span><span class="w"> </span><span class="nv">URL</span><span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">API</span><span class="w"> </span><span class="nv">key</span>,<span class="w"> </span><span class="nv">verifies</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">connection</span>,<span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">saves</span><span class="w"> </span><span class="nv">them</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span>`.<span class="nv">env</span>`.
 </code></pre></div>
-<p>The wizard prompts for your URL and API key, verifies the connection, and saves them to <code>.env</code>.</p>
+
 </div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nf">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nf">tb_setup</span><span class="p">()</span>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">R</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="nx">r</span>
+<span class="kn">library</span><span class="p">(</span><span class="nx">tokenbridge</span><span class="p">)</span>
+<span class="nx">tb_setup</span><span class="p">()</span>
+<span class="err">```</span>
+
+<span class="nx">Same</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">Python</span><span class="w"> </span><span class="nx">wizard</span><span class="w"> </span><span class="err">—</span><span class="w"> </span><span class="nx">prompts</span><span class="p">,</span><span class="w"> </span><span class="nx">verifies</span><span class="p">,</span><span class="w"> </span><span class="nx">saves</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="err">`</span><span class="p">.</span><span class="nx">env</span><span class="err">`</span><span class="p">.</span>
 </code></pre></div>
-<p>Same as the Python wizard — prompts, verifies, saves to <code>.env</code>.</p>
-</div>
+
 </div>
 </div>
 <div class="admonition warning">
@@ -641,57 +682,63 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 </div>
 <h3 id="manual-configuration">Manual configuration<a class="headerlink" href="#manual-configuration" title="Permanent link">&para;</a></h3>
 <p>If you prefer not to use <code>.env</code>, you can pass credentials directly:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Python</label><label for="__tabbed_3_2">R</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenBridge</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">(</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://abcdef.supabase.co/functions/v1&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">)</span>
+<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Python</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">python</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenBridge</span>
+
+<span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">(</span>
+    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://abcdef.supabase.co/functions/v1&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="err">```</span>
 </code></pre></div>
+
 </div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Set environment variables directly</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nf">Sys.setenv</span><span class="p">(</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="n">TOKENBRIDGE_URL</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://abcdef.supabase.co/functions/v1&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="n">TOKENBRIDGE_API_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;your-api-key&quot;</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">)</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nf">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
+<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">R</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">r</span>
+<span class="c1"># Set environment variables directly</span>
+<span class="n">Sys</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span>
+<span class="w">  </span><span class="n">TOKENBRIDGE_URL</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://abcdef.supabase.co/functions/v1&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">TOKENBRIDGE_API_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;your-api-key&quot;</span>
+<span class="p">)</span>
+<span class="n">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
+<span class="err">```</span>
 </code></pre></div>
-</div>
+
 </div>
 </div>
 <hr />
 <h2 id="onboarding-participants">Onboarding participants<a class="headerlink" href="#onboarding-participants" title="Permanent link">&para;</a></h2>
-<p>Each participant needs to authorise their Google / Fitbit account once. Generate a unique URL for each person and send it to them (email, SMS, whatever works for your study).</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Python</label><label for="__tabbed_4_2">R</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenBridge</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">()</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1"># Single participant</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">url</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">auth_url</span><span class="p">(</span><span class="s2">&quot;participant-001&quot;</span><span class="p">)</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="c1"># Batch — returns {user_id: url}</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="n">urls</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">auth_urls</span><span class="p">([</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;p002&quot;</span><span class="p">,</span> <span class="s2">&quot;p003&quot;</span><span class="p">,</span> <span class="s2">&quot;p004&quot;</span><span class="p">])</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<p>Each participant needs to authorise their account once. Generate a unique URL for each person and send it to them (email, SMS, whatever works for your study).</p>
+<div class="tabbed-set" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><label for="__tabbed_4_1">Python</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">python</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenBridge</span>
+
+<span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">()</span>
+
+<span class="c1"># Single participant</span>
+<span class="n">url</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">auth_url</span><span class="p">(</span><span class="s2">&quot;participant-001&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="c1"># Batch — returns {user_id: url}</span>
+<span class="n">urls</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">auth_urls</span><span class="p">([</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;p002&quot;</span><span class="p">,</span> <span class="s2">&quot;p003&quot;</span><span class="p">,</span> <span class="s2">&quot;p004&quot;</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="err">```</span>
 </code></pre></div>
+
 </div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Single participant</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nf">tb_auth_url</span><span class="p">(</span><span class="s">&quot;participant-001&quot;</span><span class="p">)</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Batch — returns named character vector</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">urls</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p004&quot;</span><span class="p">))</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">uid</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">urls</span><span class="p">))</span><span class="w"> </span><span class="nf">cat</span><span class="p">(</span><span class="n">uid</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;:&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">urls</span><span class="p">[[</span><span class="n">uid</span><span class="p">]],</span><span class="w"> </span><span class="s">&quot;\n&quot;</span><span class="p">)</span>
+<input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><label for="__tabbed_4_2">R</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">r</span>
+<span class="err">#</span><span class="w"> </span><span class="n">Single</span><span class="w"> </span><span class="n">participant</span>
+<span class="n">tb_auth_url</span><span class="p">(</span><span class="ss">&quot;participant-001&quot;</span><span class="p">)</span>
+
+<span class="err">#</span><span class="w"> </span><span class="n">Batch</span><span class="w"> </span><span class="err">—</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="n">named</span><span class="w"> </span><span class="k">character</span><span class="w"> </span><span class="n">vector</span>
+<span class="n">urls</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tb_auth_urls</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="ss">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;p003&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;p004&quot;</span><span class="p">))</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">uid</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="k">names</span><span class="p">(</span><span class="n">urls</span><span class="p">))</span><span class="w"> </span><span class="n">cat</span><span class="p">(</span><span class="n">uid</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;:&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">urls</span><span class="o">[</span><span class="n">[uid</span><span class="o">]</span><span class="err">]</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;\n&quot;</span><span class="p">)</span>
+<span class="err">```</span>
 </code></pre></div>
-</div>
+
 </div>
 </div>
 <p>The participant:</p>
@@ -713,127 +760,143 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 <h2 id="fetching-data">Fetching data<a class="headerlink" href="#fetching-data" title="Permanent link">&para;</a></h2>
 <p>Once a participant has authorised, you can fetch any of their data types immediately.</p>
 <h3 id="basic-fetch">Basic fetch<a class="headerlink" href="#basic-fetch" title="Permanent link">&para;</a></h3>
-<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Python</label><label for="__tabbed_5_2">R</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenBridge</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">()</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">sleep</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-06-18&quot;</span><span class="p">)</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="n">steps</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;steps&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-06-18&quot;</span><span class="p">)</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="n">hrv</span>   <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;heart-rate-variability&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-06-18&quot;</span><span class="p">)</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sleep sessions: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sleep</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">sleep</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>   <span class="c1"># first session as a flat dict</span>
+<div class="tabbed-set" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><label for="__tabbed_5_1">Python</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">python</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenBridge</span>
+
+<span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">()</span>
+
+<span class="n">sleep</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-06-18&quot;</span><span class="p">)</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;steps&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-06-18&quot;</span><span class="p">)</span>
+<span class="n">hrv</span>   <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;heart-rate-variability&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-06-18&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sleep sessions: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sleep</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sleep</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>   <span class="c1"># first session as a flat dict</span>
+<span class="err">```</span>
 </code></pre></div>
+
 </div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">steps</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;steps&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">hrv</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;heart-rate-variability&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="nf">nrow</span><span class="p">(</span><span class="n">sleep</span><span class="p">)</span><span class="w">    </span><span class="c1"># number of sleep sessions</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="nf">head</span><span class="p">(</span><span class="n">sleep</span><span class="p">)</span><span class="w">    </span><span class="c1"># first few rows</span>
+<input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><label for="__tabbed_5_2">R</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">r</span>
+<span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tb_fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;2026-06-18&quot;</span><span class="p">)</span>
+<span class="n">steps</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tb_fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;steps&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;2026-06-18&quot;</span><span class="p">)</span>
+<span class="n">hrv</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tb_fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;heart-rate-variability&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;2026-06-18&quot;</span><span class="p">)</span>
+
+<span class="n">nrow</span><span class="p">(</span><span class="n">sleep</span><span class="p">)</span><span class="w">    </span><span class="c1"># number of sleep sessions</span>
+<span class="n">head</span><span class="p">(</span><span class="n">sleep</span><span class="p">)</span><span class="w">    </span><span class="c1"># first few rows</span>
+<span class="err">```</span>
 </code></pre></div>
-</div>
+
 </div>
 </div>
 <p>Results are returned as flat records (Python: <code>list[dict]</code>, R: <code>data.frame</code>). Nested API fields are flattened with dot notation — e.g. <code>startTime.seconds</code>.</p>
 <h3 id="setting-a-default-provider">Setting a default provider<a class="headerlink" href="#setting-a-default-provider" title="Permanent link">&para;</a></h3>
-<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Python</label><label for="__tabbed_6_2">R</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">()</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">tb</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="s2">&quot;google-health&quot;</span>    <span class="c1"># default; change to switch providers</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep&quot;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>    <span class="c1"># uses tb.provider</span>
+<div class="tabbed-set" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><label for="__tabbed_6_1">Python</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code>```<span class="nv">python</span>
+<span class="nv">tb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">TokenBridge</span><span class="ss">()</span>
+<span class="nv">tb</span>.<span class="nv">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;google-health&quot;</span><span class="w">    </span>#<span class="w"> </span><span class="nv">default</span><span class="c1">; change to switch providers</span>
+
+<span class="nv">tb</span>.<span class="nv">fetch</span><span class="ss">(</span><span class="s2">&quot;p001&quot;</span>,<span class="w"> </span><span class="s2">&quot;sleep&quot;</span>,<span class="w"> </span><span class="nv">start</span>,<span class="w"> </span><span class="k">end</span><span class="ss">)</span><span class="w">    </span>#<span class="w"> </span><span class="nv">uses</span><span class="w"> </span><span class="nv">tb</span>.<span class="nv">provider</span>
+```
 </code></pre></div>
+
 </div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nf">tb_set_provider</span><span class="p">(</span><span class="s">&quot;google-health&quot;</span><span class="p">)</span><span class="w">    </span><span class="c1"># persists for the session</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">)</span><span class="w">    </span><span class="c1"># uses the default</span>
+<input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><label for="__tabbed_6_2">R</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code>```r
+tb_set_provider(&quot;google-health&quot;)    # persists for the session
+
+tb_fetch(&quot;p001&quot;, &quot;sleep&quot;, start, end)    # uses the default
+```
 </code></pre></div>
-</div>
+
 </div>
 </div>
 <h3 id="provider-namespaces-python">Provider namespaces (Python)<a class="headerlink" href="#provider-namespaces-python" title="Permanent link">&para;</a></h3>
 <p>Python exposes provider namespaces as attributes on <code>tb</code>. These always use the named provider regardless of <code>tb.provider</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">tb</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep&quot;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>      <span class="c1"># always google-health</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">tb</span><span class="o">.</span><span class="n">withings</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;activity&quot;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span> <span class="c1"># always withings</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">tb</span><span class="o">.</span><span class="n">oura</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;daily-readiness&quot;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>  <span class="c1"># always oura</span>
+<div class="codehilite"><pre><span></span><code><span class="n">tb</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep&quot;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>      <span class="c1"># always google-health</span>
+<span class="n">tb</span><span class="o">.</span><span class="n">withings</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;activity&quot;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span> <span class="c1"># always withings</span>
+<span class="n">tb</span><span class="o">.</span><span class="n">oura</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;daily-readiness&quot;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>  <span class="c1"># always oura</span>
 </code></pre></div>
+
 <h3 id="token-reuse">Token reuse<a class="headerlink" href="#token-reuse" title="Permanent link">&para;</a></h3>
 <p>Each call to <code>tb.fetch()</code> / <code>tb_fetch()</code> makes one request to TokenBridge to get a valid token. When fetching several data types for the same participant in one script, get the token once and pass it through:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Python</label><label for="__tabbed_7_2">R</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">token</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">)</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">sleep</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep&quot;</span><span class="p">,</span>                  <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="n">steps</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;steps&quot;</span><span class="p">,</span>                  <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="n">hrv</span>   <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;heart-rate-variability&quot;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="n">rhr</span>   <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;daily-resting-heart-rate&quot;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
+<div class="tabbed-set" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><label for="__tabbed_7_1">Python</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">python</span>
+<span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tb</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">)</span>
+
+<span class="n">sleep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;sleep&quot;</span><span class="p">,</span><span class="w">                  </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
+<span class="n">steps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;steps&quot;</span><span class="p">,</span><span class="w">                  </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
+<span class="n">hrv</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;heart-rate-variability&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
+<span class="n">rhr</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;daily-resting-heart-rate&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
+<span class="err">```</span>
 </code></pre></div>
+
 </div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">tok</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_get_token</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">)</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w">                   </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">steps</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;steps&quot;</span><span class="p">,</span><span class="w">                   </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="n">hrv</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;heart-rate-variability&quot;</span><span class="p">,</span><span class="w">  </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="n">rhr</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;daily-resting-heart-rate&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
+<input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><label for="__tabbed_7_2">R</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">r</span>
+<span class="n">tok</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tb_get_token</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">)</span>
+
+<span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tb_fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;sleep&quot;</span><span class="p">,</span><span class="w">                   </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
+<span class="n">steps</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tb_fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;steps&quot;</span><span class="p">,</span><span class="w">                   </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
+<span class="n">hrv</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tb_fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;heart-rate-variability&quot;</span><span class="p">,</span><span class="w">  </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
+<span class="n">rhr</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tb_fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;daily-resting-heart-rate&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
+<span class="err">```</span>
 </code></pre></div>
-</div>
+
 </div>
 </div>
 <hr />
 <h2 id="auditing-your-cohort">Auditing your cohort<a class="headerlink" href="#auditing-your-cohort" title="Permanent link">&para;</a></h2>
 <p>Before running analysis, check data completeness across participants:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Python</label><label for="__tabbed_8_2">R</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">audit</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">data_completeness</span><span class="p">(</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>    <span class="p">[</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;p002&quot;</span><span class="p">,</span> <span class="s2">&quot;p003&quot;</span><span class="p">],</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-06-18&quot;</span><span class="p">,</span>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>    <span class="n">data_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sleep&quot;</span><span class="p">,</span> <span class="s2">&quot;steps&quot;</span><span class="p">,</span> <span class="s2">&quot;heart-rate-variability&quot;</span><span class="p">],</span>
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="p">)</span>
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="c1"># list of dicts: user_id, data_type, n, days_with_data, coverage_pct</span>
+<div class="tabbed-set" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><label for="__tabbed_8_1">Python</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">python</span>
+<span class="n">audit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tb</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">data_completeness</span><span class="p">(</span>
+<span class="w">    </span><span class="p">[</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;p003&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;2026-06-18&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">data_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;steps&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;heart-rate-variability&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="c1"># list of dicts: user_id, data_type, n, days_with_data, coverage_pct</span>
+<span class="err">```</span>
 </code></pre></div>
+
 </div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">audit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">gh_data_completeness</span><span class="p">(</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">),</span>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">,</span>
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span><span class="n">data_types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;steps&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;heart-rate-variability&quot;</span><span class="p">)</span>
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="p">)</span>
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="nf">print</span><span class="p">(</span><span class="n">audit</span><span class="p">)</span><span class="w">   </span><span class="c1"># data.frame: user_id, data_type, n, days_with_data, coverage_pct</span>
+<input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><label for="__tabbed_8_2">R</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">r</span>
+<span class="n">audit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">gh_data_completeness</span><span class="p">(</span>
+<span class="w">  </span><span class="n">c</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;p003&quot;</span><span class="p">),</span>
+<span class="w">  </span><span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;2026-06-18&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">data_types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">(</span><span class="s2">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;steps&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;heart-rate-variability&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">audit</span><span class="p">)</span><span class="w">   </span><span class="c1"># data.frame: user_id, data_type, n, days_with_data, coverage_pct</span>
+<span class="err">```</span>
 </code></pre></div>
-</div>
+
 </div>
 </div>
 <hr />
 <h2 id="available-data-types">Available data types<a class="headerlink" href="#available-data-types" title="Permanent link">&para;</a></h2>
 <p>Data type IDs are kebab-case strings passed as the <code>data_type</code> argument. Each provider has its own set:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Python</label><label for="__tabbed_9_2">R</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge.providers.google_health</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_TYPES</span> <span class="k">as</span> <span class="n">GH_DATA_TYPES</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge.providers.withings</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_TYPES</span> <span class="k">as</span> <span class="n">WT_DATA_TYPES</span>
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge.providers.oura</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_TYPES</span> <span class="k">as</span> <span class="n">OU_DATA_TYPES</span>
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">GH_DATA_TYPES</span><span class="p">))</span>   <span class="c1"># e.g. &quot;sleep&quot;, &quot;steps&quot;, &quot;heart-rate-variability&quot;, ...</span>
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">WT_DATA_TYPES</span><span class="p">))</span>   <span class="c1"># e.g. &quot;sleep-summary&quot;, &quot;activity&quot;, &quot;weight&quot;, ...</span>
-<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">OU_DATA_TYPES</span><span class="p">))</span>   <span class="c1"># e.g. &quot;daily-sleep&quot;, &quot;daily-readiness&quot;, &quot;heartrate&quot;, ...</span>
+<div class="tabbed-set" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><label for="__tabbed_9_1">Python</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">python</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge.providers.google_health</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_TYPES</span> <span class="k">as</span> <span class="n">GH_DATA_TYPES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge.providers.withings</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_TYPES</span> <span class="k">as</span> <span class="n">WT_DATA_TYPES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge.providers.oura</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_TYPES</span> <span class="k">as</span> <span class="n">OU_DATA_TYPES</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">GH_DATA_TYPES</span><span class="p">))</span>   <span class="c1"># e.g. &quot;sleep&quot;, &quot;steps&quot;, &quot;heart-rate-variability&quot;, ...</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">WT_DATA_TYPES</span><span class="p">))</span>   <span class="c1"># e.g. &quot;sleep-summary&quot;, &quot;activity&quot;, &quot;weight&quot;, ...</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">OU_DATA_TYPES</span><span class="p">))</span>   <span class="c1"># e.g. &quot;daily-sleep&quot;, &quot;daily-readiness&quot;, &quot;heartrate&quot;, ...</span>
+<span class="err">```</span>
 </code></pre></div>
+
 </div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nf">names</span><span class="p">(</span><span class="n">GH_DATA_TYPES</span><span class="p">)</span><span class="w">   </span><span class="c1"># Google Health</span>
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="nf">names</span><span class="p">(</span><span class="n">WT_DATA_TYPES</span><span class="p">)</span><span class="w">   </span><span class="c1"># Withings</span>
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="nf">names</span><span class="p">(</span><span class="n">OU_DATA_TYPES</span><span class="p">)</span><span class="w">   </span><span class="c1"># Oura</span>
+<input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><label for="__tabbed_9_2">R</label><div class="tabbed-content">
+<div class="codehilite"><pre><span></span><code>```r
+names(GH_DATA_TYPES)   # Google Health
+names(WT_DATA_TYPES)   # Withings
+names(OU_DATA_TYPES)   # Oura
+```
 </code></pre></div>
-</div>
+
 </div>
 </div>
 <p>Full list with descriptions, units, and device requirements: <a href="../providers/">Provider Reference</a>.</p>
@@ -934,6 +997,12 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
                         <a class="text-2xl font-medium" href="../providers/">
                             
                             Providers
+                            
+                        </a>
+                        
+                        <a class="text-2xl font-medium" href="../without-packages/">
+                            
+                            Without Packages
                             
                         </a>
                         
