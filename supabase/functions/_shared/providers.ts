@@ -36,6 +36,13 @@ export const providers: Record<string, Provider> = {
     },
   },
 
+  'oura': {
+    authUrl: 'https://cloud.ouraring.com/oauth/authorize',
+    tokenUrl: 'https://api.ouraring.com/oauth/token',
+    scopes: ['email', 'personal', 'daily', 'heartrate', 'workout', 'tag', 'session', 'spo2Daily'],
+    pkce: false,
+  },
+
   'withings': {
     authUrl: 'https://account.withings.com/oauth2_user/authorize2',
     tokenUrl: 'https://wbsapi.withings.net/v2/oauth2',

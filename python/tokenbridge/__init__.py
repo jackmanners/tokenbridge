@@ -40,6 +40,7 @@ Data type IDs: see docs/providers.md, or:
 from tokenbridge._client import TokenBridge
 from tokenbridge.providers.google_health import GoogleHealth, DATA_TYPES
 from tokenbridge.providers.withings import Withings
+from tokenbridge.providers.oura import Oura
 
-__all__ = ["TokenBridge", "GoogleHealth", "Withings", "DATA_TYPES"]
+__all__ = ["TokenBridge", "GoogleHealth", "Withings", "Oura", "DATA_TYPES"]
 __version__ = "0.1.0"

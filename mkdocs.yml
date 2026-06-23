@@ -70,7 +70,7 @@ nav:
   - Deployment:
     - Overview: deployment.md
     - Setup Guide: basic-quickstart.md
-  - Providers: providers.md
+    - Providers: providers.md
   - Python:
     - python/index.md
     - API Reference: python/reference.md

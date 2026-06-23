@@ -147,6 +147,18 @@ class TokenBridge:
         return _ProviderProxy(self, "google-health")
 
     @property
+    def oura(self) -> "_ProviderProxy":
+        """Provider namespace pre-bound to ``"oura"``.
+
+        Example:
+            ```python
+            tb.oura.fetch("p001", "sleep", start, end)
+            tb.oura.fetch("p001", "daily-readiness", start, end)
+            ```
+        """
+        return _ProviderProxy(self, "oura")
+
+    @property
     def withings(self) -> "_ProviderProxy":
         """Provider namespace pre-bound to `"withings"`.
 
@@ -298,6 +310,9 @@ class TokenBridge:
             if provider_id == "google-health":
                 from tokenbridge.providers.google_health import GoogleHealth
                 self._provider_cache[provider_id] = GoogleHealth(self)
+            elif provider_id == "oura":
+                from tokenbridge.providers.oura import Oura
+                self._provider_cache[provider_id] = Oura(self)
             elif provider_id == "withings":
                 from tokenbridge.providers.withings import Withings
                 self._provider_cache[provider_id] = Withings(self)

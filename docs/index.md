@@ -115,6 +115,8 @@ You need a free [Supabase](https://supabase.com) account and a [Google Cloud](ht
 | Provider ID | Status | Notes |
 |---|---|---|
 | `google-health` | Supported | Requires Fitbit app linked to a Google account |
-| `withings` | Auth only | OAuth flow works; data fetch in progress |
+| `withings` | Supported | Requires Withings device (scale, BPM cuff, sleep mat, etc.) |
+| `oura` | Supported | Requires Oura Ring (Gen 2 or Gen 3) |
+| `oura` | Supported | Requires Oura Ring (Gen 2 or Gen 3) |
 
 Full list of data types, units, and endpoint notes: [Providers](providers.md)

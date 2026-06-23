@@ -105,6 +105,7 @@ gh_data_completeness(c("p001", "p002", "p003"), start, end,
 |---|---|---|
 | `google-health` | Supported | Requires Fitbit app linked to a Google account |
 | `withings` | Supported | Requires Withings device (scale, BPM cuff, sleep mat, etc.) |
+| `oura` | Supported | Requires Oura Ring (Gen 2 or Gen 3) |
 
 38 Google Health data types are supported — sleep, activity, heart rate, HRV, SpO2, ECG, temperature, weight, nutrition, and more. See the [provider reference](https://jackmanners.github.io/tokenbridge/providers/).
 

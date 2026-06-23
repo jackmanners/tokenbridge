@@ -15,3 +15,7 @@ export(gh_data_completeness)
 # Withings
 export(WT_DATA_TYPES)
 export(wt_fetch)
+
+# Oura
+export(OU_DATA_TYPES)
+export(ou_fetch)
