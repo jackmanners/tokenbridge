@@ -29,16 +29,11 @@ plugins:
 
 markdown_extensions:
   - admonition
-  - pymdownx.details
-  - pymdownx.superfences
-  - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.inlinehilite
-  - pymdownx.tabbed:
-      alternate_style: true
-  - pymdownx.snippets
+  - fenced_code
+  - codehilite
+  - pymdownx.blocks.tab
+  - pymdownx.blocks.details
   - attr_list
-  - md_in_html
   - tables
   - toc:
       permalink: true
@@ -50,6 +45,7 @@ nav:
     - Overview: deployment.md
     - Setup Guide: basic-quickstart.md
     - Providers: providers.md
+    - Without Packages: without-packages.md
   - Python:
     - python/index.md
     - API Reference: python/reference.md
