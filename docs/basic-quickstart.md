@@ -162,56 +162,8 @@ Add one or more providers. Each requires its own OAuth app and two secrets in Su
 
 ---
 
-## Part 3 — Install the client package
+## Next steps
 
-/// tab | Python
+The backend is set up. To start pulling data, see [Using TokenBridge without packages](without-packages.md) — it shows the full flow (auth link → token request → API call) using plain HTTP requests.
 
-    :::bash
-    pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
-    python -m tokenbridge
-    # When prompted:
-    #   URL:     https://YOUR_PROJECT_REF.supabase.co/functions/v1
-    #   API key: the TOKENBRIDGE_API_KEY you set in Step 3
-
-///
-
-/// tab | R
-
-    :::r
-    install.packages("devtools")
-    devtools::install_github("jackmanners/tokenbridge", subdir = "r")
-
-    library(tokenbridge)
-    tb_setup()
-    # When prompted:
-    #   URL:     https://YOUR_PROJECT_REF.supabase.co/functions/v1
-    #   API key: the TOKENBRIDGE_API_KEY you set in Step 3
-
-///
-
----
-
-## Part 4 — Basic usage
-
-:::r
-library(tokenbridge)
-
-# Generate auth links for participants and send them
-links <- tb_auth_urls(c("p001", "p002", "p003"))
-for (id in names(links)) cat(id, "->", links[[id]], "\n")
-
-# Withings or Oura participants get provider-specific links
-wt_links <- tb_auth_urls(c("p001", "p002"), provider = "withings")
-ou_links  <- tb_auth_urls(c("p001", "p002"), provider = "oura")
-
-# Fetch data (once participants have authorised)
-sleep <- tb_fetch("p001", "sleep", "2026-05-01", "2026-06-18")
-
-# Provider-specific fetchers
-activity  <- wt_fetch("p001", "activity",        "2026-05-01", "2026-06-18")
-readiness <- ou_fetch("p001", "daily-readiness", "2026-05-01", "2026-06-18")
-
-# Audit data coverage
-gh_data_completeness(c("p001", "p002", "p003"), "2026-05-01", "2026-06-18")
-
-For full package documentation see the [Python reference](../python/reference.md) and [R reference](../r/reference.md).
+If you'd prefer a Python or R wrapper, see [Client packages](../python/index.md).

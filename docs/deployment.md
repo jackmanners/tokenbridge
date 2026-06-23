@@ -8,14 +8,14 @@ For a step-by-step walkthrough, see the [Setup Guide](basic-quickstart.md). This
 
 ## What you're deploying
 
-Three things work together:
+Two things work together:
 
 **Supabase** hosts the database (token storage) and runs the edge functions (the OAuth flow and token API).
 It's the only piece that needs to be publicly reachable — participants click a link to it, and your scripts call it to get tokens.
 
 **Provider OAuth apps** (Google Cloud, Withings, Oura, etc.) provide OAuth credentials. You register an app with each provider once; it tells the provider where to redirect participants after they authorise.
 
-**The client package** (R or Python) runs on your machine. It talks to Supabase to get tokens, then uses them to call the provider API directly.
+Your scripts call the `/token` endpoint to get a valid access token, then use it to call the provider API directly — no auth logic needed in your analysis code.
 
 ---
 
@@ -23,7 +23,6 @@ It's the only piece that needs to be publicly reachable — participants click a
 
 - A [Supabase](https://supabase.com) account (free tier is fine)
 - An OAuth app for each provider you want to support (see [Setup Guide](basic-quickstart.md))
-- R or Python on your local machine
 
 ---
 
@@ -111,7 +110,7 @@ Both require `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_REF`, and `TOKENBRIDGE_A
 
 Tokens are refreshed automatically in two ways:
 
-- **On-demand:** when your script calls `tb_get_token()`, the `/token` function checks expiry and refreshes if the token is within 5 minutes of expiring.
+- **On-demand:** when your script calls `/token`, the function checks expiry and refreshes if the token is within 5 minutes of expiring.
 - **Proactive (keepalive):** the weekly GitHub Actions job refreshes tokens that haven't been touched in 80 days, keeping refresh tokens alive even during long gaps between data collection.
 
 This ensures participants never need to re-authorise due to token expiry during a study, as long as the weekly job is running.
