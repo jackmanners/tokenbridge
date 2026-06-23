@@ -28,6 +28,7 @@ plugins:
             show_signature_annotations: true
 
 markdown_extensions:
+  - navigation.indexes
   - admonition
   - fenced_code
   - codehilite
@@ -43,8 +44,11 @@ nav:
   - Deployment:
     - Overview: deployment.md
     - Setup Guide: basic-quickstart.md
-    - Providers: providers.md
     - Accessing Tokens: basic-access.md
+  - Providers:
+    - Google Health: providers/google-health.md
+    - Withings: providers/withings.md
+    - Oura: providers/oura.md
   - Client packages:
     - Python:
       - python/index.md
