@@ -710,7 +710,7 @@
 <hr />
 <h2 id="step-1-onboard-a-participant">Step 1 - Onboard a participant<a class="headerlink" href="#step-1-onboard-a-participant" title="Permanent link">&para;</a></h2>
 <p>Generate an auth link and send it to them. This is just a URL - you can print it, email it, put it in a Qualtrics survey, whatever.</p>
-<p>/// tab | Python</p>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Python</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code>:::python
 TOKENBRIDGE_URL = &quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;
 
@@ -721,8 +721,8 @@ auth_url = f&quot;{TOKENBRIDGE_URL}/auth-start?provider={provider}&amp;user_id={
 print(auth_url)
 </code></pre></div>
 
-<p>///</p>
-<p>/// tab | R</p>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">R</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="o">:::</span><span class="n">r</span>
 <span class="n">TOKENBRIDGE_URL</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;</span>
 
@@ -733,7 +733,8 @@ print(auth_url)
 <span class="nf">cat</span><span class="p">(</span><span class="n">auth_url</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;\n&quot;</span><span class="p">)</span>
 </code></pre></div>
 
-<p>///</p>
+</div>
+</div>
 <p>The participant clicks the link, signs in, approves access, and sees a success page. TokenBridge stores their token automatically. You don't need to do anything else on your end.</p>
 <hr />
 <h2 id="step-2-get-an-access-token">Step 2 - Get an access token<a class="headerlink" href="#step-2-get-an-access-token" title="Permanent link">&para;</a></h2>
