@@ -1,8 +1,6 @@
-# TokenBridge Provider Reference
+# Provider Reference
 
-Central source of truth for all supported health data providers and their data types.
-Both the Python and R packages are generated from this reference — update here first,
-then propagate changes to `python/tokenbridge/providers/` and `r/R/`.
+Supported health data providers, their data type IDs, and what each returns.
 
 ---
 
@@ -82,10 +80,9 @@ Three types only support `dailyRollup` (no raw datapoints available):
 
 ### Known limitations
 
-- The `startTime` / `endTime` query params on the `list` endpoint return HTTP 400 — filter client-side.
 - Test-mode OAuth apps support up to 100 users. Production verification requires a Google review.
 - Data availability depends on the user's device and Fitbit app sync status.
-- `heart-rate` (raw continuous) can return thousands of records per day — use a token and paginate.
+- `heart-rate` (raw continuous) can return thousands of records per day — fetch with a pre-obtained token and narrow date windows.
 
 ---
 
@@ -175,14 +172,3 @@ Body measurement values from `/measure getmeas` are encoded as `value × 10^unit
 - Oura refresh tokens do not expire by time but are invalidated if the user revokes access. The weekly keepalive will detect failures and log them.
 - The Oura sandbox (`/v2/sandbox/usercollection/...`) can be used for testing without a real ring — same paths, just prefix with `/sandbox`.
 
----
-
-## Adding a new provider
-
-1. Add the provider to the table above with its status and base URL
-2. Add OAuth config to `supabase/functions/_shared/providers.ts`
-3. Add a data types section to this file
-4. Implement `python/tokenbridge/providers/{provider}.py` (subclass `HealthProvider`)
-5. Implement `r/R/{provider}.R` (follow `google_health.R` pattern)
-6. Register the provider in `TokenBridge._get_provider()` (Python) and `tb_fetch()` (R)
-7. Export new functions in `r/NAMESPACE`

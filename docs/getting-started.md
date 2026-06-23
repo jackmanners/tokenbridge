@@ -126,11 +126,11 @@ Each participant needs to authorise their Google / Fitbit account once. Generate
 The participant:
 
 1. Clicks the link
-2. Signs in with their Google account (the one linked to their Fitbit app)
+2. Signs in with their account (Google for Fitbit, Withings, or Oura)
 3. Approves the requested permissions
 4. Sees a success page — done
 
-!!! note "Fitbit requirement"
+!!! note "Google Health / Fitbit"
     Participants must have the **Fitbit app** installed and signed in with the same Google account they use to authorise. Without this, there is no health data to access.
 
 !!! note "Test mode warning"
@@ -197,8 +197,8 @@ Python exposes provider namespaces as attributes on `tb`. These always use the n
 
 ```python
 tb.google.fetch("p001", "sleep", start, end)      # always google-health
-tb.withings.fetch("p001", "sleep", start, end)    # always withings
-tb.google.summary("p001", start, end)             # analysis helpers also available
+tb.withings.fetch("p001", "activity", start, end) # always withings
+tb.oura.fetch("p001", "daily-readiness", start, end)  # always oura
 ```
 
 ### Token reuse
@@ -236,69 +236,49 @@ Before running analysis, check data completeness across participants:
 === "Python"
 
     ```python
-    # Summary statistics for one participant
-    s = tb.google.summary("p001", "2026-05-01", "2026-06-18")
-    print(s["sleep"]["coverage_pct"])        # e.g. 92.3
-    print(s["respiratory_rate"]["mean"])     # e.g. 15.2
-
-    # Data completeness table for the whole cohort
     audit = tb.google.data_completeness(
         ["p001", "p002", "p003"],
-        "2026-05-01", "2026-06-18"
+        "2026-05-01", "2026-06-18",
+        data_types=["sleep", "steps", "heart-rate-variability"],
     )
-    # audit is a list of dicts: user_id, data_type, n, days_with_data, coverage_pct, error
+    # list of dicts: user_id, data_type, n, days_with_data, coverage_pct
     ```
 
 === "R"
 
     ```r
-    # Summary for one participant
-    s <- gh_summary("p001", "2026-05-01", "2026-06-18")
-    s$sleep$coverage_pct        # e.g. 92.3
-    s$respiratory_rate$mean     # e.g. 15.2
-
-    # Data completeness table for the whole cohort
     audit <- gh_data_completeness(
       c("p001", "p002", "p003"),
-      "2026-05-01", "2026-06-18"
+      "2026-05-01", "2026-06-18",
+      data_types = c("sleep", "steps", "heart-rate-variability")
     )
-    print(audit)   # data.frame: user_id, data_type, n, days_with_data, coverage_pct, error
+    print(audit)   # data.frame: user_id, data_type, n, days_with_data, coverage_pct
     ```
 
 ---
 
 ## Available data types
 
-Pass any of these kebab-case IDs as the `data_type` argument:
-
-```
-sleep                               respiratory-rate-sleep-summary
-daily-sleep-temperature-derivations steps
-distance                            exercise
-active-zone-minutes                 active-energy-burned
-sedentary-period                    floors
-daily-vo2-max                       daily-resting-heart-rate
-heart-rate                          daily-heart-rate-zones
-heart-rate-variability              daily-heart-rate-variability
-electrocardiogram                   oxygen-saturation
-daily-oxygen-saturation             daily-respiratory-rate
-core-body-temperature               blood-glucose
-weight                              body-fat
-height                              nutrition-log
-hydration-log                       ...and more
-```
-
-Full list with units, device requirements, and notes: [Providers](providers.md).
+Data type IDs are kebab-case strings passed as the `data_type` argument. Each provider has its own set:
 
 === "Python"
 
     ```python
-    from tokenbridge.providers.google_health import DATA_TYPES
-    print(list(DATA_TYPES.keys()))
+    from tokenbridge.providers.google_health import DATA_TYPES as GH_DATA_TYPES
+    from tokenbridge.providers.withings import DATA_TYPES as WT_DATA_TYPES
+    from tokenbridge.providers.oura import DATA_TYPES as OU_DATA_TYPES
+
+    print(list(GH_DATA_TYPES))   # e.g. "sleep", "steps", "heart-rate-variability", ...
+    print(list(WT_DATA_TYPES))   # e.g. "sleep-summary", "activity", "weight", ...
+    print(list(OU_DATA_TYPES))   # e.g. "daily-sleep", "daily-readiness", "heartrate", ...
     ```
 
 === "R"
 
     ```r
-    names(GH_DATA_TYPES)
+    names(GH_DATA_TYPES)   # Google Health
+    names(WT_DATA_TYPES)   # Withings
+    names(OU_DATA_TYPES)   # Oura
     ```
+
+Full list with descriptions, units, and device requirements: [Provider Reference](providers.md).

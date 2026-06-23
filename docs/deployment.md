@@ -2,7 +2,7 @@
 
 TokenBridge is self-hosted. You run your own instance — your participant tokens never leave your infrastructure.
 
-For a step-by-step setup walkthrough, see the [Basic Setup Guide](basic-quickstart.md).
+For a step-by-step setup walkthrough, see the [Setup Guide](basic-quickstart.md).
 This page covers the architecture, configuration options, and anything you might need once you're running.
 
 ---
@@ -12,47 +12,58 @@ This page covers the architecture, configuration options, and anything you might
 Three things work together:
 
 **Supabase** hosts the database (token storage) and runs the edge functions (the OAuth flow and token API).
-It's the only piece that needs to be publicly reachable — participants click a link to it, and your R/Python scripts call it to get tokens.
+It's the only piece that needs to be publicly reachable — participants click a link to it, and your scripts call it to get tokens.
 
-**Google Cloud** provides OAuth credentials. You register an app there once;
-it tells Google where to send participants after they authorise (back to your Supabase function).
+**Provider OAuth apps** (Google Cloud, Withings, Oura, etc.) provide OAuth credentials. You register an app with each provider once; it tells the provider where to redirect participants after they authorise.
 
-**The client package** (R or Python) runs on your machine. It talks to Supabase to get tokens, then uses them to call Google Health directly.
+**The client package** (R or Python) runs on your machine. It talks to Supabase to get tokens, then uses them to call the provider API directly.
 
 ---
 
 ## What you need
 
 - A [Supabase](https://supabase.com) account (free tier is fine)
-- A [Google Cloud](https://console.cloud.google.com) account (free)
+- An OAuth app for each provider you want to support (see [Setup Guide](basic-quickstart.md))
 - R or Python on your local machine
 
 ---
 
 ## Edge functions
 
-Three Deno/TypeScript functions run on Supabase:
+Four Deno/TypeScript functions run on Supabase:
 
 | Function | Purpose |
 |---|---|
-| `auth-start` | Generates the Google OAuth URL and redirects the participant |
+| `auth-start` | Generates the provider OAuth URL and redirects the participant |
 | `auth-callback` | Receives the OAuth code after authorisation, exchanges it for tokens, stores them |
-| `token` | Called by your scripts — returns a valid access token (auto-refreshes if needed) |
+| `token` | Called by your scripts — returns a valid access token, auto-refreshes if needed |
+| `token-keepalive` | Called weekly by GitHub Actions — proactively refreshes tokens before they expire |
 
 The function code lives in [`supabase/functions/`](https://github.com/jackmanners/tokenbridge/tree/main/supabase/functions).
-Deploy via the [Supabase dashboard](https://supabase.com/dashboard) (Edge Functions → paste code) or the CLI (`supabase functions deploy`).
+Deploy via the CLI (`supabase functions deploy`) — the functions share code via `_shared/` so they must be bundled by the CLI, not pasted into the dashboard.
 
 ---
 
 ## Secrets
 
-Set these in **Project Settings → Edge Functions → Secrets**:
+Set these in **Project Settings → Edge Functions → Secrets**.
+
+**Core (required):**
+
+| Secret | Description |
+|---|---|
+| `TOKENBRIDGE_API_KEY` | A secret you choose — your scripts use this to authenticate with the `/token` endpoint |
+
+**Per provider — add the pair for each provider you enable:**
 
 | Secret | Description |
 |---|---|
 | `GOOGLE_HEALTH_CLIENT_ID` | From your Google Cloud OAuth credentials |
 | `GOOGLE_HEALTH_CLIENT_SECRET` | From your Google Cloud OAuth credentials |
-| `TOKENBRIDGE_API_KEY` | A secret you choose — your scripts use this to authenticate |
+| `WITHINGS_CLIENT_ID` | From your Withings developer app |
+| `WITHINGS_CLIENT_SECRET` | From your Withings developer app |
+| `OURA_CLIENT_ID` | From your Oura developer app |
+| `OURA_CLIENT_SECRET` | From your Oura developer app |
 
 ---
 
@@ -86,21 +97,22 @@ https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback
 
 ---
 
-## CLI deployment (alternative to the dashboard)
+## Automatic deployment
 
-If you have the Supabase CLI available:
+Two GitHub Actions workflows keep your deployment up to date:
 
-```bash
-supabase login
-supabase link --project-ref YOUR_PROJECT_REF
-supabase functions deploy auth-start auth-callback token
-```
+- **`deploy-functions.yml`** — redeploys edge functions automatically on every push to `main` that touches `supabase/functions/`
+- **`token-keepalive.yml`** — runs every Monday, refreshes any tokens that haven't been refreshed in 80+ days
+
+Both require `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_REF`, and `TOKENBRIDGE_API_KEY` as repository secrets.
 
 ---
 
-## Adding Withings support
+## Token refresh
 
-1. Create an app at [developer.withings.com](https://developer.withings.com)
-2. Set the redirect URI to `https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback`
-3. Add `WITHINGS_CLIENT_ID` and `WITHINGS_CLIENT_SECRET` to Supabase secrets
-4. Add the Withings provider config to `supabase/functions/_shared/providers.ts`
+Tokens are refreshed automatically in two ways:
+
+- **On-demand:** when your script calls `tb_get_token()`, the `/token` function checks expiry and refreshes if the token is within 5 minutes of expiring.
+- **Proactive (keepalive):** the weekly GitHub Actions job refreshes tokens that haven't been touched in 80 days, keeping refresh tokens alive even during long gaps between data collection.
+
+This ensures participants never need to re-authorise due to token expiry during a study, as long as the weekly job is running.
