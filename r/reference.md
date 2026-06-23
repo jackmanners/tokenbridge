@@ -98,7 +98,7 @@ tb_fetch(user_id, data_type, start_date, end_date,
 returns a flat `data.frame` with one row per data point.
 
 `data_type` is the kebab-case type ID — e.g. `"sleep"`, `"steps"`,
-`"heart-rate-variability"`. See `names(GH_DATA_TYPES)` or [Providers](../providers.md)
+`"heart-rate-variability"`. See `names(GH_DATA_TYPES)` or [Providers](../providers/index.md)
 for the full list.
 
 `provider` defaults to `tb_get_provider()`. Pass explicitly to override for a single
@@ -304,7 +304,7 @@ for (dt in names(GH_DATA_TYPES)) {
 }
 ```
 
-Full descriptions, units, and device requirements: [Providers](../providers.md).
+Full descriptions, units, and device requirements: [Providers](../providers/index.md).
 
 ---
 
@@ -526,13 +526,13 @@ Fetch Withings data for a participant. Equivalent to
 | `env_file` | character | `".env"` | Path to `.env` file |
 
 Planned type IDs: `"sleep"`, `"heart-rate"`, `"weight"`, `"blood-pressure"`.
-See [Providers](../providers.md).
+See [Providers](../providers/index.md).
 
 ---
 
 ## Data type IDs
 
-Pass any of these strings as the `data_type` argument. See [Providers](../providers.md)
+Pass any of these strings as the `data_type` argument. See [Providers](../providers/index.md)
 for units, device requirements, and notes.
 
 | Category | Type IDs |

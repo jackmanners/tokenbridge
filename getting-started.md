@@ -296,4 +296,4 @@ Data type IDs are kebab-case strings passed as the `data_type` argument. Each pr
 
 ///
 
-Full list with descriptions, units, and device requirements: [Provider Reference](providers.md).
+Full list with descriptions, units, and device requirements: [Provider Reference](providers/index.md).

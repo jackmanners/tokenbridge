@@ -109,4 +109,4 @@ You need a free [Supabase](https://supabase.com) account. Setup takes around 20â
 | `withings` | Supported | Requires Withings device (scale, BPM cuff, sleep mat, etc.) |
 | `oura` | Supported | Requires Oura Ring (Gen 2 or Gen 3) |
 
-Full list of data types, units, and endpoint notes: [Providers](providers.md)
+Full list of data types, units, and endpoint notes: [Providers](providers/index.md)
