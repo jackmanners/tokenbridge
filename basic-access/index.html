@@ -698,7 +698,7 @@
     </div>
   </div>
   <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
-    <p>If you'd rather not use the Python or R packages — or you're working in another language — you can drive the whole flow with plain HTTP. TokenBridge is just a few REST endpoints.</p>
+    <p>If you'd rather not use the Python or R packages - or you're working in another language - you can drive the whole flow with plain HTTP. TokenBridge is just a few REST endpoints.</p>
 <p>This page shows the minimal code to get from zero to a valid access token. What you do with it after that is up to you.</p>
 <hr />
 <h2 id="what-you-need">What you need<a class="headerlink" href="#what-you-need" title="Permanent link">&para;</a></h2>
@@ -708,8 +708,8 @@
 <li>A provider set up (see <a href="../basic-quickstart/">Setup Guide</a>)</li>
 </ul>
 <hr />
-<h2 id="step-1-onboard-a-participant">Step 1 — Onboard a participant<a class="headerlink" href="#step-1-onboard-a-participant" title="Permanent link">&para;</a></h2>
-<p>Generate an auth link and send it to them. This is just a URL — you can print it, email it, put it in a Qualtrics survey, whatever.</p>
+<h2 id="step-1-onboard-a-participant">Step 1 - Onboard a participant<a class="headerlink" href="#step-1-onboard-a-participant" title="Permanent link">&para;</a></h2>
+<p>Generate an auth link and send it to them. This is just a URL - you can print it, email it, put it in a Qualtrics survey, whatever.</p>
 <p>/// tab | Python</p>
 <div class="codehilite"><pre><span></span><code>:::python
 TOKENBRIDGE_URL = &quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;
@@ -736,8 +736,8 @@ print(auth_url)
 <p>///</p>
 <p>The participant clicks the link, signs in, approves access, and sees a success page. TokenBridge stores their token automatically. You don't need to do anything else on your end.</p>
 <hr />
-<h2 id="step-2-get-an-access-token">Step 2 — Get an access token<a class="headerlink" href="#step-2-get-an-access-token" title="Permanent link">&para;</a></h2>
-<p>Once a participant has authorised, call the <code>/token</code> endpoint. TokenBridge handles refresh automatically — you always get back a usable token.</p>
+<h2 id="step-2-get-an-access-token">Step 2 - Get an access token<a class="headerlink" href="#step-2-get-an-access-token" title="Permanent link">&para;</a></h2>
+<p>Once a participant has authorised, call the <code>/token</code> endpoint. TokenBridge handles refresh automatically - you always get back a usable token.</p>
 <p>/// tab | Python</p>
 <div class="codehilite"><pre><span></span><code><span class="p">:::</span><span class="n">python</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
@@ -777,7 +777,7 @@ print(auth_url)
 <p>///</p>
 <p>That's it. From here you call the provider API directly using the token as a Bearer credential.</p>
 <hr />
-<h2 id="step-3-call-the-provider-api">Step 3 — Call the provider API<a class="headerlink" href="#step-3-call-the-provider-api" title="Permanent link">&para;</a></h2>
+<h2 id="step-3-call-the-provider-api">Step 3 - Call the provider API<a class="headerlink" href="#step-3-call-the-provider-api" title="Permanent link">&para;</a></h2>
 <p>Pass the token in an <code>Authorization: Bearer</code> header. Minimal example for each provider:</p>
 <p>/// tab | Google Health</p>
 <div class="codehilite"><pre><span></span><code><span class="p">:::</span><span class="n">python</span>
@@ -836,7 +836,7 @@ print(auth_url)
 <span class="p">}</span>
 </code></pre></div>
 
-<p><code>expires_at</code> is informational — TokenBridge refreshes automatically on the next call if the token is expired or close to expiry.</p>
+<p><code>expires_at</code> is informational - TokenBridge refreshes automatically on the next call if the token is expired or close to expiry.</p>
   </div>
   
   <script>
@@ -1007,7 +1007,7 @@ print(auth_url)
         <a href="#step-1-onboard-a-participant"
             class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
             data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#step-1-onboard-a-participant');">
-            Step 1 — Onboard a participant
+            Step 1 - Onboard a participant
         </a>
         
 
@@ -1015,7 +1015,7 @@ print(auth_url)
         <a href="#step-2-get-an-access-token"
             class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
             data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#step-2-get-an-access-token');">
-            Step 2 — Get an access token
+            Step 2 - Get an access token
         </a>
         
 
@@ -1023,7 +1023,7 @@ print(auth_url)
         <a href="#step-3-call-the-provider-api"
             class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
             data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#step-3-call-the-provider-api');">
-            Step 3 — Call the provider API
+            Step 3 - Call the provider API
         </a>
         
 

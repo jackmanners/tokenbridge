@@ -700,7 +700,7 @@
   <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
     <p><strong>API base:</strong> <code>https://health.googleapis.com/v4/users/me</code><br />
 <strong>Auth:</strong> OAuth 2.0 with PKCE, scopes <code>https://www.googleapis.com/auth/googlehealth.*</code><br />
-<strong>Backend:</strong> Google Health Connect — data comes from Fitbit (and other apps the user has linked)</p>
+<strong>Backend:</strong> Google Health Connect - data comes from Fitbit (and other apps the user has linked)</p>
 <h2 id="endpoint-types">Endpoint types<a class="headerlink" href="#endpoint-types" title="Permanent link">&para;</a></h2>
 <div class="table-wrapper"><table>
 <thead>
@@ -723,7 +723,7 @@
 </tr>
 </tbody>
 </table></div>
-<p>The <code>list</code> endpoint does <strong>not</strong> accept date filter query params — filtering must be done
+<p>The <code>list</code> endpoint does <strong>not</strong> accept date filter query params - filtering must be done
 client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 <p>The <code>dailyRollup</code> endpoint accepts a JSON body <code>{"startDate": "YYYY-MM-DD", "endDate": "YYYY-MM-DD"}</code>.</p>
 <p>Three types only support <code>dailyRollup</code> (no raw datapoints available):
@@ -745,7 +745,7 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 <td><code>sleep</code></td>
 <td>Sleep</td>
 <td>Sleep sessions with stages</td>
-<td>—</td>
+<td>-</td>
 <td>list</td>
 <td>One record per session</td>
 </tr>
@@ -785,7 +785,7 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 <td><code>exercise</code></td>
 <td>Activity</td>
 <td>Exercise sessions</td>
-<td>—</td>
+<td>-</td>
 <td>list</td>
 <td>Includes type, duration, GPS if available</td>
 </tr>
@@ -817,7 +817,7 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 <td><code>activity-level</code></td>
 <td>Activity</td>
 <td>Activity level intervals</td>
-<td>—</td>
+<td>-</td>
 <td>list</td>
 <td>Sedentary/light/moderate/vigorous</td>
 </tr>
@@ -825,7 +825,7 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 <td><code>sedentary-period</code></td>
 <td>Activity</td>
 <td>Sedentary intervals</td>
-<td>—</td>
+<td>-</td>
 <td>list</td>
 <td></td>
 </tr>
@@ -841,7 +841,7 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 <td><code>swim-lengths-data</code></td>
 <td>Activity</td>
 <td>Swim length data</td>
-<td>—</td>
+<td>-</td>
 <td>list</td>
 <td>Requires swim tracking device</td>
 </tr>
@@ -907,7 +907,7 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 <td>Continuous HR samples</td>
 <td>bpm</td>
 <td>list</td>
-<td>High volume — paginate carefully</td>
+<td>High volume - paginate carefully</td>
 </tr>
 <tr>
 <td><code>daily-resting-heart-rate</code></td>
@@ -945,7 +945,7 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 <td><code>electrocardiogram</code></td>
 <td>Heart</td>
 <td>ECG recordings</td>
-<td>—</td>
+<td>-</td>
 <td>list</td>
 <td>Requires ECG-capable device</td>
 </tr>
@@ -953,7 +953,7 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 <td><code>irregular-rhythm-notification</code></td>
 <td>Heart</td>
 <td>AFib / irregular rhythm alerts</td>
-<td>—</td>
+<td>-</td>
 <td>list</td>
 <td></td>
 </tr>
@@ -1025,7 +1025,7 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 <td><code>food</code></td>
 <td>Nutrition</td>
 <td>Food log entries</td>
-<td>—</td>
+<td>-</td>
 <td>list</td>
 <td></td>
 </tr>
@@ -1033,7 +1033,7 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 <td><code>nutrition-log</code></td>
 <td>Nutrition</td>
 <td>Nutrition log (macros etc.)</td>
-<td>—</td>
+<td>-</td>
 <td>list</td>
 <td></td>
 </tr>
@@ -1051,7 +1051,7 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 <ul>
 <li>Test-mode OAuth apps support up to 100 users. Production verification requires a Google review.</li>
 <li>Data availability depends on the user's device and Fitbit app sync status.</li>
-<li><code>heart-rate</code> (raw continuous) can return thousands of records per day — fetch with a pre-obtained token and narrow date windows.</li>
+<li><code>heart-rate</code> (raw continuous) can return thousands of records per day - fetch with a pre-obtained token and narrow date windows.</li>
 </ul>
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
 <p><strong>Requires:</strong> A Google Cloud project. Data comes from Fitbit devices linked to a Google account.</p>
@@ -1064,7 +1064,7 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 <ol>
 <li>Go to <strong>APIs &amp; Services → OAuth consent screen → Get Started</strong></li>
 <li>Fill in your app name and email, set Audience to <strong>External</strong>, click through</li>
-<li>On the <strong>Data access</strong> step — leave it completely empty</li>
+<li>On the <strong>Data access</strong> step - leave it completely empty</li>
 <li>
 <p>When asked about publishing status, choose <strong>Production</strong></p>
 <p><strong>Create credentials:</strong></p>
@@ -1093,11 +1093,11 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 </tr>
 </tbody>
 </table></div>
-<p><strong>Test</strong> — visit this URL, you should be redirected to Google sign-in:</p>
+<p><strong>Test</strong> - visit this URL, you should be redirected to Google sign-in:</p>
 <p><code>https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=google-health&amp;user_id=test</code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Participants will see an "unverified app" warning — tell them to click <strong>Advanced → Continue</strong>.
+<p>Participants will see an "unverified app" warning - tell them to click <strong>Advanced → Continue</strong>.
 This goes away once Google verifies your app (optional for small studies).</p>
 </div>
 </li>

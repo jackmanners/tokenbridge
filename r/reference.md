@@ -56,7 +56,7 @@ Can be called multiple times to switch providers mid-script.
 
 | Argument | Type | Description |
 |---|---|---|
-| `provider` | character | Provider ID — e.g. `"google-health"`, `"withings"` |
+| `provider` | character | Provider ID - e.g. `"google-health"`, `"withings"` |
 
 **Returns** Invisibly: the provider string
 
@@ -81,7 +81,7 @@ tb_get_provider()
 Return the current session default provider (set by `tb_set_provider()`).
 Default at package load: `"google-health"`.
 
-**Returns** character — the current default provider ID
+**Returns** character - the current default provider ID
 
 ---
 
@@ -97,7 +97,7 @@ tb_fetch(user_id, data_type, start_date, end_date,
 **The canonical data fetch function.** Fetches health data for one participant and
 returns a flat `data.frame` with one row per data point.
 
-`data_type` is the kebab-case type ID — e.g. `"sleep"`, `"steps"`,
+`data_type` is the kebab-case type ID - e.g. `"sleep"`, `"steps"`,
 `"heart-rate-variability"`. See `names(GH_DATA_TYPES)` or [Providers](../providers/index.md)
 for the full list.
 
@@ -108,10 +108,10 @@ call without changing the session default.
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
-| `user_id` | character | — | TokenBridge participant ID |
-| `data_type` | character | — | Kebab-case type ID (e.g. `"sleep"`, `"steps"`) |
-| `start_date` | character | — | Start of date range, `"YYYY-MM-DD"` |
-| `end_date` | character | — | End of date range, `"YYYY-MM-DD"` |
+| `user_id` | character | - | TokenBridge participant ID |
+| `data_type` | character | - | Kebab-case type ID (e.g. `"sleep"`, `"steps"`) |
+| `start_date` | character | - | Start of date range, `"YYYY-MM-DD"` |
+| `end_date` | character | - | End of date range, `"YYYY-MM-DD"` |
 | `token` | character | `NULL` | Pre-fetched access token. Pass to skip a TokenBridge round-trip when fetching multiple types for the same user |
 | `provider` | character | `tb_get_provider()` | Provider ID. Overrides session default for this call only |
 | `env_file` | character | `".env"` | Path to `.env` file |
@@ -127,7 +127,7 @@ Returns an empty `data.frame` if no data exists for the period.
 sleep <- tb_fetch("p001", "sleep", "2026-05-01", "2026-06-18")
 steps <- tb_fetch("p001", "steps", "2026-05-01", "2026-06-18")
 
-# Token reuse — one TokenBridge call for multiple fetches
+# Token reuse - one TokenBridge call for multiple fetches
 tok <- tb_get_token("p001")
 sleep <- tb_fetch("p001", "sleep",                   "2026-05-01", "2026-06-18", token = tok)
 steps <- tb_fetch("p001", "steps",                   "2026-05-01", "2026-06-18", token = tok)
@@ -161,11 +161,11 @@ Once they complete the OAuth flow, their token is stored and you can fetch data 
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
-| `user_id` | character | — | TokenBridge participant ID |
+| `user_id` | character | - | TokenBridge participant ID |
 | `provider` | character | `tb_get_provider()` | Provider to authorise |
 | `env_file` | character | `".env"` | Path to `.env` file |
 
-**Returns** character — the full auth URL
+**Returns** character - the full auth URL
 
 **Example**
 
@@ -188,7 +188,7 @@ Return auth URLs for multiple participants at once.
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
-| `user_ids` | character vector | — | TokenBridge participant IDs |
+| `user_ids` | character vector | - | TokenBridge participant IDs |
 | `provider` | character | `tb_get_provider()` | Provider to authorise |
 | `env_file` | character | `".env"` | Path to `.env` file |
 
@@ -215,18 +215,18 @@ tb_get_token(user_id, provider = tb_get_provider(), env_file = ".env")
 Fetch a valid access token for a participant. TokenBridge refreshes automatically
 if the token is within 5 minutes of expiry.
 
-You rarely need this directly — `tb_fetch()` and `gh_fetch()` call it internally.
+You rarely need this directly - `tb_fetch()` and `gh_fetch()` call it internally.
 Use it when you want to fetch multiple data types for the same user efficiently:
 
 **Arguments**
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
-| `user_id` | character | — | TokenBridge participant ID |
+| `user_id` | character | - | TokenBridge participant ID |
 | `provider` | character | `tb_get_provider()` | Provider |
 | `env_file` | character | `".env"` | Path to `.env` file |
 
-**Returns** character — the OAuth access token
+**Returns** character - the OAuth access token
 
 **Example**
 
@@ -252,7 +252,7 @@ Useful for auditing whether participants have authorised and when their tokens e
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
-| `user_id` | character | — | TokenBridge participant ID |
+| `user_id` | character | - | TokenBridge participant ID |
 | `provider` | character | `tb_get_provider()` | Provider |
 | `env_file` | character | `".env"` | Path to `.env` file |
 
@@ -284,7 +284,7 @@ GH_DATA_TYPES
 
 Named character vector of all supported Google Health data type IDs.
 Names are the kebab-case IDs to pass to `gh_fetch()` / `tb_fetch()`.
-Values are `"list"` or `"dailyRollup"` (the endpoint type — handled automatically).
+Values are `"list"` or `"dailyRollup"` (the endpoint type - handled automatically).
 
 **Usage**
 
@@ -318,7 +318,7 @@ gh_fetch(user_id, data_type, start_date, end_date,
 Fetch Google Health data for a participant. Equivalent to
 `tb_fetch(..., provider = "google-health")`.
 
-This is the Google Health shorthand — it always uses the `"google-health"` provider
+This is the Google Health shorthand - it always uses the `"google-health"` provider
 regardless of the session default set by `tb_set_provider()`.
 
 Automatically handles the difference between `list` and `dailyRollup` endpoint types
@@ -328,14 +328,14 @@ based on `GH_DATA_TYPES`.
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
-| `user_id` | character | — | TokenBridge participant ID |
-| `data_type` | character | — | Kebab-case type ID. See `names(GH_DATA_TYPES)` |
-| `start_date` | character | — | `"YYYY-MM-DD"` |
-| `end_date` | character | — | `"YYYY-MM-DD"` |
+| `user_id` | character | - | TokenBridge participant ID |
+| `data_type` | character | - | Kebab-case type ID. See `names(GH_DATA_TYPES)` |
+| `start_date` | character | - | `"YYYY-MM-DD"` |
+| `end_date` | character | - | `"YYYY-MM-DD"` |
 | `token` | character | `NULL` | Pre-fetched access token (avoids a TokenBridge call) |
 | `env_file` | character | `".env"` | Path to `.env` file |
 
-**Returns** `data.frame` — one row per data point, columns depend on type.
+**Returns** `data.frame` - one row per data point, columns depend on type.
 Returns an empty `data.frame` if no data exists for the period.
 
 **Examples**
@@ -368,9 +368,9 @@ Makes a single token request and reuses it for both data fetches.
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
-| `user_id` | character | — | TokenBridge participant ID |
-| `start_date` | character | — | `"YYYY-MM-DD"` |
-| `end_date` | character | — | `"YYYY-MM-DD"` |
+| `user_id` | character | - | TokenBridge participant ID |
+| `start_date` | character | - | `"YYYY-MM-DD"` |
+| `end_date` | character | - | `"YYYY-MM-DD"` |
 | `env_file` | character | `".env"` | Path to `.env` file |
 
 **Returns** Named list:
@@ -423,9 +423,9 @@ rather than stopping the whole call.
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
-| `user_ids` | character vector | — | TokenBridge participant IDs |
-| `start_date` | character | — | `"YYYY-MM-DD"` |
-| `end_date` | character | — | `"YYYY-MM-DD"` |
+| `user_ids` | character vector | - | TokenBridge participant IDs |
+| `start_date` | character | - | `"YYYY-MM-DD"` |
+| `end_date` | character | - | `"YYYY-MM-DD"` |
 | `env_file` | character | `".env"` | Path to `.env` file |
 
 **Returns** Named list, one element per `user_id`. Each element is the result
@@ -455,15 +455,15 @@ gh_data_completeness(user_ids, start_date, end_date, env_file = ".env")
 ```
 
 Data completeness audit for multiple participants. Returns a `data.frame` with one row
-per participant × data type — useful for checking data quality before running analysis.
+per participant × data type - useful for checking data quality before running analysis.
 
 **Arguments**
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
-| `user_ids` | character vector | — | TokenBridge participant IDs |
-| `start_date` | character | — | `"YYYY-MM-DD"` |
-| `end_date` | character | — | `"YYYY-MM-DD"` |
+| `user_ids` | character vector | - | TokenBridge participant IDs |
+| `start_date` | character | - | `"YYYY-MM-DD"` |
+| `end_date` | character | - | `"YYYY-MM-DD"` |
 | `env_file` | character | `".env"` | Path to `.env` file |
 
 **Returns** `data.frame` with columns:
@@ -518,10 +518,10 @@ Fetch Withings data for a participant. Equivalent to
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
-| `user_id` | character | — | TokenBridge participant ID |
-| `data_type` | character | — | Withings type ID |
-| `start_date` | character | — | `"YYYY-MM-DD"` |
-| `end_date` | character | — | `"YYYY-MM-DD"` |
+| `user_id` | character | - | TokenBridge participant ID |
+| `data_type` | character | - | Withings type ID |
+| `start_date` | character | - | `"YYYY-MM-DD"` |
+| `end_date` | character | - | `"YYYY-MM-DD"` |
 | `token` | character | `NULL` | Pre-fetched access token |
 | `env_file` | character | `".env"` | Path to `.env` file |
 

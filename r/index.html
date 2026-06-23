@@ -705,10 +705,10 @@
 
 <p>Requires R 4.0+. Dependencies: <code>httr</code>.</p>
 <h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
-<div class="codehilite"><pre><span></span><code>tb_*    TokenBridge platform — auth, token management, canonical data fetch
-gh_*    Google Health shorthand — always uses &quot;google-health&quot; provider
-wt_*    Withings shorthand — always uses &quot;withings&quot; provider
-ou_*    Oura shorthand — always uses &quot;oura&quot; provider
+<div class="codehilite"><pre><span></span><code>tb_*    TokenBridge platform - auth, token management, canonical data fetch
+gh_*    Google Health shorthand - always uses &quot;google-health&quot; provider
+wt_*    Withings shorthand - always uses &quot;withings&quot; provider
+ou_*    Oura shorthand - always uses &quot;oura&quot; provider
 
 tb_set_provider(&quot;google-health&quot;)       set session default
 tb_fetch(&quot;p001&quot;, &quot;sleep&quot;, s, e)        canonical fetch, uses default provider
@@ -720,7 +720,7 @@ ou_fetch(&quot;p001&quot;, &quot;daily-sleep&quot;, s, e)  Oura shorthand
 <h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span><code><span class="nf">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
 
-<span class="nf">tb_setup</span><span class="p">()</span><span class="w">                           </span><span class="c1"># once — saves .env credentials</span>
+<span class="nf">tb_setup</span><span class="p">()</span><span class="w">                           </span><span class="c1"># once - saves .env credentials</span>
 <span class="nf">tb_set_provider</span><span class="p">(</span><span class="s">&quot;google-health&quot;</span><span class="p">)</span><span class="w">     </span><span class="c1"># optional, it&#39;s the default</span>
 
 <span class="c1"># Onboard</span>

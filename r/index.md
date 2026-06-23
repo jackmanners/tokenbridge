@@ -13,10 +13,10 @@ Requires R 4.0+. Dependencies: `httr`.
 ## Architecture
 
 ```
-tb_*    TokenBridge platform — auth, token management, canonical data fetch
-gh_*    Google Health shorthand — always uses "google-health" provider
-wt_*    Withings shorthand — always uses "withings" provider
-ou_*    Oura shorthand — always uses "oura" provider
+tb_*    TokenBridge platform - auth, token management, canonical data fetch
+gh_*    Google Health shorthand - always uses "google-health" provider
+wt_*    Withings shorthand - always uses "withings" provider
+ou_*    Oura shorthand - always uses "oura" provider
 
 tb_set_provider("google-health")       set session default
 tb_fetch("p001", "sleep", s, e)        canonical fetch, uses default provider
@@ -30,7 +30,7 @@ ou_fetch("p001", "daily-sleep", s, e)  Oura shorthand
 ```r
 library(tokenbridge)
 
-tb_setup()                           # once — saves .env credentials
+tb_setup()                           # once - saves .env credentials
 tb_set_provider("google-health")     # optional, it's the default
 
 # Onboard

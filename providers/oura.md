@@ -3,7 +3,7 @@
 **API base:** `https://api.ouraring.com/v2/usercollection`  
 **Auth:** OAuth 2.0 (no PKCE), scopes `email personal daily heartrate workout tag session spo2Daily`  
 **Backend:** Oura Ring (Gen 2 or Gen 3)  
-**Response envelope:** `{ "data": [...], "next_token": "..." }` — standard REST pagination
+**Response envelope:** `{ "data": [...], "next_token": "..." }` - standard REST pagination
 
 ## Endpoint types
 
@@ -34,10 +34,10 @@
 
 ## Known limitations
 
-- `heartrate` (continuous 5-second stream) can return very large volumes — use a token and reasonable date windows.
+- `heartrate` (continuous 5-second stream) can return very large volumes - use a token and reasonable date windows.
 - `daily-resilience`, `cardiovascular-age`, and `daily-spo2` require Oura Ring Gen 3.
 - Oura refresh tokens do not expire by time but are invalidated if the user revokes access. The weekly keepalive will detect failures and log them.
-- The Oura sandbox (`/v2/sandbox/usercollection/...`) can be used for testing without a real ring — same paths, just prefix with `/sandbox`.
+- The Oura sandbox (`/v2/sandbox/usercollection/...`) can be used for testing without a real ring - same paths, just prefix with `/sandbox`.
 
 ## Setup
 
@@ -57,6 +57,6 @@
 | `OURA_CLIENT_ID` | Client ID from above |
 | `OURA_CLIENT_SECRET` | Client Secret from above |
 
-**Test** — visit this URL, you should be redirected to Oura authorisation:
+**Test** - visit this URL, you should be redirected to Oura authorisation:
 
 `https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=oura&user_id=test`

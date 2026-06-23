@@ -701,7 +701,7 @@
     <p><strong>API base:</strong> <code>https://wbsapi.withings.net</code><br />
 <strong>Auth:</strong> OAuth 2.0 (no PKCE), scopes <code>user.info user.metrics user.activity user.sleepevents</code><br />
 <strong>Backend:</strong> Withings devices (scales, blood pressure monitors, sleep mats, activity trackers)<br />
-<strong>Response envelope:</strong> All responses are <code>{ "status": 0, "body": { ... } }</code> — status 0 = success</p>
+<strong>Response envelope:</strong> All responses are <code>{ "status": 0, "body": { ... } }</code> - status 0 = success</p>
 <h2 id="endpoint-types">Endpoint types<a class="headerlink" href="#endpoint-types" title="Permanent link">&para;</a></h2>
 <div class="table-wrapper"><table>
 <thead>
@@ -747,21 +747,21 @@
 <td><code>sleep-detail</code></td>
 <td>Sleep</td>
 <td>High-frequency sleep stage data</td>
-<td>—</td>
+<td>-</td>
 <td>Raw 30-second epoch data; best for detailed analysis</td>
 </tr>
 <tr>
 <td><code>activity</code></td>
 <td>Activity</td>
 <td>Daily activity summary</td>
-<td>—</td>
+<td>-</td>
 <td>steps, distance, calories, active_calories, elevation</td>
 </tr>
 <tr>
 <td><code>workouts</code></td>
 <td>Activity</td>
 <td>Individual workout sessions</td>
-<td>—</td>
+<td>-</td>
 <td>category, duration, calories, intensity</td>
 </tr>
 <tr>
@@ -831,18 +831,18 @@
 <td><code>ecg</code></td>
 <td>Heart</td>
 <td>ECG recording metadata (signal IDs)</td>
-<td>—</td>
+<td>-</td>
 <td>Use Withings Heart v2 - Get for raw signal</td>
 </tr>
 </tbody>
 </table></div>
 <h2 id="measure-value-decoding">Measure value decoding<a class="headerlink" href="#measure-value-decoding" title="Permanent link">&para;</a></h2>
-<p>Body measurement values from <code>/measure getmeas</code> are encoded as <code>value × 10^unit</code> (e.g. <code>value=800</code> <code>unit=-1</code> → <code>80.0 kg</code>). The client decodes this automatically — returned dicts already have the real numeric value under named columns like <code>weight_kg</code>, <code>fat_ratio_pct</code>, etc.</p>
+<p>Body measurement values from <code>/measure getmeas</code> are encoded as <code>value × 10^unit</code> (e.g. <code>value=800</code> <code>unit=-1</code> → <code>80.0 kg</code>). The client decodes this automatically - returned dicts already have the real numeric value under named columns like <code>weight_kg</code>, <code>fat_ratio_pct</code>, etc.</p>
 <h2 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">&para;</a></h2>
 <ul>
 <li>The Withings API requires re-authorisation when the refresh token expires (unlike Google, which issues long-lived refresh tokens). If a user's token is invalidated, <code>tb_get_token()</code> raises an error with a re-auth link.</li>
 <li>Some data types (BIA measurements, ECG) require specific Withings hardware.</li>
-<li>Test accounts (demo mode) have dummy data — use <code>action=getdemoaccess</code> in the Withings developer dashboard to access it.</li>
+<li>Test accounts (demo mode) have dummy data - use <code>action=getdemoaccess</code> in the Withings developer dashboard to access it.</li>
 </ul>
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
 <p><strong>Requires:</strong> A Withings developer account. Data comes from Withings devices (scales, blood pressure monitors, sleep mats, activity trackers).</p>
@@ -873,7 +873,7 @@
 </tr>
 </tbody>
 </table></div>
-<p><strong>Test</strong> — visit this URL, you should be redirected to Withings authorisation:</p>
+<p><strong>Test</strong> - visit this URL, you should be redirected to Withings authorisation:</p>
 <p><code>https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=withings&amp;user_id=test</code></p>
   </div>
   

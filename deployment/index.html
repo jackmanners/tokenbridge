@@ -698,15 +698,15 @@
     </div>
   </div>
   <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
-    <p>TokenBridge is self-hosted — you run your own Supabase instance and tokens stay in your own database.</p>
+    <p>TokenBridge is self-hosted - you run your own Supabase instance and tokens stay in your own database.</p>
 <p>For a step-by-step walkthrough, see the <a href="../basic-quickstart/">Setup Guide</a>. This page covers the architecture and config options.</p>
 <hr />
 <h2 id="what-youre-deploying">What you're deploying<a class="headerlink" href="#what-youre-deploying" title="Permanent link">&para;</a></h2>
 <p>Two things work together:</p>
 <p><strong>Supabase</strong> hosts the database (token storage) and runs the edge functions (the OAuth flow and token API).
-It's the only piece that needs to be publicly reachable — participants click a link to it, and your scripts call it to get tokens.</p>
+It's the only piece that needs to be publicly reachable - participants click a link to it, and your scripts call it to get tokens.</p>
 <p><strong>Provider OAuth apps</strong> (Google Cloud, Withings, Oura, etc.) provide OAuth credentials. You register an app with each provider once; it tells the provider where to redirect participants after they authorise.</p>
-<p>Your scripts call the <code>/token</code> endpoint to get a valid access token, then use it to call the provider API directly — no auth logic needed in your analysis code.</p>
+<p>Your scripts call the <code>/token</code> endpoint to get a valid access token, then use it to call the provider API directly - no auth logic needed in your analysis code.</p>
 <hr />
 <h2 id="what-you-need">What you need<a class="headerlink" href="#what-you-need" title="Permanent link">&para;</a></h2>
 <ul>
@@ -734,16 +734,16 @@ It's the only piece that needs to be publicly reachable — participants click a
 </tr>
 <tr>
 <td><code>token</code></td>
-<td>Called by your scripts — returns a valid access token, auto-refreshes if needed</td>
+<td>Called by your scripts - returns a valid access token, auto-refreshes if needed</td>
 </tr>
 <tr>
 <td><code>token-keepalive</code></td>
-<td>Called weekly by GitHub Actions — proactively refreshes tokens before they expire</td>
+<td>Called weekly by GitHub Actions - proactively refreshes tokens before they expire</td>
 </tr>
 </tbody>
 </table></div>
 <p>The function code lives in <a href="https://github.com/jackmanners/tokenbridge/tree/main/supabase/functions"><code>supabase/functions/</code></a>.
-Deploy via the CLI (<code>supabase functions deploy</code>) — the functions share code via <code>_shared/</code> so they must be bundled by the CLI, not pasted into the dashboard.</p>
+Deploy via the CLI (<code>supabase functions deploy</code>) - the functions share code via <code>_shared/</code> so they must be bundled by the CLI, not pasted into the dashboard.</p>
 <hr />
 <h2 id="secrets">Secrets<a class="headerlink" href="#secrets" title="Permanent link">&para;</a></h2>
 <p>Set these in <strong>Project Settings → Edge Functions → Secrets</strong>.</p>
@@ -758,11 +758,11 @@ Deploy via the CLI (<code>supabase functions deploy</code>) — the functions sh
 <tbody>
 <tr>
 <td><code>TOKENBRIDGE_API_KEY</code></td>
-<td>A secret you choose — your scripts use this to authenticate with the <code>/token</code> endpoint</td>
+<td>A secret you choose - your scripts use this to authenticate with the <code>/token</code> endpoint</td>
 </tr>
 </tbody>
 </table></div>
-<p><strong>Per provider — add the pair for each provider you enable:</strong></p>
+<p><strong>Per provider - add the pair for each provider you enable:</strong></p>
 <div class="table-wrapper"><table>
 <thead>
 <tr>
@@ -800,9 +800,9 @@ Deploy via the CLI (<code>supabase functions deploy</code>) — the functions sh
 <hr />
 <h2 id="google-oauth">Google OAuth<a class="headerlink" href="#google-oauth" title="Permanent link">&para;</a></h2>
 <h3 id="consent-screen-and-verification">Consent screen and verification<a class="headerlink" href="#consent-screen-and-verification" title="Permanent link">&para;</a></h3>
-<p>When setting up the OAuth consent screen, leave the <strong>Data Access</strong> page empty — do not add any scopes there.</p>
+<p>When setting up the OAuth consent screen, leave the <strong>Data Access</strong> page empty - do not add any scopes there.</p>
 <p>The edge functions request health scopes directly in the OAuth URL at runtime. Declaring them in the console is what triggers Google's verification requirement for restricted scopes. Leaving Data Access empty bypasses this, and the app works for up to 100 participants with no review process.</p>
-<p>Participants will see an "unverified app" warning during authorisation — tell them to click <strong>Advanced → Continue</strong>. This is expected.</p>
+<p>Participants will see an "unverified app" warning during authorisation - tell them to click <strong>Advanced → Continue</strong>. This is expected.</p>
 <h3 id="testing-vs-production-mode">Testing vs Production mode<a class="headerlink" href="#testing-vs-production-mode" title="Permanent link">&para;</a></h3>
 <div class="table-wrapper"><table>
 <thead>
@@ -825,7 +825,7 @@ Deploy via the CLI (<code>supabase functions deploy</code>) — the functions sh
 </tr>
 </tbody>
 </table></div>
-<p>Production is recommended — it removes the need to pre-register every participant's email.
+<p>Production is recommended - it removes the need to pre-register every participant's email.
 Both modes have a 100-participant cap for unverified apps using restricted scopes.
 If your study exceeds 100 participants, you will need to go through Google's verification process.</p>
 <h3 id="redirect-uri">Redirect URI<a class="headerlink" href="#redirect-uri" title="Permanent link">&para;</a></h3>
@@ -837,8 +837,8 @@ If your study exceeds 100 participants, you will need to go through Google's ver
 <h2 id="automatic-deployment">Automatic deployment<a class="headerlink" href="#automatic-deployment" title="Permanent link">&para;</a></h2>
 <p>Two GitHub Actions workflows keep your deployment up to date:</p>
 <ul>
-<li><strong><code>deploy-functions.yml</code></strong> — redeploys edge functions automatically on every push to <code>main</code> that touches <code>supabase/functions/</code></li>
-<li><strong><code>token-keepalive.yml</code></strong> — runs every Monday, refreshes any tokens that haven't been refreshed in 80+ days</li>
+<li><strong><code>deploy-functions.yml</code></strong> - redeploys edge functions automatically on every push to <code>main</code> that touches <code>supabase/functions/</code></li>
+<li><strong><code>token-keepalive.yml</code></strong> - runs every Monday, refreshes any tokens that haven't been refreshed in 80+ days</li>
 </ul>
 <p>Both require <code>SUPABASE_ACCESS_TOKEN</code>, <code>SUPABASE_PROJECT_REF</code>, and <code>TOKENBRIDGE_API_KEY</code> as repository secrets.</p>
 <hr />

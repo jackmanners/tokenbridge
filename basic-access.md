@@ -1,6 +1,6 @@
 # Using TokenBridge Without the Packages
 
-If you'd rather not use the Python or R packages — or you're working in another language — you can drive the whole flow with plain HTTP. TokenBridge is just a few REST endpoints.
+If you'd rather not use the Python or R packages - or you're working in another language - you can drive the whole flow with plain HTTP. TokenBridge is just a few REST endpoints.
 
 This page shows the minimal code to get from zero to a valid access token. What you do with it after that is up to you.
 
@@ -14,9 +14,9 @@ This page shows the minimal code to get from zero to a valid access token. What 
 
 ------------------------------------------------------------------------
 
-## Step 1 — Onboard a participant
+## Step 1 - Onboard a participant
 
-Generate an auth link and send it to them. This is just a URL — you can print it, email it, put it in a Qualtrics survey, whatever.
+Generate an auth link and send it to them. This is just a URL - you can print it, email it, put it in a Qualtrics survey, whatever.
 
 /// tab \| Python
 
@@ -52,9 +52,9 @@ The participant clicks the link, signs in, approves access, and sees a success p
 
 ------------------------------------------------------------------------
 
-## Step 2 — Get an access token
+## Step 2 - Get an access token
 
-Once a participant has authorised, call the `/token` endpoint. TokenBridge handles refresh automatically — you always get back a usable token.
+Once a participant has authorised, call the `/token` endpoint. TokenBridge handles refresh automatically - you always get back a usable token.
 
 /// tab \| Python
 
@@ -103,7 +103,7 @@ That's it. From here you call the provider API directly using the token as a Bea
 
 ------------------------------------------------------------------------
 
-## Step 3 — Call the provider API
+## Step 3 - Call the provider API
 
 Pass the token in an `Authorization: Bearer` header. Minimal example for each provider:
 
@@ -177,4 +177,4 @@ The `/token` endpoint returns:
 }
 ```
 
-`expires_at` is informational — TokenBridge refreshes automatically on the next call if the token is expired or close to expiry.
+`expires_at` is informational - TokenBridge refreshes automatically on the next call if the token is expired or close to expiry.

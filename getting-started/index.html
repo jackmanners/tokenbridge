@@ -756,7 +756,7 @@ The<span class="w"> </span>wizard<span class="w"> </span>prompts<span class="w">
 <div class="codehilite"><pre><span></span><code><span class="nf">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
 <span class="nf">tb_setup</span><span class="p">()</span>
 
-<span class="n">Same</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">Python</span><span class="w"> </span><span class="n">wizard</span><span class="w"> </span>—<span class="w"> </span><span class="n">prompts</span><span class="p">,</span><span class="w"> </span><span class="n">verifies</span><span class="p">,</span><span class="w"> </span><span class="n">saves</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">`.env`.</span>
+<span class="n">Same</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">Python</span><span class="w"> </span><span class="n">wizard</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">prompts</span><span class="p">,</span><span class="w"> </span><span class="n">verifies</span><span class="p">,</span><span class="w"> </span><span class="n">saves</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">`.env`.</span>
 </code></pre></div>
 
 </div>
@@ -800,7 +800,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 <span class="n">url</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">auth_url</span><span class="p">(</span><span class="s2">&quot;participant-001&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
-<span class="c1"># Batch — returns {user_id: url}</span>
+<span class="c1"># Batch - returns {user_id: url}</span>
 <span class="n">urls</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">auth_urls</span><span class="p">([</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;p002&quot;</span><span class="p">,</span> <span class="s2">&quot;p003&quot;</span><span class="p">,</span> <span class="s2">&quot;p004&quot;</span><span class="p">])</span>
 <span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -811,7 +811,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 <div class="codehilite"><pre><span></span><code><span class="c1"># Single participant</span>
 <span class="nf">tb_auth_url</span><span class="p">(</span><span class="s">&quot;participant-001&quot;</span><span class="p">)</span>
 
-<span class="c1"># Batch — returns named character vector</span>
+<span class="c1"># Batch - returns named character vector</span>
 <span class="n">urls</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p004&quot;</span><span class="p">))</span>
 <span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">uid</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">urls</span><span class="p">))</span><span class="w"> </span><span class="nf">cat</span><span class="p">(</span><span class="n">uid</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;:&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">urls</span><span class="p">[[</span><span class="n">uid</span><span class="p">]],</span><span class="w"> </span><span class="s">&quot;\n&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -823,7 +823,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 <li>Clicks the link</li>
 <li>Signs in with their account (Google for Fitbit, Withings, or Oura)</li>
 <li>Approves the requested permissions</li>
-<li>Sees a success page — done</li>
+<li>Sees a success page - done</li>
 </ol>
 <div class="admonition note">
 <p class="admonition-title">Google Health / Fitbit</p>
@@ -831,7 +831,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 </div>
 <div class="admonition note">
 <p class="admonition-title">Test mode warning</p>
-<p>If your Google Cloud app is in Testing mode (the default for new deployments), participants will see an "unverified app" warning. They should click <strong>Advanced → Go to [app name] (unsafe)</strong> to proceed. This is expected — see <a href="../deployment/#google-verification">Deployment</a> for context.</p>
+<p>If your Google Cloud app is in Testing mode (the default for new deployments), participants will see an "unverified app" warning. They should click <strong>Advanced → Go to [app name] (unsafe)</strong> to proceed. This is expected - see <a href="../deployment/#google-verification">Deployment</a> for context.</p>
 </div>
 <hr />
 <h2 id="fetching-data">Fetching data<a class="headerlink" href="#fetching-data" title="Permanent link">&para;</a></h2>
@@ -862,7 +862,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 
 </div>
 </div>
-<p>Results are returned as flat records (Python: <code>list[dict]</code>, R: <code>data.frame</code>). Nested API fields are flattened with dot notation — e.g. <code>startTime.seconds</code>.</p>
+<p>Results are returned as flat records (Python: <code>list[dict]</code>, R: <code>data.frame</code>). Nested API fields are flattened with dot notation - e.g. <code>startTime.seconds</code>.</p>
 <h3 id="setting-a-default-provider">Setting a default provider<a class="headerlink" href="#setting-a-default-provider" title="Permanent link">&para;</a></h3>
 <div class="tabbed-set" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><label for="__tabbed_6_1">Python</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">()</span>

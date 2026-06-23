@@ -30,7 +30,7 @@ tb.google.summary("p001", start, end)                  # GoogleHealth.summary
 tb.google.data_completeness(["p001", "p002"], s, e)    # GoogleHealth.data_completeness
 ```
 
-They are read-only properties on `TokenBridge` — you cannot assign to `tb.google`.
+They are read-only properties on `TokenBridge` - you cannot assign to `tb.google`.
 
 ---
 
@@ -80,7 +80,7 @@ for dtype in DATA_TYPES:
 ## Withings
 
 The Withings provider stub. The OAuth flow is wired but `fetch()` raises
-`NotImplementedError` — implementation is in progress.
+`NotImplementedError` - implementation is in progress.
 
 ::: tokenbridge.Withings
     options:

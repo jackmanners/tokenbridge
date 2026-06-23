@@ -749,7 +749,7 @@ unless overridden with <code>provider=</code>.</p>
 <tr>
 <td><code>provider</code></td>
 <td>character</td>
-<td>Provider ID — e.g. <code>"google-health"</code>, <code>"withings"</code></td>
+<td>Provider ID - e.g. <code>"google-health"</code>, <code>"withings"</code></td>
 </tr>
 </tbody>
 </table></div>
@@ -769,7 +769,7 @@ unless overridden with <code>provider=</code>.</p>
 
 <p>Return the current session default provider (set by <code>tb_set_provider()</code>).
 Default at package load: <code>"google-health"</code>.</p>
-<p><strong>Returns</strong> character — the current default provider ID</p>
+<p><strong>Returns</strong> character - the current default provider ID</p>
 <hr />
 <h3 id="tb_fetch">tb_fetch<a class="headerlink" href="#tb_fetch" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><code><span class="nf">tb_fetch</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">data_type</span><span class="p">,</span><span class="w"> </span><span class="n">start_date</span><span class="p">,</span><span class="w"> </span><span class="n">end_date</span><span class="p">,</span>
@@ -780,7 +780,7 @@ Default at package load: <code>"google-health"</code>.</p>
 
 <p><strong>The canonical data fetch function.</strong> Fetches health data for one participant and
 returns a flat <code>data.frame</code> with one row per data point.</p>
-<p><code>data_type</code> is the kebab-case type ID — e.g. <code>"sleep"</code>, <code>"steps"</code>,
+<p><code>data_type</code> is the kebab-case type ID - e.g. <code>"sleep"</code>, <code>"steps"</code>,
 <code>"heart-rate-variability"</code>. See <code>names(GH_DATA_TYPES)</code> or <a href="../../providers/">Providers</a>
 for the full list.</p>
 <p><code>provider</code> defaults to <code>tb_get_provider()</code>. Pass explicitly to override for a single
@@ -799,25 +799,25 @@ call without changing the session default.</p>
 <tr>
 <td><code>user_id</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td>TokenBridge participant ID</td>
 </tr>
 <tr>
 <td><code>data_type</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td>Kebab-case type ID (e.g. <code>"sleep"</code>, <code>"steps"</code>)</td>
 </tr>
 <tr>
 <td><code>start_date</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td>Start of date range, <code>"YYYY-MM-DD"</code></td>
 </tr>
 <tr>
 <td><code>end_date</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td>End of date range, <code>"YYYY-MM-DD"</code></td>
 </tr>
 <tr>
@@ -848,7 +848,7 @@ Returns an empty <code>data.frame</code> if no data exists for the period.</p>
 <span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
 <span class="n">steps</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;steps&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
 
-<span class="c1"># Token reuse — one TokenBridge call for multiple fetches</span>
+<span class="c1"># Token reuse - one TokenBridge call for multiple fetches</span>
 <span class="n">tok</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_get_token</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">)</span>
 <span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w">                   </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
 <span class="n">steps</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;steps&quot;</span><span class="p">,</span><span class="w">                   </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
@@ -888,7 +888,7 @@ Once they complete the OAuth flow, their token is stored and you can fetch data 
 <tr>
 <td><code>user_id</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td>TokenBridge participant ID</td>
 </tr>
 <tr>
@@ -905,7 +905,7 @@ Once they complete the OAuth flow, their token is stored and you can fetch data 
 </tr>
 </tbody>
 </table></div>
-<p><strong>Returns</strong> character — the full auth URL</p>
+<p><strong>Returns</strong> character - the full auth URL</p>
 <p><strong>Example</strong></p>
 <div class="codehilite"><pre><span></span><code><span class="n">url</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_url</span><span class="p">(</span><span class="s">&quot;participant-001&quot;</span><span class="p">)</span>
 <span class="nf">cat</span><span class="p">(</span><span class="s">&quot;Please visit this link to connect your Fitbit:\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">url</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;\n&quot;</span><span class="p">)</span>
@@ -931,7 +931,7 @@ Once they complete the OAuth flow, their token is stored and you can fetch data 
 <tr>
 <td><code>user_ids</code></td>
 <td>character vector</td>
-<td>—</td>
+<td>-</td>
 <td>TokenBridge participant IDs</td>
 </tr>
 <tr>
@@ -964,7 +964,7 @@ Once they complete the OAuth flow, their token is stored and you can fetch data 
 
 <p>Fetch a valid access token for a participant. TokenBridge refreshes automatically
 if the token is within 5 minutes of expiry.</p>
-<p>You rarely need this directly — <code>tb_fetch()</code> and <code>gh_fetch()</code> call it internally.
+<p>You rarely need this directly - <code>tb_fetch()</code> and <code>gh_fetch()</code> call it internally.
 Use it when you want to fetch multiple data types for the same user efficiently:</p>
 <p><strong>Arguments</strong></p>
 <div class="table-wrapper"><table>
@@ -980,7 +980,7 @@ Use it when you want to fetch multiple data types for the same user efficiently:
 <tr>
 <td><code>user_id</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td>TokenBridge participant ID</td>
 </tr>
 <tr>
@@ -997,7 +997,7 @@ Use it when you want to fetch multiple data types for the same user efficiently:
 </tr>
 </tbody>
 </table></div>
-<p><strong>Returns</strong> character — the OAuth access token</p>
+<p><strong>Returns</strong> character - the OAuth access token</p>
 <p><strong>Example</strong></p>
 <div class="codehilite"><pre><span></span><code><span class="n">tok</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_get_token</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">)</span>
 <span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
@@ -1026,7 +1026,7 @@ Useful for auditing whether participants have authorised and when their tokens e
 <tr>
 <td><code>user_id</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td>TokenBridge participant ID</td>
 </tr>
 <tr>
@@ -1084,7 +1084,7 @@ Useful for auditing whether participants have authorised and when their tokens e
 
 <p>Named character vector of all supported Google Health data type IDs.
 Names are the kebab-case IDs to pass to <code>gh_fetch()</code> / <code>tb_fetch()</code>.
-Values are <code>"list"</code> or <code>"dailyRollup"</code> (the endpoint type — handled automatically).</p>
+Values are <code>"list"</code> or <code>"dailyRollup"</code> (the endpoint type - handled automatically).</p>
 <p><strong>Usage</strong></p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># See all type IDs</span>
 <span class="nf">names</span><span class="p">(</span><span class="n">GH_DATA_TYPES</span><span class="p">)</span>
@@ -1110,7 +1110,7 @@ Values are <code>"list"</code> or <code>"dailyRollup"</code> (the endpoint type 
 
 <p>Fetch Google Health data for a participant. Equivalent to
 <code>tb_fetch(..., provider = "google-health")</code>.</p>
-<p>This is the Google Health shorthand — it always uses the <code>"google-health"</code> provider
+<p>This is the Google Health shorthand - it always uses the <code>"google-health"</code> provider
 regardless of the session default set by <code>tb_set_provider()</code>.</p>
 <p>Automatically handles the difference between <code>list</code> and <code>dailyRollup</code> endpoint types
 based on <code>GH_DATA_TYPES</code>.</p>
@@ -1128,25 +1128,25 @@ based on <code>GH_DATA_TYPES</code>.</p>
 <tr>
 <td><code>user_id</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td>TokenBridge participant ID</td>
 </tr>
 <tr>
 <td><code>data_type</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td>Kebab-case type ID. See <code>names(GH_DATA_TYPES)</code></td>
 </tr>
 <tr>
 <td><code>start_date</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td><code>"YYYY-MM-DD"</code></td>
 </tr>
 <tr>
 <td><code>end_date</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td><code>"YYYY-MM-DD"</code></td>
 </tr>
 <tr>
@@ -1163,7 +1163,7 @@ based on <code>GH_DATA_TYPES</code>.</p>
 </tr>
 </tbody>
 </table></div>
-<p><strong>Returns</strong> <code>data.frame</code> — one row per data point, columns depend on type.
+<p><strong>Returns</strong> <code>data.frame</code> - one row per data point, columns depend on type.
 Returns an empty <code>data.frame</code> if no data exists for the period.</p>
 <p><strong>Examples</strong></p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># Basic</span>
@@ -1199,19 +1199,19 @@ Makes a single token request and reuses it for both data fetches.</p>
 <tr>
 <td><code>user_id</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td>TokenBridge participant ID</td>
 </tr>
 <tr>
 <td><code>start_date</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td><code>"YYYY-MM-DD"</code></td>
 </tr>
 <tr>
 <td><code>end_date</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td><code>"YYYY-MM-DD"</code></td>
 </tr>
 <tr>
@@ -1274,19 +1274,19 @@ rather than stopping the whole call.</p>
 <tr>
 <td><code>user_ids</code></td>
 <td>character vector</td>
-<td>—</td>
+<td>-</td>
 <td>TokenBridge participant IDs</td>
 </tr>
 <tr>
 <td><code>start_date</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td><code>"YYYY-MM-DD"</code></td>
 </tr>
 <tr>
 <td><code>end_date</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td><code>"YYYY-MM-DD"</code></td>
 </tr>
 <tr>
@@ -1318,7 +1318,7 @@ of <code>gh_summary()</code>, or <code>list(error = "message")</code> if that pa
 </code></pre></div>
 
 <p>Data completeness audit for multiple participants. Returns a <code>data.frame</code> with one row
-per participant × data type — useful for checking data quality before running analysis.</p>
+per participant × data type - useful for checking data quality before running analysis.</p>
 <p><strong>Arguments</strong></p>
 <div class="table-wrapper"><table>
 <thead>
@@ -1333,19 +1333,19 @@ per participant × data type — useful for checking data quality before running
 <tr>
 <td><code>user_ids</code></td>
 <td>character vector</td>
-<td>—</td>
+<td>-</td>
 <td>TokenBridge participant IDs</td>
 </tr>
 <tr>
 <td><code>start_date</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td><code>"YYYY-MM-DD"</code></td>
 </tr>
 <tr>
 <td><code>end_date</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td><code>"YYYY-MM-DD"</code></td>
 </tr>
 <tr>
@@ -1443,25 +1443,25 @@ This function currently raises an error.</p>
 <tr>
 <td><code>user_id</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td>TokenBridge participant ID</td>
 </tr>
 <tr>
 <td><code>data_type</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td>Withings type ID</td>
 </tr>
 <tr>
 <td><code>start_date</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td><code>"YYYY-MM-DD"</code></td>
 </tr>
 <tr>
 <td><code>end_date</code></td>
 <td>character</td>
-<td>—</td>
+<td>-</td>
 <td><code>"YYYY-MM-DD"</code></td>
 </tr>
 <tr>

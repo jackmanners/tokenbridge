@@ -721,7 +721,7 @@
 <p>Responsible for auth URL generation, token retrieval, and routing data
 requests to the correct provider.  Set <code>tb.provider</code> once at the top of
 your script; use <code>tb.fetch()</code> for all data fetching.</p>
-<p>Use <code>tb.google</code> / <code>tb.withings</code> as provider-namespaced shortcuts — they
+<p>Use <code>tb.google</code> / <code>tb.withings</code> as provider-namespaced shortcuts - they
 pre-bind the provider and forward every call to the underlying provider
 instance, so <code>tb.google.summary(...)</code> also works.</p>
 <p>See <code>docs/providers/index.md</code> for supported providers and data type IDs.</p>
@@ -951,7 +951,7 @@ be resolved from arguments or environment.</p>
 <p>Routes to the appropriate provider and returns a flat list of records.
 Each record is a dict with dot-notation keys for nested API fields,
 e.g. <code>startTime.seconds</code>.</p>
-<p><code>data_type</code> is the kebab-case type ID — e.g. <code>"sleep"</code>, <code>"steps"</code>,
+<p><code>data_type</code> is the kebab-case type ID - e.g. <code>"sleep"</code>, <code>"steps"</code>,
 <code>"heart-rate-variability"</code>.  See <code>docs/providers/index.md</code> or:</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge.providers.google_health</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_TYPES</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">DATA_TYPES</span><span class="p">))</span>
@@ -1332,7 +1332,7 @@ their token is stored and you can fetch data immediately.</p>
         <p>Fetch a valid access token for a participant.</p>
 <p>TokenBridge refreshes automatically if the token is within 5 minutes
 of expiry.</p>
-<p>You rarely need this directly — <code>tb.fetch()</code> handles it internally.
+<p>You rarely need this directly - <code>tb.fetch()</code> handles it internally.
 Use it when fetching multiple data types for the same participant to
 avoid one TokenBridge round-trip per call:</p>
 
@@ -1436,7 +1436,7 @@ methods are available as <code>tb.google.&lt;method&gt;</code>.</p>
 <span class="n">tb</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">data_completeness</span><span class="p">([</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;p002&quot;</span><span class="p">],</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>    <span class="c1"># GoogleHealth.data_completeness</span>
 </code></pre></div>
 
-<p>They are read-only properties on <code>TokenBridge</code> — you cannot assign to <code>tb.google</code>.</p>
+<p>They are read-only properties on <code>TokenBridge</code> - you cannot assign to <code>tb.google</code>.</p>
 <hr />
 <h2 id="googlehealth">GoogleHealth<a class="headerlink" href="#googlehealth" title="Permanent link">&para;</a></h2>
 <p>The underlying Google Health provider. You can use this directly if you prefer not to
@@ -1512,7 +1512,7 @@ fetching multiple types for the same participant:</p>
     <div class="doc doc-contents ">
 
         <p>Fetch any Google Health data type by its ID.</p>
-<p>This is the primary method — all named helpers (<code>fetch_sleep</code>, etc.)
+<p>This is the primary method - all named helpers (<code>fetch_sleep</code>, etc.)
 delegate here.  Automatically routes to the correct endpoint type
 (<code>list</code> or <code>dailyRollup</code>) based on <code>DATA_TYPES</code>.</p>
 
@@ -1683,7 +1683,7 @@ types to avoid repeated TokenBridge round-trips.</p>
 
     <div class="doc doc-contents ">
 
-        <p>Data completeness audit — how many days of data each participant has.</p>
+        <p>Data completeness audit - how many days of data each participant has.</p>
 <p>Fetches each requested data type for each participant and returns a
 flat table of counts. One row per participant × data type.</p>
 
@@ -1859,7 +1859,7 @@ subset of <code>DATA_TYPES</code> keys.</p>
 </div><hr />
 <h2 id="withings">Withings<a class="headerlink" href="#withings" title="Permanent link">&para;</a></h2>
 <p>The Withings provider stub. The OAuth flow is wired but <code>fetch()</code> raises
-<code>NotImplementedError</code> — implementation is in progress.</p>
+<code>NotImplementedError</code> - implementation is in progress.</p>
 
 
 <div class="doc doc-object doc-class">

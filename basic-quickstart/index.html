@@ -700,11 +700,11 @@
   <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
     <p>Two phases:</p>
 <ol>
-<li><strong>Backend</strong> — Supabase project + edge functions (once, ~10 min)</li>
-<li><strong>Providers</strong> — OAuth app per data source (10–15 min each, add as many as you need)</li>
+<li><strong>Backend</strong> - Supabase project + edge functions (once, ~10 min)</li>
+<li><strong>Providers</strong> - OAuth app per data source (10–15 min each, add as many as you need)</li>
 </ol>
 <hr />
-<h2 id="part-1-backend-setup">Part 1 — Backend setup<a class="headerlink" href="#part-1-backend-setup" title="Permanent link">&para;</a></h2>
+<h2 id="part-1-backend-setup">Part 1 - Backend setup<a class="headerlink" href="#part-1-backend-setup" title="Permanent link">&para;</a></h2>
 <h3 id="1-create-a-supabase-project-5-min">1. Create a Supabase project (~5 min)<a class="headerlink" href="#1-create-a-supabase-project-5-min" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Sign up at <a href="https://supabase.com">supabase.com</a> and create a new project</li>
@@ -720,7 +720,7 @@
 </ol>
 <hr />
 <h3 id="2-deploy-the-edge-functions-5-min">2. Deploy the edge functions (~5 min)<a class="headerlink" href="#2-deploy-the-edge-functions-5-min" title="Permanent link">&para;</a></h3>
-<p>The functions use shared code so they must be deployed via the Supabase CLI. This is a one-time step — after this, pushing to <code>main</code> deploys automatically.</p>
+<p>The functions use shared code so they must be deployed via the Supabase CLI. This is a one-time step - after this, pushing to <code>main</code> deploys automatically.</p>
 <div class="codehilite"><pre><span></span><code>npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>supabase
 supabase<span class="w"> </span>login
 supabase<span class="w"> </span>link<span class="w"> </span>--project-ref<span class="w"> </span>YOUR_PROJECT_REF
@@ -742,7 +742,7 @@ Alternatively, you can deploy functions one at a time from the Supabase web dash
 <tbody>
 <tr>
 <td><code>TOKENBRIDGE_API_KEY</code></td>
-<td>Make up a long random password — you'll use this in the client packages</td>
+<td>Make up a long random password - you'll use this in the client packages</td>
 </tr>
 </tbody>
 </table></div>
@@ -751,8 +751,8 @@ Alternatively, you can deploy functions one at a time from the Supabase web dash
 <h3 id="4-set-up-github-actions-optional">4. Set up GitHub Actions (optional)<a class="headerlink" href="#4-set-up-github-actions-optional" title="Permanent link">&para;</a></h3>
 <p>Two workflows live in <code>.github/workflows/</code>:</p>
 <ul>
-<li><strong><code>deploy-functions.yml</code></strong> — redeploys edge functions automatically whenever you push changes to <code>supabase/functions/</code></li>
-<li><strong><code>token-keepalive.yml</code></strong> — runs weekly to proactively refresh tokens before they expire</li>
+<li><strong><code>deploy-functions.yml</code></strong> - redeploys edge functions automatically whenever you push changes to <code>supabase/functions/</code></li>
+<li><strong><code>token-keepalive.yml</code></strong> - runs weekly to proactively refresh tokens before they expire</li>
 </ul>
 <p>Both need these repository secrets (<strong>Settings → Secrets → Actions</strong>):</p>
 <div class="table-wrapper"><table>
@@ -778,11 +778,11 @@ Alternatively, you can deploy functions one at a time from the Supabase web dash
 </tbody>
 </table></div>
 <hr />
-<h2 id="part-2-provider-setup">Part 2 — Provider setup<a class="headerlink" href="#part-2-provider-setup" title="Permanent link">&para;</a></h2>
+<h2 id="part-2-provider-setup">Part 2 - Provider setup<a class="headerlink" href="#part-2-provider-setup" title="Permanent link">&para;</a></h2>
 <p>Add one or more providers. Each requires its own OAuth app and two secrets in Supabase.
 See the <a href="../providers/">Providers section</a> for detailed setup instructions per provider, including which data types are available and any special notes or limitations.</p>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
-<p>The backend is set up. To start pulling data, see <a href="../basic-access/">Basic Access via TokenBridge</a> — it shows the full flow (auth link → token request → API call) using plain HTTP requests.</p>
+<p>The backend is set up. To start pulling data, see <a href="../basic-access/">Basic Access via TokenBridge</a> - it shows the full flow (auth link → token request → API call) using plain HTTP requests.</p>
 <p>If you'd prefer a Python or R wrapper, see <a href="../python/index.md">Client packages</a>.</p>
   </div>
   
@@ -946,7 +946,7 @@ See the <a href="../providers/">Providers section</a> for detailed setup instruc
         <a href="#part-1-backend-setup"
             class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
             data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#part-1-backend-setup');">
-            Part 1 — Backend setup
+            Part 1 - Backend setup
         </a>
         
         
@@ -980,7 +980,7 @@ See the <a href="../providers/">Providers section</a> for detailed setup instruc
         <a href="#part-2-provider-setup"
             class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
             data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#part-2-provider-setup');">
-            Part 2 — Provider setup
+            Part 2 - Provider setup
         </a>
         
 
