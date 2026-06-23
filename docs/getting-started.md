@@ -57,7 +57,7 @@ The recommended way to store these is in a `.env` file in your project directory
     library(tokenbridge)
     tb_setup()
 
-    Same as the Python wizard — prompts, verifies, saves to `.env`.
+    Same as the Python wizard - prompts, verifies, saves to `.env`.
 
 ///
 
@@ -109,7 +109,7 @@ Each participant needs to authorise their account once. Generate a unique URL fo
     url = tb.auth_url("participant-001")
     print(url)
 
-    # Batch — returns {user_id: url}
+    # Batch - returns {user_id: url}
     urls = tb.auth_urls(["p001", "p002", "p003", "p004"])
     for uid, url in urls.items():
         print(f"{uid}: {url}")
@@ -122,7 +122,7 @@ Each participant needs to authorise their account once. Generate a unique URL fo
     # Single participant
     tb_auth_url("participant-001")
 
-    # Batch — returns named character vector
+    # Batch - returns named character vector
     urls <- tb_auth_urls(c("p001", "p002", "p003", "p004"))
     for (uid in names(urls)) cat(uid, ":", urls[[uid]], "\n")
 
@@ -133,13 +133,13 @@ The participant:
 1. Clicks the link
 2. Signs in with their account (Google for Fitbit, Withings, or Oura)
 3. Approves the requested permissions
-4. Sees a success page — done
+4. Sees a success page - done
 
 !!! note "Google Health / Fitbit"
     Participants must have the **Fitbit app** installed and signed in with the same Google account they use to authorise. Without this, there is no health data to access.
 
 !!! note "Test mode warning"
-    If your Google Cloud app is in Testing mode (the default for new deployments), participants will see an "unverified app" warning. They should click **Advanced → Go to [app name] (unsafe)** to proceed. This is expected — see [Deployment](deployment.md#google-verification) for context.
+    If your Google Cloud app is in Testing mode (the default for new deployments), participants will see an "unverified app" warning. They should click **Advanced → Go to [app name] (unsafe)** to proceed. This is expected - see [Deployment](deployment.md#google-verification) for context.
 
 ---
 
@@ -177,7 +177,7 @@ Once a participant has authorised, you can fetch any of their data types immedia
 
 ///
 
-Results are returned as flat records (Python: `list[dict]`, R: `data.frame`). Nested API fields are flattened with dot notation — e.g. `startTime.seconds`.
+Results are returned as flat records (Python: `list[dict]`, R: `data.frame`). Nested API fields are flattened with dot notation - e.g. `startTime.seconds`.
 
 ### Setting a default provider
 

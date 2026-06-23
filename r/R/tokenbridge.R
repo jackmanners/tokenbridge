@@ -6,7 +6,7 @@
 #   library(tokenbridge)
 #   tb_setup()                                       # once, to save credentials
 #
-#   tb_set_provider("google-health")                 # set default (optional — it's the default)
+#   tb_set_provider("google-health")                 # set default (optional - it's the default)
 #
 #   tb_auth_url("p001")                              # send link to participant
 #
@@ -40,7 +40,7 @@
 .tb_env <- function(key) {
   val <- Sys.getenv(key)
   if (nchar(val) == 0)
-    stop(key, " is not set — run tb_setup() first.", call. = FALSE)
+    stop(key, " is not set - run tb_setup() first.", call. = FALSE)
   val
 }
 
@@ -56,7 +56,7 @@
 #' this provider unless you pass provider= explicitly.
 #' Can be changed mid-script to switch providers.
 #'
-#' @param provider Provider ID string — e.g. "google-health", "withings".
+#' @param provider Provider ID string - e.g. "google-health", "withings".
 #'   See docs/providers/index.md for the full list.
 #' @return Invisibly returns the provider string
 #' @export
@@ -72,7 +72,7 @@ tb_set_provider <- function(provider) {
 
 #' Get the current default provider
 #'
-#' @return Character string — the current default provider ID
+#' @return Character string - the current default provider ID
 #' @export
 tb_get_provider <- function() {
   .tb_state$provider
@@ -132,7 +132,7 @@ tb_setup <- function(env_file = ".env") {
 #' @param user_id  Unique identifier for this participant in TokenBridge
 #' @param provider Health data provider. Defaults to tb_get_provider().
 #' @param env_file Path to .env file (default ".env")
-#' @return Character string — the auth URL
+#' @return Character string - the auth URL
 #' @export
 tb_auth_url <- function(user_id, provider = tb_get_provider(), env_file = ".env") {
   .tb_load_env(env_file)
@@ -162,7 +162,7 @@ tb_auth_urls <- function(user_ids, provider = tb_get_provider(), env_file = ".en
 #' Fetch health data for a participant
 #'
 #' The canonical fetch function. data_type is the kebab-case type ID from the
-#' provider — e.g. "sleep", "steps", "heart-rate-variability".
+#' provider - e.g. "sleep", "steps", "heart-rate-variability".
 #'
 #' See docs/providers/index.md for the full list, or print names(GH_DATA_TYPES).
 #'
@@ -198,7 +198,7 @@ tb_fetch <- function(user_id, data_type, start_date, end_date,
 #'
 #' TokenBridge refreshes automatically if the token is close to expiry.
 #'
-#' Useful when fetching multiple data types for the same user — call this once
+#' Useful when fetching multiple data types for the same user - call this once
 #' and pass token= to tb_fetch() to skip repeated round-trips:
 #' \code{tok <- tb_get_token("p001")}
 #' \code{tb_fetch("p001", "sleep", s, e, token = tok)}
@@ -207,7 +207,7 @@ tb_fetch <- function(user_id, data_type, start_date, end_date,
 #' @param user_id  TokenBridge user ID
 #' @param provider Health data provider. Defaults to tb_get_provider().
 #' @param env_file Path to .env file (default ".env")
-#' @return Character string — the access token
+#' @return Character string - the access token
 #' @export
 tb_get_token <- function(user_id, provider = tb_get_provider(), env_file = ".env") {
   .tb_load_env(env_file)
@@ -225,7 +225,7 @@ tb_get_token <- function(user_id, provider = tb_get_provider(), env_file = ".env
          "Send them this link to authorise: ", auth_url, call. = FALSE)
   }
   if (status == 401)
-    stop("Token for '", user_id, "' has expired and cannot be refreshed — ",
+    stop("Token for '", user_id, "' has expired and cannot be refreshed - ",
          "they need to re-authorise: ", tb_auth_url(user_id, provider, env_file),
          call. = FALSE)
   if (status != 200)

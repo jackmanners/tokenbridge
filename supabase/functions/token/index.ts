@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
   }
 
   if (!row.refresh_token) {
-    return json({ error: 'token expired and no refresh_token is stored — re-authorize' }, 401)
+    return json({ error: 'token expired and no refresh_token is stored - re-authorize' }, 401)
   }
 
   const refreshResult = await doRefresh(providerName, provider, row.refresh_token)
@@ -107,7 +107,7 @@ Deno.serve(async (req) => {
 
   if (updateError) {
     console.error('Failed to persist refreshed token:', updateError)
-    // Still return the new token — the refresh succeeded
+    // Still return the new token - the refresh succeeded
   }
 
   return json({

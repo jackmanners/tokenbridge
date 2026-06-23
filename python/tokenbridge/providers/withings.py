@@ -1,6 +1,6 @@
 """Withings Health API provider.
 
-Wraps the Withings API (https://wbsapi.withings.net/) — uses TokenBridge for
+Wraps the Withings API (https://wbsapi.withings.net/) - uses TokenBridge for
 auth, handles pagination and date conversion internally.
 
 All responses are returned as flat lists of dicts.  Nested fields are
@@ -24,12 +24,12 @@ from tokenbridge.providers._base import HealthProvider
 _BASE = "https://wbsapi.withings.net"
 
 # Each entry describes how to fetch the type:
-#   endpoint  — API path (relative to _BASE)
-#   action    — value of the ?action= param
-#   date_fmt  — "ymd" (YYYY-MM-DD strings) or "unix" (epoch seconds)
-#   result_key — key inside response body containing the data list
-#   meastype  — (getmeas only) single measure type int
-#   meastypes — (getmeas only) comma-separated type ints string
+#   endpoint  - API path (relative to _BASE)
+#   action    - value of the ?action= param
+#   date_fmt  - "ymd" (YYYY-MM-DD strings) or "unix" (epoch seconds)
+#   result_key - key inside response body containing the data list
+#   meastype  - (getmeas only) single measure type int
+#   meastypes - (getmeas only) comma-separated type ints string
 DATA_TYPES: dict[str, dict] = {
     # ── Sleep ────────────────────────────────────────────────────────────────
     "sleep-summary": {

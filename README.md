@@ -7,7 +7,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](python/)
 [![R 4.0+](https://img.shields.io/badge/R-4.0%2B-276DC3?logo=r&logoColor=white)](r/)
 
-**[Documentation](https://jackmanners.github.io/tokenbridge)** — setup guide, provider reference, API reference
+**[Documentation](https://jackmanners.github.io/tokenbridge)** - setup guide, provider reference, API reference
 
 ---
 
@@ -31,7 +31,7 @@ Participant (once)               Your research script
 **Python**
 ```bash
 pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
-python -m tokenbridge   # one-time setup — saves URL and API key to .env
+python -m tokenbridge   # one-time setup - saves URL and API key to .env
 ```
 
 **R**
@@ -68,4 +68,4 @@ sleep <- tb_fetch("p001", "sleep", "2026-05-01", "2026-06-18")
 
 ## License
 
-[PolyForm Noncommercial 1.0.0](LICENSE) — free for personal, research, and educational use.
+[PolyForm Noncommercial 1.0.0](LICENSE) - free for personal, research, and educational use.

@@ -2,12 +2,12 @@
 
 Two phases:
 
-1. **Backend** — Supabase project + edge functions (once, ~10 min)
-2. **Providers** — OAuth app per data source (10–15 min each, add as many as you need)
+1. **Backend** - Supabase project + edge functions (once, ~10 min)
+2. **Providers** - OAuth app per data source (10–15 min each, add as many as you need)
 
 ---
 
-## Part 1 — Backend setup
+## Part 1 - Backend setup
 
 ### 1. Create a Supabase project (~5 min)
 
@@ -26,7 +26,7 @@ Two phases:
 
 ### 2. Deploy the edge functions (~5 min)
 
-The functions use shared code so they must be deployed via the Supabase CLI. This is a one-time step — after this, pushing to `main` deploys automatically.
+The functions use shared code so they must be deployed via the Supabase CLI. This is a one-time step - after this, pushing to `main` deploys automatically.
 
 ```bash
 npm install -g supabase
@@ -46,7 +46,7 @@ In your Supabase dashboard, go to **Project Settings → Edge Functions → Secr
 
 | Secret name | Value |
 |---|---|
-| `TOKENBRIDGE_API_KEY` | Make up a long random password — you'll use this in the client packages |
+| `TOKENBRIDGE_API_KEY` | Make up a long random password - you'll use this in the client packages |
 
 To generate one: `openssl rand -hex 32`
 
@@ -56,8 +56,8 @@ To generate one: `openssl rand -hex 32`
 
 Two workflows live in `.github/workflows/`:
 
-- **`deploy-functions.yml`** — redeploys edge functions automatically whenever you push changes to `supabase/functions/`
-- **`token-keepalive.yml`** — runs weekly to proactively refresh tokens before they expire
+- **`deploy-functions.yml`** - redeploys edge functions automatically whenever you push changes to `supabase/functions/`
+- **`token-keepalive.yml`** - runs weekly to proactively refresh tokens before they expire
 
 Both need these repository secrets (**Settings → Secrets → Actions**):
 
@@ -69,13 +69,13 @@ Both need these repository secrets (**Settings → Secrets → Actions**):
 
 ---
 
-## Part 2 — Provider setup
+## Part 2 - Provider setup
 
 Add one or more providers. Each requires its own OAuth app and two secrets in Supabase.
 See the [Providers section](providers/index.md) for detailed setup instructions per provider, including which data types are available and any special notes or limitations.
 
 ## Next steps
 
-The backend is set up. To start pulling data, see [Basic Access via TokenBridge](basic-access.md) — it shows the full flow (auth link → token request → API call) using plain HTTP requests.
+The backend is set up. To start pulling data, see [Basic Access via TokenBridge](basic-access.md) - it shows the full flow (auth link → token request → API call) using plain HTTP requests.
 
 If you'd prefer a Python or R wrapper, see [Client packages](../python/index.md).

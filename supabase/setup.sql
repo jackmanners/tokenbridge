@@ -1,4 +1,4 @@
--- TokenBridge — database setup
+-- TokenBridge - database setup
 -- Paste this entire file into the Supabase SQL Editor and click Run.
 
 -- Short-lived state records for in-flight OAuth flows (CSRF protection + PKCE)

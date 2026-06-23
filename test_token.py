@@ -1,5 +1,5 @@
 """
-test_token.py — personal dev script, not intended for end users.
+test_token.py - personal dev script, not intended for end users.
 
 Fetches sleep and respiratory rate for a single user and prints a preview.
 Requires the Python package to be installed:

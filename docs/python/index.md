@@ -1,6 +1,6 @@
 # Python Package
 
-The `tokenbridge` Python package provides a single `TokenBridge` client with built-in provider access. No separate provider import needed — everything is available through `tb`.
+The `tokenbridge` Python package provides a single `TokenBridge` client with built-in provider access. No separate provider import needed - everything is available through `tb`.
 
 ## Installation
 
@@ -13,17 +13,17 @@ Requires Python 3.10+. Dependencies: `requests`, `python-dotenv`.
 ## Architecture
 
 ```
-TokenBridge (tb)           — auth, token management, and top-level fetch
-  ├── tb.provider          — default provider string (e.g. "google-health")
-  ├── tb.fetch(...)        — canonical data fetch, uses tb.provider
-  ├── tb.google            — _ProviderProxy, pre-binds "google-health"
+TokenBridge (tb)           - auth, token management, and top-level fetch
+  ├── tb.provider          - default provider string (e.g. "google-health")
+  ├── tb.fetch(...)        - canonical data fetch, uses tb.provider
+  ├── tb.google            - _ProviderProxy, pre-binds "google-health"
   │     ├── .fetch(...)
   │     └── .data_completeness(...)
-  ├── tb.withings          — _ProviderProxy, pre-binds "withings"
+  ├── tb.withings          - _ProviderProxy, pre-binds "withings"
   │     └── .fetch(...)
-  ├── tb.oura              — _ProviderProxy, pre-binds "oura"
+  ├── tb.oura              - _ProviderProxy, pre-binds "oura"
   │     └── .fetch(...)
-  └── tb.auth_url(...)     — participant onboarding
+  └── tb.auth_url(...)     - participant onboarding
 ```
 
 ## Quick start
@@ -32,7 +32,7 @@ TokenBridge (tb)           — auth, token management, and top-level fetch
 from tokenbridge import TokenBridge
 
 tb = TokenBridge()           # reads .env
-tb.provider = "google-health"   # optional — it's the default
+tb.provider = "google-health"   # optional - it's the default
 
 # Onboard
 print(tb.auth_url("p001"))

@@ -3,7 +3,7 @@ alter table oauth_tokens add column if not exists health_user_id text;
 create index if not exists oauth_tokens_health_user_id on oauth_tokens (health_user_id);
 
 -- Lightweight index of which dates we have data for each user + provider + data type.
--- Populated by webhooks. Stores availability metadata only — no actual health values.
+-- Populated by webhooks. Stores availability metadata only - no actual health values.
 create table data_availability (
   user_id       text not null,
   provider      text not null,

@@ -1,6 +1,6 @@
 # Deploying TokenBridge
 
-TokenBridge is self-hosted — you run your own Supabase instance and tokens stay in your own database.
+TokenBridge is self-hosted - you run your own Supabase instance and tokens stay in your own database.
 
 For a step-by-step walkthrough, see the [Setup Guide](basic-quickstart.md). This page covers the architecture and config options.
 
@@ -11,11 +11,11 @@ For a step-by-step walkthrough, see the [Setup Guide](basic-quickstart.md). This
 Two things work together:
 
 **Supabase** hosts the database (token storage) and runs the edge functions (the OAuth flow and token API).
-It's the only piece that needs to be publicly reachable — participants click a link to it, and your scripts call it to get tokens.
+It's the only piece that needs to be publicly reachable - participants click a link to it, and your scripts call it to get tokens.
 
 **Provider OAuth apps** (Google Cloud, Withings, Oura, etc.) provide OAuth credentials. You register an app with each provider once; it tells the provider where to redirect participants after they authorise.
 
-Your scripts call the `/token` endpoint to get a valid access token, then use it to call the provider API directly — no auth logic needed in your analysis code.
+Your scripts call the `/token` endpoint to get a valid access token, then use it to call the provider API directly - no auth logic needed in your analysis code.
 
 ---
 
@@ -34,11 +34,11 @@ Four Deno/TypeScript functions run on Supabase:
 |---|---|
 | `auth-start` | Generates the provider OAuth URL and redirects the participant |
 | `auth-callback` | Receives the OAuth code after authorisation, exchanges it for tokens, stores them |
-| `token` | Called by your scripts — returns a valid access token, auto-refreshes if needed |
-| `token-keepalive` | Called weekly by GitHub Actions — proactively refreshes tokens before they expire |
+| `token` | Called by your scripts - returns a valid access token, auto-refreshes if needed |
+| `token-keepalive` | Called weekly by GitHub Actions - proactively refreshes tokens before they expire |
 
 The function code lives in [`supabase/functions/`](https://github.com/jackmanners/tokenbridge/tree/main/supabase/functions).
-Deploy via the CLI (`supabase functions deploy`) — the functions share code via `_shared/` so they must be bundled by the CLI, not pasted into the dashboard.
+Deploy via the CLI (`supabase functions deploy`) - the functions share code via `_shared/` so they must be bundled by the CLI, not pasted into the dashboard.
 
 ---
 
@@ -50,9 +50,9 @@ Set these in **Project Settings → Edge Functions → Secrets**.
 
 | Secret | Description |
 |---|---|
-| `TOKENBRIDGE_API_KEY` | A secret you choose — your scripts use this to authenticate with the `/token` endpoint |
+| `TOKENBRIDGE_API_KEY` | A secret you choose - your scripts use this to authenticate with the `/token` endpoint |
 
-**Per provider — add the pair for each provider you enable:**
+**Per provider - add the pair for each provider you enable:**
 
 | Secret | Description |
 |---|---|
@@ -69,11 +69,11 @@ Set these in **Project Settings → Edge Functions → Secrets**.
 
 ### Consent screen and verification
 
-When setting up the OAuth consent screen, leave the **Data Access** page empty — do not add any scopes there.
+When setting up the OAuth consent screen, leave the **Data Access** page empty - do not add any scopes there.
 
 The edge functions request health scopes directly in the OAuth URL at runtime. Declaring them in the console is what triggers Google's verification requirement for restricted scopes. Leaving Data Access empty bypasses this, and the app works for up to 100 participants with no review process.
 
-Participants will see an "unverified app" warning during authorisation — tell them to click **Advanced → Continue**. This is expected.
+Participants will see an "unverified app" warning during authorisation - tell them to click **Advanced → Continue**. This is expected.
 
 ### Testing vs Production mode
 
@@ -82,7 +82,7 @@ Participants will see an "unverified app" warning during authorisation — tell 
 | Testing | Only accounts you manually add to the user list | Default for new apps |
 | Production | Any Google account | Audience → Publish app |
 
-Production is recommended — it removes the need to pre-register every participant's email.
+Production is recommended - it removes the need to pre-register every participant's email.
 Both modes have a 100-participant cap for unverified apps using restricted scopes.
 If your study exceeds 100 participants, you will need to go through Google's verification process.
 
@@ -99,8 +99,8 @@ https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback
 
 Two GitHub Actions workflows keep your deployment up to date:
 
-- **`deploy-functions.yml`** — redeploys edge functions automatically on every push to `main` that touches `supabase/functions/`
-- **`token-keepalive.yml`** — runs every Monday, refreshes any tokens that haven't been refreshed in 80+ days
+- **`deploy-functions.yml`** - redeploys edge functions automatically on every push to `main` that touches `supabase/functions/`
+- **`token-keepalive.yml`** - runs every Monday, refreshes any tokens that haven't been refreshed in 80+ days
 
 Both require `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_REF`, and `TOKENBRIDGE_API_KEY` as repository secrets.
 

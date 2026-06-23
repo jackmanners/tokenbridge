@@ -1,6 +1,6 @@
 """Google Health API v4 provider.
 
-Wraps `https://health.googleapis.com/v4` — uses TokenBridge for auth,
+Wraps `https://health.googleapis.com/v4` - uses TokenBridge for auth,
 handles pagination and client-side date filtering internally.
 
 The usual entry point is `tb.fetch()` or `tb.google.fetch()` on a
@@ -118,7 +118,7 @@ class GoogleHealth(HealthProvider):
     ) -> list[dict]:
         """Fetch any Google Health data type by its ID.
 
-        This is the primary method — all named helpers (`fetch_sleep`, etc.)
+        This is the primary method - all named helpers (`fetch_sleep`, etc.)
         delegate here.  Automatically routes to the correct endpoint type
         (`list` or `dailyRollup`) based on `DATA_TYPES`.
 
@@ -163,7 +163,7 @@ class GoogleHealth(HealthProvider):
         end_date: str,
         data_types: Optional[Sequence[str]] = None,
     ) -> list[dict]:
-        """Data completeness audit — how many days of data each participant has.
+        """Data completeness audit - how many days of data each participant has.
 
         Fetches each requested data type for each participant and returns a
         flat table of counts. One row per participant × data type.

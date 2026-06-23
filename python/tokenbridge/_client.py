@@ -13,7 +13,7 @@ Quick start:
     tb.auth_url("p001")                         # send to participant
     tb.auth_urls(["p001", "p002", "p003"])      # batch
 
-    # Fetch — three equivalent styles:
+    # Fetch - three equivalent styles:
     tb.fetch("p001", "sleep", start, end)                      # canonical
     tb.google.fetch("p001", "sleep", start, end)               # provider namespace
     tb.fetch("p001", "sleep", start, end, provider="withings") # one-off override
@@ -42,7 +42,7 @@ class TokenBridge:
     requests to the correct provider.  Set `tb.provider` once at the top of
     your script; use `tb.fetch()` for all data fetching.
 
-    Use `tb.google` / `tb.withings` as provider-namespaced shortcuts — they
+    Use `tb.google` / `tb.withings` as provider-namespaced shortcuts - they
     pre-bind the provider and forward every call to the underlying provider
     instance, so `tb.google.summary(...)` also works.
 
@@ -117,11 +117,11 @@ class TokenBridge:
 
         if not self.url:
             raise RuntimeError(
-                "TOKENBRIDGE_URL not set — run `python -m tokenbridge` to configure."
+                "TOKENBRIDGE_URL not set - run `python -m tokenbridge` to configure."
             )
         if not self.api_key:
             raise RuntimeError(
-                "TOKENBRIDGE_API_KEY not set — run `python -m tokenbridge` to configure."
+                "TOKENBRIDGE_API_KEY not set - run `python -m tokenbridge` to configure."
             )
 
         self._provider_cache: dict = {}
@@ -187,7 +187,7 @@ class TokenBridge:
         Each record is a dict with dot-notation keys for nested API fields,
         e.g. `startTime.seconds`.
 
-        `data_type` is the kebab-case type ID — e.g. `"sleep"`, `"steps"`,
+        `data_type` is the kebab-case type ID - e.g. `"sleep"`, `"steps"`,
         `"heart-rate-variability"`.  See `docs/providers/index.md` or:
 
         ```python
@@ -281,7 +281,7 @@ class TokenBridge:
         TokenBridge refreshes automatically if the token is within 5 minutes
         of expiry.
 
-        You rarely need this directly — `tb.fetch()` handles it internally.
+        You rarely need this directly - `tb.fetch()` handles it internally.
         Use it when fetching multiple data types for the same participant to
         avoid one TokenBridge round-trip per call:
 
@@ -338,7 +338,7 @@ class TokenBridge:
             )
         if resp.status_code == 401:
             raise RuntimeError(
-                f"Token for '{user_id}' has expired and cannot be refreshed — "
+                f"Token for '{user_id}' has expired and cannot be refreshed - "
                 f"they need to re-authorise: {self.auth_url(user_id, provider)}"
             )
         resp.raise_for_status()
@@ -353,7 +353,7 @@ class _ProviderProxy:
 
     `tb.google.fetch(...)` is equivalent to `tb.fetch(..., provider="google-health")`.
     Any attribute not defined on the proxy is forwarded to the underlying
-    provider instance — so `tb.google.summary(...)` also works.
+    provider instance - so `tb.google.summary(...)` also works.
 
     This class is not intended to be instantiated directly.
     Access it via `tb.google` or `tb.withings`.

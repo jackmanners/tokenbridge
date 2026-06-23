@@ -1,10 +1,10 @@
 """Oura Ring API v2 provider.
 
-Wraps https://api.ouraring.com/v2 — uses TokenBridge for auth,
+Wraps https://api.ouraring.com/v2 - uses TokenBridge for auth,
 handles pagination internally.
 
 All responses are flat lists of dicts matching the Oura API field names
-exactly (no transformation needed — Oura returns clean JSON already).
+exactly (no transformation needed - Oura returns clean JSON already).
 
 Supported data types::
 

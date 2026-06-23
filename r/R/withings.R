@@ -1,6 +1,6 @@
 # Withings API provider
 #
-# Wraps https://wbsapi.withings.net/ — uses TokenBridge for auth,
+# Wraps https://wbsapi.withings.net/ - uses TokenBridge for auth,
 # handles pagination and date conversion internally.
 #
 # Usage:

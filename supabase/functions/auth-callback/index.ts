@@ -134,7 +134,7 @@ function page(type: 'success' | 'error' | 'warn', title: string, body: string, s
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TokenBridge — ${title}</title>
+  <title>TokenBridge - ${title}</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
     body {

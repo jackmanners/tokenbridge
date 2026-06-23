@@ -1,6 +1,6 @@
 # tokenbridge (Python)
 
-Python client for [TokenBridge](https://github.com/jackmanners/tokenbridge) — fetches health data from Google Health (Fitbit-backed) and Withings via a self-hosted OAuth token manager.
+Python client for [TokenBridge](https://github.com/jackmanners/tokenbridge) - fetches health data from Google Health (Fitbit-backed) and Withings via a self-hosted OAuth token manager.
 
 ## Install
 
@@ -23,7 +23,7 @@ from tokenbridge import TokenBridge
 
 tb = TokenBridge()   # reads TOKENBRIDGE_URL + TOKENBRIDGE_API_KEY from .env
 
-# Send each participant their auth link — they click once to authorise
+# Send each participant their auth link - they click once to authorise
 print(tb.auth_url("p001"))
 urls = tb.auth_urls(["p001", "p002", "p003"])   # batch
 

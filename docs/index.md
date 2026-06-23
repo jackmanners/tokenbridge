@@ -52,8 +52,8 @@ If someone in your lab has already set this up, you just need the client package
 
 You need a free [Supabase](https://supabase.com) account. Setup takes around 20–30 minutes.
 
-→ [Basic setup walkthrough](basic-quickstart.md) — step-by-step from scratch  
-→ [Deployment overview](deployment.md) — architecture, config options, adding providers
+→ [Basic setup walkthrough](basic-quickstart.md) - step-by-step from scratch  
+→ [Deployment overview](deployment.md) - architecture, config options, adding providers
 
 ---
 

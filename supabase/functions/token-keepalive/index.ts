@@ -1,5 +1,5 @@
 /**
- * token-keepalive — proactive token refresh to prevent refresh token expiry.
+ * token-keepalive - proactive token refresh to prevent refresh token expiry.
  *
  * Called weekly by GitHub Actions. Refreshes all tokens where
  * last_refreshed_at is older than 80 days (targeting a 90-day cycle,

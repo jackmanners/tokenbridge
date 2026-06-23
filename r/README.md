@@ -1,6 +1,6 @@
 # tokenbridge (R)
 
-R client for [TokenBridge](https://github.com/jackmanners/tokenbridge) — fetches health data from Google Health (Fitbit-backed) and Withings via a self-hosted OAuth token manager.
+R client for [TokenBridge](https://github.com/jackmanners/tokenbridge) - fetches health data from Google Health (Fitbit-backed) and Withings via a self-hosted OAuth token manager.
 
 ## Install
 
@@ -21,7 +21,7 @@ tb_setup()   # prompts for URL + API key, saves to .env
 ```r
 library(tokenbridge)
 
-# Send each participant their auth link — they click once to authorise
+# Send each participant their auth link - they click once to authorise
 tb_auth_url("p001")
 links <- tb_auth_urls(c("p001", "p002", "p003"))   # named character vector
 

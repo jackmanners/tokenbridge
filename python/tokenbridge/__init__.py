@@ -1,12 +1,12 @@
 """
-tokenbridge — OAuth token management + health data for research.
+tokenbridge - OAuth token management + health data for research.
 
 Quick start:
     from tokenbridge import TokenBridge
 
-    tb = TokenBridge()                # reads .env — run `python -m tokenbridge` to set up
+    tb = TokenBridge()                # reads .env - run `python -m tokenbridge` to set up
 
-    # Set default provider once (optional — google-health is the default)
+    # Set default provider once (optional - google-health is the default)
     tb.provider = "google-health"
 
     # Onboard participants

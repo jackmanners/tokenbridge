@@ -1,5 +1,5 @@
 """
-python -m tokenbridge — interactive setup wizard.
+python -m tokenbridge - interactive setup wizard.
 
 Prompts for your TokenBridge URL and API key, verifies the connection,
 and saves both values to .env in the current directory.
@@ -54,7 +54,7 @@ def main() -> None:
         if resp.status_code == 401:
             print("FAILED\n")
             sys.exit("Invalid API key.")
-        # 404 = user not found — that's fine, it means the server and key are good
+        # 404 = user not found - that's fine, it means the server and key are good
         print("OK")
     except requests.RequestException as e:
         print("FAILED\n")

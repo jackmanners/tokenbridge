@@ -1,6 +1,6 @@
 # Google Health API v4 provider
 #
-# Wraps https://health.googleapis.com/v4 — uses TokenBridge for auth,
+# Wraps https://health.googleapis.com/v4 - uses TokenBridge for auth,
 # handles pagination and client-side date filtering.
 #
 # You rarely need to call these functions directly.
@@ -30,10 +30,10 @@
 #'
 #' Named character vector. Names are the kebab-case type IDs to pass to
 #' gh_fetch() / tb_fetch(). Values are "list" or "dailyRollup" (the endpoint
-#' type — you don't need to think about this; gh_fetch handles it automatically).
+#' type - you don't need to think about this; gh_fetch handles it automatically).
 #'
-#' \code{names(GH_DATA_TYPES)}  — list all type IDs
-#' \code{GH_DATA_TYPES["sleep"]}  — check endpoint type for a specific ID
+#' \code{names(GH_DATA_TYPES)}  - list all type IDs
+#' \code{GH_DATA_TYPES["sleep"]}  - check endpoint type for a specific ID
 #'
 #' Full descriptions and units: see docs/providers/index.md
 #'
@@ -89,7 +89,7 @@ GH_DATA_TYPES <- c(
 
 #' Fetch Google Health data for a participant
 #'
-#' data_type is the kebab-case type ID — e.g. "sleep", "steps",
+#' data_type is the kebab-case type ID - e.g. "sleep", "steps",
 #' "heart-rate-variability". See \code{names(GH_DATA_TYPES)} or
 #' docs/providers/index.md for the full list.
 #'
@@ -150,7 +150,7 @@ gh_data_completeness <- function(user_ids, start_date, end_date,
       error = function(e) conditionMessage(e)
     )
     if (is.character(token) && !startsWith(token, "ya29.")) {
-      # token fetch failed — record error for all types
+      # token fetch failed - record error for all types
       for (dtype in data_types) {
         rows <- c(rows, list(data.frame(
           user_id = uid, data_type = dtype, n = NA_integer_,

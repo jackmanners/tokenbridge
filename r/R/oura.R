@@ -1,6 +1,6 @@
 # Oura Ring API v2 provider
 #
-# Wraps https://api.ouraring.com/v2 — uses TokenBridge for auth,
+# Wraps https://api.ouraring.com/v2 - uses TokenBridge for auth,
 # handles cursor-based pagination internally.
 #
 # Usage:
