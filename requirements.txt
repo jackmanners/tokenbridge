@@ -1,2 +1,3 @@
-mkdocs-material>=9.5
+mkdocs-shadcn
 mkdocstrings[python]>=0.25
+Pygments
