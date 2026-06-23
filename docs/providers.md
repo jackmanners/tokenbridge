@@ -11,7 +11,7 @@ then propagate changes to `python/tokenbridge/providers/` and `r/R/`.
 | Provider ID | Status | Notes |
 |---|---|---|
 | `google-health` | Supported | Requires Fitbit app linked to a Google account |
-| `withings` | Stub | Auth flow wired; data fetch not yet implemented |
+| `withings` | Supported | Requires Withings device (scale, BPM cuff, sleep mat, etc.) |
 
 ---
 
@@ -91,16 +91,45 @@ Three types only support `dailyRollup` (no raw datapoints available):
 ## Withings (`withings`)
 
 **API base:** `https://wbsapi.withings.net`  
-**Status:** Auth flow wired; fetch not yet implemented.
+**Auth:** OAuth 2.0 (no PKCE), scopes `user.info user.metrics user.activity user.sleepevents`  
+**Backend:** Withings devices (scales, blood pressure monitors, sleep mats, activity trackers)  
+**Response envelope:** All responses are `{ "status": 0, "body": { ... } }` — status 0 = success
 
-Planned data types (post-implementation):
+### Endpoint types
 
-| Type ID | Category | Description |
+| Pattern | Date params | Pagination |
 |---|---|---|
-| `sleep` | Sleep | Sleep summary with stages |
-| `heart-rate` | Heart | Resting HR from Withings devices |
-| `weight` | Body | Weight from Withings scale |
-| `blood-pressure` | Vitals | Systolic / diastolic from Withings cuff |
+| YMD endpoints (`/v2/sleep getsummary`, `/v2/measure getactivity`, `/v2/measure getworkouts`) | `startdateymd` / `enddateymd` (YYYY-MM-DD) | `more` boolean + `offset` integer |
+| Unix endpoints (`/measure getmeas`, `/v2/sleep get`, `/v2/heart list`) | `startdate` / `enddate` (epoch seconds) | `more` boolean + `offset` integer |
+
+### Data types
+
+| Type ID | Category | Description | Unit | Notes |
+|---|---|---|---|---|
+| `sleep-summary` | Sleep | Daily sleep summary with stages | s | One row per sleep session; total_sleep_time, rem/light/deep durations, efficiency |
+| `sleep-detail` | Sleep | High-frequency sleep stage data | — | Raw 30-second epoch data; best for detailed analysis |
+| `activity` | Activity | Daily activity summary | — | steps, distance, calories, active_calories, elevation |
+| `workouts` | Activity | Individual workout sessions | — | category, duration, calories, intensity |
+| `weight` | Body | Weight measurements | kg | Value decoded from Withings int+exponent encoding |
+| `height` | Body | Height measurements | m | |
+| `fat-ratio` | Body | Body fat percentage | % | Requires BIA-capable Withings scale |
+| `fat-mass` | Body | Fat mass | kg | Requires BIA-capable Withings scale |
+| `blood-pressure` | Vitals | Blood pressure (systolic + diastolic in same row) | mmHg | Requires Withings blood pressure monitor |
+| `heart-rate` | Vitals | Resting heart rate from BPM/scale devices | bpm | Distinct from activity HR |
+| `spo2` | Vitals | Blood oxygen saturation | % | Requires compatible Withings device |
+| `muscle-mass` | Body | Muscle mass | kg | Requires BIA-capable scale |
+| `bone-mass` | Body | Bone mass | kg | Requires BIA-capable scale |
+| `ecg` | Heart | ECG recording metadata (signal IDs) | — | Use Withings Heart v2 - Get for raw signal |
+
+### Measure value decoding
+
+Body measurement values from `/measure getmeas` are encoded as `value × 10^unit` (e.g. `value=800` `unit=-1` → `80.0 kg`). The client decodes this automatically — returned dicts already have the real numeric value under named columns like `weight_kg`, `fat_ratio_pct`, etc.
+
+### Known limitations
+
+- The Withings API requires re-authorisation when the refresh token expires (unlike Google, which issues long-lived refresh tokens). If a user's token is invalidated, `tb_get_token()` raises an error with a re-auth link.
+- Some data types (BIA measurements, ECG) require specific Withings hardware.
+- Test accounts (demo mode) have dummy data — use `action=getdemoaccess` in the Withings developer dashboard to access it.
 
 ---
 

@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
-import { providers, envPrefix, type Provider } from '../_shared/providers.ts'
+import { providers } from '../_shared/providers.ts'
+import { doRefresh } from '../_shared/refresh.ts'
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -89,13 +90,17 @@ Deno.serve(async (req) => {
     ? new Date(Date.now() + td.expires_in * 1000).toISOString()
     : row.expires_at
 
+  const providerData = provider.extractProviderData ? provider.extractProviderData(td) : {}
+
   const { error: updateError } = await supabase
     .from('oauth_tokens')
     .update({
-      access_token: td.access_token as string,
-      refresh_token: (td.refresh_token as string | undefined) ?? row.refresh_token,
-      expires_at: newExpiresAt,
-      raw: td,
+      access_token:      td.access_token as string,
+      refresh_token:     (td.refresh_token as string | undefined) ?? row.refresh_token,
+      expires_at:        newExpiresAt,
+      provider_data:     providerData,
+      last_refreshed_at: new Date().toISOString(),
+      raw:               td,
     })
     .eq('user_id', userId)
     .eq('provider', providerName)
@@ -115,37 +120,6 @@ Deno.serve(async (req) => {
   })
 })
 
-async function doRefresh(
-  providerName: string,
-  provider: Provider,
-  refreshToken: string,
-): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; error: unknown }> {
-  const clientId = Deno.env.get(`${envPrefix(providerName)}_CLIENT_ID`)!
-  const clientSecret = Deno.env.get(`${envPrefix(providerName)}_CLIENT_SECRET`)!
-
-  const params: Record<string, string> = {
-    grant_type: 'refresh_token',
-    refresh_token: refreshToken,
-    client_id: clientId,
-    client_secret: clientSecret,
-    ...provider.extraTokenParams,
-  }
-
-  const res = await fetch(provider.tokenUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams(params),
-  })
-
-  const raw = await res.json() as Record<string, unknown>
-
-  if (!res.ok || raw.error) {
-    return { ok: false, error: raw }
-  }
-
-  const data = provider.unwrapTokenResponse ? provider.unwrapTokenResponse(raw) : raw
-  return { ok: true, data }
-}
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {

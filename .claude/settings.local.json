@@ -9,7 +9,9 @@
       "Read(//c/GitRepos/tokenbridge/**)",
       "Bash(grep -r \"dazucslvjgtfxjoocnei\\\\|jackmanners\\\\|jack@example\" /c/GitRepos/tokenbridge --include=\"*.md\" --include=\"*.toml\" --include=\"*.ts\" --include=\"*.py\" --include=\"*.R\" --include=\"*.txt\" --include=\"*.example\" -l 2>/dev/null)",
       "Bash(grep -r \"dazucslvjgtfxjoocnei\" /c/GitRepos/tokenbridge --include=\"*.md\" --include=\"*.py\" --include=\"*.R\" --include=\"*.example\" -n 2>/dev/null)",
-      "Bash(python -m pytest tests/ -v)"
+      "Bash(python -m pytest tests/ -v)",
+      "WebFetch(domain:developer.withings.com)",
+      "Bash(python -c ' *)"
     ]
   }
 }

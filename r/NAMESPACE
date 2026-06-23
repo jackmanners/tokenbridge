@@ -12,5 +12,6 @@ export(GH_DATA_TYPES)
 export(gh_fetch)
 export(gh_data_completeness)
 
-# Withings (stub — auth only, data fetch not yet implemented)
+# Withings
+export(WT_DATA_TYPES)
 export(wt_fetch)

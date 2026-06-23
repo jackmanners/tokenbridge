@@ -1,0 +1,25 @@
+name: Token keepalive
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'   # Mondays at 03:00 UTC
+  workflow_dispatch:        # allow manual trigger
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refresh tokens due for proactive refresh
+        run: |
+          response=$(curl -s -o /tmp/keepalive.json -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.TOKENBRIDGE_API_KEY }}" \
+            "https://${{ secrets.SUPABASE_PROJECT_REF }}.supabase.co/functions/v1/token-keepalive")
+
+          cat /tmp/keepalive.json
+          echo ""
+
+          if [ "$response" != "200" ]; then
+            echo "Keepalive returned HTTP $response"
+            exit 1
+          fi

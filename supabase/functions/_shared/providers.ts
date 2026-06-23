@@ -9,6 +9,8 @@ export interface Provider {
   extraTokenParams?: Record<string, string>
   /** transform token response body before storage (e.g. Withings wraps in .body) */
   unwrapTokenResponse?: (raw: Record<string, unknown>) => Record<string, unknown>
+  /** extract provider-specific metadata to store in the provider_data jsonb column */
+  extractProviderData?: (tokenData: Record<string, unknown>) => Record<string, unknown>
 }
 
 export const providers: Record<string, Provider> = {
@@ -37,13 +39,15 @@ export const providers: Record<string, Provider> = {
   'withings': {
     authUrl: 'https://account.withings.com/oauth2_user/authorize2',
     tokenUrl: 'https://wbsapi.withings.net/v2/oauth2',
-    scopes: ['user.activity', 'user.metrics', 'user.sleepevents'],
+    scopes: ['user.info', 'user.metrics', 'user.activity', 'user.sleepevents'],
     pkce: false,
     authParams: { response_type: 'code' },
     // Withings requires action= on both token exchange and refresh
     extraTokenParams: { action: 'requesttoken' },
     // Withings wraps the token payload in a `.body` key
     unwrapTokenResponse: (raw) => (raw.body as Record<string, unknown>) ?? raw,
+    // Withings userid is needed for partner endpoints (revoke, webhooks, etc.)
+    extractProviderData: (td) => ({ userid: td.userid }),
   },
 }
 

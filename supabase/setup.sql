@@ -14,16 +14,18 @@ create table oauth_states (
 
 -- Stored tokens, one row per (user, provider)
 create table oauth_tokens (
-  id            uuid primary key default gen_random_uuid(),
-  user_id       text not null,
-  provider      text not null,
-  access_token  text not null,
-  refresh_token text,
-  expires_at    timestamptz,
-  scopes        text[],
-  raw           jsonb,
-  created_at    timestamptz default now(),
-  updated_at    timestamptz default now(),
+  id                uuid primary key default gen_random_uuid(),
+  user_id           text not null,
+  provider          text not null,
+  access_token      text not null,
+  refresh_token     text,
+  expires_at        timestamptz,
+  scopes            text[],
+  provider_data     jsonb default '{}',   -- provider-specific metadata (e.g. Withings userid)
+  last_refreshed_at timestamptz,          -- tracks proactive keepalive; null = never refreshed
+  raw               jsonb,
+  created_at        timestamptz default now(),
+  updated_at        timestamptz default now(),
   unique (user_id, provider)
 );
 

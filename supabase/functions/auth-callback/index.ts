@@ -89,14 +89,18 @@ Deno.serve(async (req) => {
   const scopeStr = tokenData.scope as string | undefined
   const scopes = scopeStr ? scopeStr.split(/[\s,]+/) : provider.scopes
 
+  const providerData = provider.extractProviderData ? provider.extractProviderData(tokenData) : {}
+
   const { error: upsertError } = await supabase.from('oauth_tokens').upsert(
     {
-      user_id: stateRow.user_id,
-      provider: stateRow.provider,
-      access_token: tokenData.access_token as string,
-      refresh_token: (tokenData.refresh_token as string | undefined) ?? null,
-      expires_at: expiresAt,
+      user_id:           stateRow.user_id,
+      provider:          stateRow.provider,
+      access_token:      tokenData.access_token as string,
+      refresh_token:     (tokenData.refresh_token as string | undefined) ?? null,
+      expires_at:        expiresAt,
       scopes,
+      provider_data:     providerData,
+      last_refreshed_at: new Date().toISOString(),
       raw,
     },
     { onConflict: 'user_id,provider' },
