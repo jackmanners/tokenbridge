@@ -31,8 +31,8 @@ markdown_extensions:
   - admonition
   - fenced_code
   - codehilite
+  - pymdownx.blocks
   - pymdownx.blocks.tab
-  - pymdownx.blocks.details
   - attr_list
   - tables
   - toc:
@@ -45,7 +45,7 @@ nav:
     - Overview: deployment.md
     - Setup Guide: basic-quickstart.md
     - Providers: providers.md
-    - Without Packages: without-packages.md
+    - Accessing Tokens: basic-access.md
   - Client packages:
     - Python:
       - python/index.md
