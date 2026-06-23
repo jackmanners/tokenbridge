@@ -46,9 +46,10 @@ nav:
     - Setup Guide: basic-quickstart.md
     - Providers: providers.md
     - Without Packages: without-packages.md
-  - Python:
-    - python/index.md
-    - API Reference: python/reference.md
-  - R:
-    - r/index.md
-    - API Reference: r/reference.md
+  - Client packages:
+    - Python:
+      - python/index.md
+      - API Reference: python/reference.md
+    - R:
+      - r/index.md
+      - API Reference: r/reference.md
