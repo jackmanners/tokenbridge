@@ -7,6 +7,10 @@ edit_uri: edit/main/docs/
 
 theme:
   name: shadcn
+  features:
+    - content.code.select
+    - content.code.copy
+    - content.tabs.link
 
 plugins:
   - search
