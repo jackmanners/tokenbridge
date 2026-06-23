@@ -1,13 +1,19 @@
 # Provider Reference
 
-Supported health data providers, their data type IDs, and what each returns.
+A central registry of supported health data providers, integration requirements, and available data streams.
 
 ---
 
-## Providers
+## Supported Providers
 
-| Provider ID | Status | Notes |
-|---|---|---|
-| [`google-health`](google-health.md) | Supported | Requires Fitbit app linked to a Google account |
-| [`withings`](withings.md) | Supported | Requires Withings device (scale, BPM cuff, sleep mat, etc.) |
-| [`oura`](oura.md) | Supported | Requires Oura Ring (Gen 2 or Gen 3) |
+| Provider | Core Hardware Requirement | Auth / Account Requirement | Available Data Streams | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| [**Google Health**](google-health.md) | Smartphone / Wearable | Fitbit app + Google Account | Activity, Sleep, Vitals | `Stable` |
+| [**Withings**](withings.md) | Smart Scale, BPM, Sleep Mat | Withings ecosystem login | Weight, Blood Pressure, Sleep | `Stable` |
+| [**Oura**](oura.md) | Oura Ring (Gen 2 / 3) | Oura Cloud account | Sleep, Readiness, Activity | `Stable` |
+
+***
+
+### 💡 Quick Integration Notes
+* All providers require user OAuth2 authorization before data fetching begins.
+* Rate limits apply globally across all endpoints based on individual provider restrictions.
