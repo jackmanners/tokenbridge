@@ -1,6 +1,6 @@
 # Getting Started
 
-This page covers installation and first use. If you need to deploy your own TokenBridge instance, see [Deployment](deployment.md) first.
+Installation and first use. If you're setting up your own instance first, see [Deployment](deployment.md).
 
 ---
 

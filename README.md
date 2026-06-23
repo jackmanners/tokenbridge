@@ -1,122 +1,71 @@
 # TokenBridge
 
-**OAuth token management for wearable health data research.**
+> Handles OAuth and token storage for health data APIs so your research scripts don't have to.
 
-Getting data out of health APIs (Google Health/Fitbit, Withings) into a research script means implementing OAuth 2.0, storing tokens securely, handling refresh before expiry, and doing it across dozens of participants. TokenBridge handles all of that so you don't have to.
+[![Docs](https://img.shields.io/badge/docs-jackmanners.github.io%2Ftokenbridge-informational)](https://jackmanners.github.io/tokenbridge)
+[![License: PolyForm NC](https://img.shields.io/badge/license-PolyForm%20NC-blue)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](python/)
+[![R 4.0+](https://img.shields.io/badge/R-4.0%2B-276DC3?logo=r&logoColor=white)](r/)
+
+**[Documentation](https://jackmanners.github.io/tokenbridge)** — setup guide, provider reference, API reference
 
 ---
 
-## How it works
+Pulling data from Google Health/Fitbit, Withings, or Oura into a research script means dealing with OAuth, storing tokens for all your participants, and keeping them refreshed across a study that can run for months. TokenBridge handles all of that. Your scripts call one endpoint to get a valid token, then query the provider API directly.
 
 ```
-Participant (once)               Researcher script
+Participant (once)               Your research script
      │                                  │
      │  clicks auth link                │  tb.fetch("p001", "sleep", ...)
      ▼                                  ▼
  TokenBridge  ────────────────────  /token endpoint
-     │                             returns valid access token
-     └── Supabase Postgres         script calls Google Health API directly
-         token storage
-         auto-refresh
+     │                             returns a valid access token
+     └── Supabase Postgres         script calls the health API directly
+         token storage + auto-refresh
 ```
-
-TokenBridge is a small set of Supabase edge functions. It manages the OAuth flow, stores tokens in Postgres, and refreshes them automatically. Your scripts call one endpoint to get a valid token, then query the health API directly.
 
 ---
 
-## Two ways to use it
+## Install
 
-### Someone has already deployed TokenBridge
-
-If your PI or institution runs a TokenBridge instance, you just need the client package. Ask them for the deployment URL and API key, then:
-
+**Python**
 ```bash
 pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
-python -m tokenbridge   # saves credentials to .env
+python -m tokenbridge   # one-time setup — saves URL and API key to .env
 ```
+
+**R**
 ```r
 devtools::install_github("jackmanners/tokenbridge", subdir = "r")
 library(tokenbridge)
-tb_setup()   # saves credentials to .env
+tb_setup()
 ```
-
-### Deploy your own instance
-
-You need a free [Supabase](https://supabase.com) account and a [Google Cloud](https://console.cloud.google.com) project. Setup takes around 20–30 minutes.
-
-→ [Deployment guide](https://jackmanners.github.io/tokenbridge/deployment/)  
-→ [Basic setup walkthrough](https://jackmanners.github.io/tokenbridge/basic-quickstart/)
 
 ---
 
-## Quick start
-
-Once configured, the API is the same in both languages:
+## Usage
 
 ```python
 from tokenbridge import TokenBridge
-
 tb = TokenBridge()
 
-# Generate an auth link for each participant and send it to them
-# They click it once, sign in with Google, and approve access
-print(tb.auth_url("participant-001"))
+# Send each participant a one-time auth link
+print(tb.auth_url("p001"))
 
-# Fetch data as soon as they've authorised
-sleep = tb.fetch("participant-001", "sleep", "2026-05-01", "2026-06-18")
-steps = tb.fetch("participant-001", "steps", "2026-05-01", "2026-06-18")
-hrv   = tb.fetch("participant-001", "heart-rate-variability", "2026-05-01", "2026-06-18")
-
-# Fetch multiple types efficiently with one token request
-token = tb.get_token("participant-001")
-sleep = tb.fetch("participant-001", "sleep", start, end, token=token)
-steps = tb.fetch("participant-001", "steps", start, end, token=token)
-
-# Audit data coverage across your cohort
-tb.google.data_completeness(["p001", "p002", "p003"], start, end,
-                             data_types=["sleep", "steps", "heart-rate-variability"])
+# Fetch data once they've authorised
+sleep = tb.fetch("p001", "sleep", "2026-05-01", "2026-06-18")
+steps = tb.fetch("p001", "steps", "2026-05-01", "2026-06-18")
 ```
 
 ```r
 library(tokenbridge)
 
-# Generate auth links for your cohort
 links <- tb_auth_urls(c("p001", "p002", "p003"))
-
-# Fetch data
 sleep <- tb_fetch("p001", "sleep", "2026-05-01", "2026-06-18")
-steps <- tb_fetch("p001", "steps", "2026-05-01", "2026-06-18")
-
-# Efficient multi-type fetch with one token
-tok <- tb_get_token("p001")
-sleep <- tb_fetch("p001", "sleep", start, end, token = tok)
-hrv   <- tb_fetch("p001", "heart-rate-variability", start, end, token = tok)
-
-# Audit data coverage
-gh_data_completeness(c("p001", "p002", "p003"), start, end,
-                     data_types = c("sleep", "steps", "heart-rate-variability"))
 ```
-
----
-
-## Supported providers
-
-| Provider | Status | Notes |
-|---|---|---|
-| `google-health` | Supported | Requires Fitbit app linked to a Google account |
-| `withings` | Supported | Requires Withings device (scale, BPM cuff, sleep mat, etc.) |
-| `oura` | Supported | Requires Oura Ring (Gen 2 or Gen 3) |
-
-38 Google Health data types are supported — sleep, activity, heart rate, HRV, SpO2, ECG, temperature, weight, nutrition, and more. See the [provider reference](https://jackmanners.github.io/tokenbridge/providers/).
-
----
-
-## Documentation
-
-**[jackmanners.github.io/tokenbridge](https://jackmanners.github.io/tokenbridge)**
 
 ---
 
 ## License
 
-[Polyform Noncommercial 1.0.0](LICENSE) — free for personal, research, and educational use. Commercial use requires permission.
+[PolyForm Noncommercial 1.0.0](LICENSE) — free for personal, research, and educational use.

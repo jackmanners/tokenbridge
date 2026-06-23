@@ -1,10 +1,9 @@
-# TokenBridge — Basic Setup Guide
+# Setup Guide
 
-This guide walks through a complete TokenBridge deployment.
-There are two distinct phases:
+Two phases:
 
-1. **Backend setup** — Supabase project + edge functions (do this once, takes ~10 min)
-2. **Provider setup** — OAuth app per data source (10–15 min each, add as many as you need)
+1. **Backend** — Supabase project + edge functions (once, ~10 min)
+2. **Providers** — OAuth app per data source (10–15 min each, add as many as you need)
 
 ---
 

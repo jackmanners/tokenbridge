@@ -1,8 +1,8 @@
 # TokenBridge
 
-**OAuth token management for wearable health data research.**
+A small tool for pulling data from health APIs (Google Health/Fitbit, Withings, Oura) without dealing with OAuth every time.
 
-Getting data out of health APIs — Google Health/Fitbit, Withings — into a research script means implementing OAuth 2.0, securely storing tokens for dozens of participants, and keeping them refreshed across a study that runs for months. TokenBridge handles all of that so you don't have to write any auth code.
+Getting data out of these APIs into a research script means implementing OAuth, storing tokens for all your participants, and keeping them refreshed across a study that can run for months. This handles all of that so your analysis code doesn't have to.
 
 ---
 
@@ -19,7 +19,7 @@ Participant (once)               Your research script
          token storage + refresh
 ```
 
-TokenBridge is a small set of Supabase edge functions. It runs the OAuth flow, stores tokens in Postgres, and refreshes them automatically before they expire. Your scripts ask for a token, get one back, and query the provider API directly. No auth logic in your analysis code.
+It's a small set of Supabase edge functions. It runs the OAuth flow, stores tokens in Postgres, and refreshes them automatically before they expire. Your scripts ask for a token, get one back, and call the provider API directly.
 
 ---
 
@@ -27,7 +27,7 @@ TokenBridge is a small set of Supabase edge functions. It runs the OAuth flow, s
 
 ### Using an existing deployment
 
-If your institution or PI has deployed TokenBridge, you only need the client package. Ask them for the URL and API key, then point the package at their instance.
+If someone in your lab has already set this up, you just need the client package. Get the URL and API key from them and point the package at their instance.
 
 === "Python"
 
@@ -48,7 +48,7 @@ If your institution or PI has deployed TokenBridge, you only need the client pac
 
 ### Deploying your own instance
 
-You need a free [Supabase](https://supabase.com) account and a [Google Cloud](https://console.cloud.google.com) project. Setup takes around 20–30 minutes.
+You need a free [Supabase](https://supabase.com) account. Setup takes around 20–30 minutes.
 
 → [Basic setup walkthrough](basic-quickstart.md) — step-by-step from scratch  
 → [Deployment overview](deployment.md) — architecture, config options, adding providers
@@ -116,7 +116,6 @@ You need a free [Supabase](https://supabase.com) account and a [Google Cloud](ht
 |---|---|---|
 | `google-health` | Supported | Requires Fitbit app linked to a Google account |
 | `withings` | Supported | Requires Withings device (scale, BPM cuff, sleep mat, etc.) |
-| `oura` | Supported | Requires Oura Ring (Gen 2 or Gen 3) |
 | `oura` | Supported | Requires Oura Ring (Gen 2 or Gen 3) |
 
 Full list of data types, units, and endpoint notes: [Providers](providers.md)

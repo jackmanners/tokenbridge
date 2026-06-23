@@ -11,7 +11,11 @@
       "Bash(grep -r \"dazucslvjgtfxjoocnei\" /c/GitRepos/tokenbridge --include=\"*.md\" --include=\"*.py\" --include=\"*.R\" --include=\"*.example\" -n 2>/dev/null)",
       "Bash(python -m pytest tests/ -v)",
       "WebFetch(domain:developer.withings.com)",
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Bash(gh repo *)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:asiffer.github.io)"
     ]
   }
 }

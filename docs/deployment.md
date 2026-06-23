@@ -1,9 +1,8 @@
 # Deploying TokenBridge
 
-TokenBridge is self-hosted. You run your own instance — your participant tokens never leave your infrastructure.
+TokenBridge is self-hosted — you run your own Supabase instance and tokens stay in your own database.
 
-For a step-by-step setup walkthrough, see the [Setup Guide](basic-quickstart.md).
-This page covers the architecture, configuration options, and anything you might need once you're running.
+For a step-by-step walkthrough, see the [Setup Guide](basic-quickstart.md). This page covers the architecture and config options.
 
 ---
 

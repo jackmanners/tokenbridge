@@ -6,35 +6,7 @@ repo_name: jackmanners/tokenbridge
 edit_uri: edit/main/docs/
 
 theme:
-  name: material
-  palette:
-    - scheme: slate
-      primary: indigo
-      accent: deep purple
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
-    - scheme: default
-      primary: indigo
-      accent: deep purple
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-  font: 
-    text: Roboto
-    code: Google Sans Code
-  features:
-    - navigation.tabs
-    - navigation.tabs.sticky
-    - navigation.sections
-    - navigation.expand
-    - navigation.indexes
-    - navigation.top
-    - toc.follow
-    - search.highlight
-    - search.share
-    - content.code.copy
-    - content.code.annotate
+  name: shadcn
 
 plugins:
   - search
