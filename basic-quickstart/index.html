@@ -431,9 +431,32 @@
 <div data-slot="sidebar-group" data-sidebar="group" class="relative flex w-full min-w-0 flex-col p-2">
     <div data-slot="sidebar-group-label" data-sidebar="group-label"
         class="flex h-8 shrink-0 items-center rounded-md px-2 text-xs ring-sidebar-ring outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0 group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 font-medium text-muted-foreground">
-        Python</div>
+        Client packages</div>
     <div data-slot="sidebar-group-content" data-sidebar="group-content" class="w-full text-sm">
         <ul data-slot="sidebar-menu" data-sidebar="menu" class="flex w-full min-w-0 flex-col gap-0.5">
+            
+            
+            <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
+    
+    <button data-slot="collapsible-trigger" data-sidebar="menu-button" data-size="default" data-active="false"
+        class="peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 [&amp;&gt;span:last-child]:truncate hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-[0.8rem] font-medium"
+        type="button" aria-expanded="true"
+        data-state="closed"
+        onclick="this.setAttribute('data-state', this.getAttribute('data-state') === 'closed' ? 'open' : 'closed')">
+        
+        Python
+        
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-chevron-right ml-auto transition-[stroke,rotate] duration-200 group-data-[state=open]/menu-button:rotate-90 group-data-[state=closed]/menu-button:stroke-muted-foreground">
+            <path d="m9 18 6-6-6-6"></path>
+        </svg>
+    </button>
+    <div data-state="open" data-slot="collapsible-content"
+        class="grid grid-rows-[0fr] transition-[grid-template-rows] peer-data-[state=open]/menu-button:grid-rows-[1fr] py-0.5">
+        <ul data-slot="sidebar-menu-sub" data-sidebar="menu-sub"
+            class="overflow-hidden ml-3.5 flex flex-col gap-0.5 border-l border-sidebar-border pl-2.5">
+
             
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
@@ -475,16 +498,31 @@
             
         </ul>
     </div>
-</div>
+</li>
+            
+            
+            
+            <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
+    
+    <button data-slot="collapsible-trigger" data-sidebar="menu-button" data-size="default" data-active="false"
+        class="peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 [&amp;&gt;span:last-child]:truncate hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-[0.8rem] font-medium"
+        type="button" aria-expanded="true"
+        data-state="closed"
+        onclick="this.setAttribute('data-state', this.getAttribute('data-state') === 'closed' ? 'open' : 'closed')">
+        
+        R
+        
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-chevron-right ml-auto transition-[stroke,rotate] duration-200 group-data-[state=open]/menu-button:rotate-90 group-data-[state=closed]/menu-button:stroke-muted-foreground">
+            <path d="m9 18 6-6-6-6"></path>
+        </svg>
+    </button>
+    <div data-state="open" data-slot="collapsible-content"
+        class="grid grid-rows-[0fr] transition-[grid-template-rows] peer-data-[state=open]/menu-button:grid-rows-[1fr] py-0.5">
+        <ul data-slot="sidebar-menu-sub" data-sidebar="menu-sub"
+            class="overflow-hidden ml-3.5 flex flex-col gap-0.5 border-l border-sidebar-border pl-2.5">
 
-
-
-<div data-slot="sidebar-group" data-sidebar="group" class="relative flex w-full min-w-0 flex-col p-2">
-    <div data-slot="sidebar-group-label" data-sidebar="group-label"
-        class="flex h-8 shrink-0 items-center rounded-md px-2 text-xs ring-sidebar-ring outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0 group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 font-medium text-muted-foreground">
-        R</div>
-    <div data-slot="sidebar-group-content" data-sidebar="group-content" class="w-full text-sm">
-        <ul data-slot="sidebar-menu" data-sidebar="menu" class="flex w-full min-w-0 flex-col gap-0.5">
             
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
@@ -521,6 +559,11 @@
 
         
     </a>
+</li>
+            
+            
+        </ul>
+    </div>
 </li>
             
             
@@ -616,8 +659,7 @@
 <li>Sign up at <a href="https://supabase.com">supabase.com</a> and create a new project</li>
 <li>Give it a name, choose a region near you, set a database password</li>
 <li>Wait about a minute for it to provision</li>
-<li>Go to <strong>Project Settings → General</strong> and copy your <strong>Project reference ID</strong>
-   (looks like <code>abcdefghijklmnop</code>)</li>
+<li>Go to <strong>Project Settings → General</strong> and copy your <strong>Project reference ID</strong> (looks like <code>abcdefghijklmnop</code>)</li>
 </ol>
 <p><strong>Set up the database:</strong></p>
 <ol>
@@ -627,8 +669,7 @@
 </ol>
 <hr />
 <h3 id="2-deploy-the-edge-functions-5-min">2. Deploy the edge functions (~5 min)<a class="headerlink" href="#2-deploy-the-edge-functions-5-min" title="Permanent link">&para;</a></h3>
-<p>The functions use shared code so they must be deployed via the Supabase CLI.
-This is a one-time step — after this, pushing to <code>main</code> deploys automatically.</p>
+<p>The functions use shared code so they must be deployed via the Supabase CLI. This is a one-time step — after this, pushing to <code>main</code> deploys automatically.</p>
 <div class="codehilite"><pre><span></span><code>npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>supabase
 supabase<span class="w"> </span>login
 supabase<span class="w"> </span>link<span class="w"> </span>--project-ref<span class="w"> </span>YOUR_PROJECT_REF
@@ -706,24 +747,19 @@ supabase<span class="w"> </span>functions<span class="w"> </span>deploy<span cla
 
 <span class="mi">1</span>. <span class="n">Go</span> <span class="nb">to</span> **<span class="n">APIs</span> &amp; <span class="n">Services</span> → <span class="n">Credentials</span> → <span class="n">Create</span> <span class="n">Credentials</span> → <span class="n">OAuth</span> <span class="n">client</span> <span class="n">ID</span>**
 <span class="mi">2</span>. <span class="n">Application</span> <span class="n">type:</span> **<span class="n">Web</span> <span class="n">application</span>**
-<span class="mi">3</span>. <span class="n">Under</span> **<span class="n">Authorised</span> <span class="n">redirect</span> <span class="n">URIs</span>**, <span class="n">add:</span>
-   ```
-   <span class="n">https:</span>//<span class="n">YOUR_PROJECT_REF</span>.<span class="n">supabase</span>.<span class="n">co</span><span class="o">/</span><span class="n">functions</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">auth-callback</span>
-   ```
+<span class="mi">3</span>. <span class="n">Under</span> **<span class="n">Authorised</span> <span class="n">redirect</span> <span class="n">URIs</span>**, <span class="nb">add</span> `<span class="n">https:</span>//<span class="n">YOUR_PROJECT_REF</span>.<span class="n">supabase</span>.<span class="n">co</span><span class="o">/</span><span class="n">functions</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">auth-callback</span>`
 <span class="mi">4</span>. <span class="n">Click</span> **<span class="n">Create</span>** <span class="o">and</span> <span class="nb">copy</span> <span class="n">the</span> **<span class="n">Client</span> <span class="n">ID</span>** <span class="o">and</span> **<span class="n">Client</span> <span class="n">Secret</span>**
 
-**<span class="n">Add</span> <span class="n">secrets</span> <span class="nb">to</span> <span class="n">Supabase</span>** (**<span class="n">Project</span> <span class="n">Settings</span> → <span class="n">Edge</span> <span class="n">Functions</span> → <span class="n">Secrets</span>**):
+**<span class="n">Add</span> <span class="n">secrets</span> <span class="nb">to</span> <span class="n">Supabase</span>** (<span class="n">Project</span> <span class="n">Settings</span> → <span class="n">Edge</span> <span class="n">Functions</span> → <span class="n">Secrets</span>):
 
 | <span class="n">Secret</span> <span class="nb">name</span> | <span class="n">Value</span> |
 |---|---|
 | `<span class="n">GOOGLE_HEALTH_CLIENT_ID</span>` | <span class="n">Client</span> <span class="n">ID</span> <span class="nb">from</span> <span class="n">above</span> |
 | `<span class="n">GOOGLE_HEALTH_CLIENT_SECRET</span>` | <span class="n">Client</span> <span class="n">Secret</span> <span class="nb">from</span> <span class="n">above</span> |
 
-**<span class="n">Test:</span>**
-```
-<span class="n">https:</span>//<span class="n">YOUR_PROJECT_REF</span>.<span class="n">supabase</span>.<span class="n">co</span><span class="o">/</span><span class="n">functions</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">auth-start</span><span class="o">?</span><span class="n">provider</span>=<span class="n">google-health</span><span class="nv">&amp;user_id</span>=<span class="n">test</span>
-```
-<span class="n">You</span> <span class="n">should</span> <span class="n">be</span> <span class="n">redirected</span> <span class="nb">to</span> <span class="n">a</span> <span class="n">Google</span> <span class="n">sign-in</span> <span class="n">page</span>.
+**<span class="n">Test</span>** — <span class="n">visit</span> <span class="n">this</span> <span class="n">URL</span>, <span class="n">you</span> <span class="n">should</span> <span class="n">be</span> <span class="n">redirected</span> <span class="nb">to</span> <span class="n">Google</span> <span class="n">sign-in:</span>
+
+`<span class="n">https:</span>//<span class="n">YOUR_PROJECT_REF</span>.<span class="n">supabase</span>.<span class="n">co</span><span class="o">/</span><span class="n">functions</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">auth-start</span><span class="o">?</span><span class="n">provider</span>=<span class="n">google-health</span><span class="nv">&amp;user_id</span>=<span class="n">test</span>`
 
 !!! <span class="nb">note</span>
     <span class="n">Participants</span> <span class="n">will</span> <span class="n">see</span> <span class="n">an</span> <span class="s">&quot;unverified app&quot;</span> <span class="n">warning</span> — <span class="nb">tell</span> <span class="n">them</span> <span class="nb">to</span> <span class="n">click</span> **<span class="n">Advanced</span> → <span class="n">Continue</span>**.
@@ -732,32 +768,26 @@ supabase<span class="w"> </span>functions<span class="w"> </span>deploy<span cla
 
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Withings</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="o">**</span><span class="n">Requires</span><span class="o">:**</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="n">Withings</span><span class="w"> </span><span class="n">developer</span><span class="w"> </span><span class="k">account</span><span class="p">.</span><span class="w"> </span><span class="k">Data</span><span class="w"> </span><span class="n">comes</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">Withings</span><span class="w"> </span><span class="n">devices</span>
-<span class="p">(</span><span class="n">scales</span><span class="p">,</span><span class="w"> </span><span class="n">blood</span><span class="w"> </span><span class="n">pressure</span><span class="w"> </span><span class="n">monitors</span><span class="p">,</span><span class="w"> </span><span class="n">sleep</span><span class="w"> </span><span class="n">mats</span><span class="p">,</span><span class="w"> </span><span class="n">activity</span><span class="w"> </span><span class="n">trackers</span><span class="p">).</span>
+<div class="codehilite"><pre><span></span><code><span class="o">**</span><span class="n">Requires</span><span class="o">:**</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="n">Withings</span><span class="w"> </span><span class="n">developer</span><span class="w"> </span><span class="k">account</span><span class="p">.</span><span class="w"> </span><span class="k">Data</span><span class="w"> </span><span class="n">comes</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">Withings</span><span class="w"> </span><span class="n">devices</span><span class="w"> </span><span class="p">(</span><span class="n">scales</span><span class="p">,</span><span class="w"> </span><span class="n">blood</span><span class="w"> </span><span class="n">pressure</span><span class="w"> </span><span class="n">monitors</span><span class="p">,</span><span class="w"> </span><span class="n">sleep</span><span class="w"> </span><span class="n">mats</span><span class="p">,</span><span class="w"> </span><span class="n">activity</span><span class="w"> </span><span class="n">trackers</span><span class="p">).</span>
 
 <span class="o">**</span><span class="k">Create</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">Withings</span><span class="w"> </span><span class="n">app</span><span class="o">:**</span>
 
 <span class="mf">1.</span><span class="w"> </span><span class="n">Sign</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="k">at</span><span class="w"> </span><span class="err">[</span><span class="n">developer</span><span class="p">.</span><span class="n">withings</span><span class="p">.</span><span class="n">com</span><span class="err">]</span><span class="p">(</span><span class="n">https</span><span class="o">://</span><span class="n">developer</span><span class="p">.</span><span class="n">withings</span><span class="p">.</span><span class="n">com</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">go</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="err">[</span><span class="n">Dashboard</span><span class="err">]</span><span class="p">(</span><span class="n">https</span><span class="o">://</span><span class="n">developer</span><span class="p">.</span><span class="n">withings</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">dashboard</span><span class="o">/</span><span class="p">)</span>
 <span class="mf">2.</span><span class="w"> </span><span class="n">Click</span><span class="w"> </span><span class="o">**</span><span class="k">Create</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">application</span><span class="o">**</span>
 <span class="mf">3.</span><span class="w"> </span><span class="n">Fill</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">app</span><span class="w"> </span><span class="k">name</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">description</span>
-<span class="mf">4.</span><span class="w"> </span><span class="n">Under</span><span class="w"> </span><span class="o">**</span><span class="n">Callback</span><span class="w"> </span><span class="k">URL</span><span class="o">**</span><span class="p">,</span><span class="w"> </span><span class="k">add</span><span class="o">:</span>
-<span class="w">   </span><span class="n n-Quoted">`</span><span class="n n-Quoted n-Quoted-Escape">``</span>
-<span class="n n-Quoted">   https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback</span>
-<span class="n n-Quoted">   </span><span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">`</span>
+<span class="mf">4.</span><span class="w"> </span><span class="n">Under</span><span class="w"> </span><span class="o">**</span><span class="n">Callback</span><span class="w"> </span><span class="k">URL</span><span class="o">**</span><span class="p">,</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="n n-Quoted">`https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback`</span>
 <span class="mf">5.</span><span class="w"> </span><span class="n">Save</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">copy</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="o">**</span><span class="k">Client</span><span class="w"> </span><span class="n">ID</span><span class="o">**</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="o">**</span><span class="n">Consumer</span><span class="w"> </span><span class="n">Secret</span><span class="o">**</span>
 
-<span class="o">**</span><span class="k">Add</span><span class="w"> </span><span class="n">secrets</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">Supabase</span><span class="o">**</span><span class="w"> </span><span class="p">(</span><span class="o">**</span><span class="n">Project</span><span class="w"> </span><span class="k">Set</span><span class="n">tings</span><span class="w"> </span><span class="n">→</span><span class="w"> </span><span class="n">Edge</span><span class="w"> </span><span class="n">Functions</span><span class="w"> </span><span class="n">→</span><span class="w"> </span><span class="n">Secrets</span><span class="o">**</span><span class="p">)</span><span class="o">:</span>
+<span class="o">**</span><span class="k">Add</span><span class="w"> </span><span class="n">secrets</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">Supabase</span><span class="o">**</span><span class="w"> </span><span class="p">(</span><span class="n">Project</span><span class="w"> </span><span class="k">Set</span><span class="n">tings</span><span class="w"> </span><span class="n">→</span><span class="w"> </span><span class="n">Edge</span><span class="w"> </span><span class="n">Functions</span><span class="w"> </span><span class="n">→</span><span class="w"> </span><span class="n">Secrets</span><span class="p">)</span><span class="o">:</span>
 
 <span class="o">|</span><span class="w"> </span><span class="n">Secret</span><span class="w"> </span><span class="k">name</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Value</span><span class="w"> </span><span class="o">|</span>
 <span class="o">|---|---|</span>
 <span class="o">|</span><span class="w"> </span><span class="n n-Quoted">`WITHINGS_CLIENT_ID`</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Client</span><span class="w"> </span><span class="n">ID</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">above</span><span class="w"> </span><span class="o">|</span>
 <span class="o">|</span><span class="w"> </span><span class="n n-Quoted">`WITHINGS_CLIENT_SECRET`</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Consumer</span><span class="w"> </span><span class="n">Secret</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">above</span><span class="w"> </span><span class="o">|</span>
 
-<span class="o">**</span><span class="n">Test</span><span class="o">:**</span>
-<span class="n n-Quoted">`</span><span class="n n-Quoted n-Quoted-Escape">``</span>
-<span class="n n-Quoted">https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=withings&amp;user_id=test</span>
-<span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">`</span>
-<span class="n">You</span><span class="w"> </span><span class="n">should</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">redirected</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">Withings</span><span class="w"> </span><span class="n">authorisation</span><span class="w"> </span><span class="k">page</span><span class="p">.</span>
+<span class="o">**</span><span class="n">Test</span><span class="o">**</span><span class="w"> </span><span class="n">—</span><span class="w"> </span><span class="n">visit</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="k">URL</span><span class="p">,</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">should</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">redirected</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">Withings</span><span class="w"> </span><span class="n">authorisation</span><span class="o">:</span>
+
+<span class="n n-Quoted">`https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=withings&amp;user_id=test`</span>
 </code></pre></div>
 
 </div>
@@ -768,80 +798,27 @@ supabase<span class="w"> </span>functions<span class="w"> </span>deploy<span cla
 
 <span class="mf">1.</span><span class="w"> </span><span class="n">Sign</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">at</span><span class="w"> </span><span class="err">[</span><span class="n">cloud</span><span class="p">.</span><span class="n">ouraring</span><span class="p">.</span><span class="n">com</span><span class="err">]</span><span class="p">(</span><span class="n">https</span><span class="o">://</span><span class="n">cloud</span><span class="p">.</span><span class="n">ouraring</span><span class="p">.</span><span class="n">com</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">go</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="o">**</span><span class="n">My</span><span class="w"> </span><span class="n">Apps</span><span class="w"> </span><span class="n">→</span><span class="w"> </span><span class="k">Create</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="n">App</span><span class="o">**</span>
 <span class="mf">2.</span><span class="w"> </span><span class="n">Fill</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="n">app</span><span class="w"> </span><span class="k">name</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">description</span>
-<span class="mf">3.</span><span class="w"> </span><span class="n">Under</span><span class="w"> </span><span class="o">**</span><span class="n">Redirect</span><span class="w"> </span><span class="n">URIs</span><span class="o">**</span><span class="p">,</span><span class="w"> </span><span class="k">add</span><span class="o">:</span>
-<span class="w">   </span><span class="n n-Quoted">`</span><span class="n n-Quoted n-Quoted-Escape">``</span>
-<span class="n n-Quoted">   https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback</span>
-<span class="n n-Quoted">   </span><span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">`</span>
+<span class="mf">3.</span><span class="w"> </span><span class="n">Under</span><span class="w"> </span><span class="o">**</span><span class="n">Redirect</span><span class="w"> </span><span class="n">URIs</span><span class="o">**</span><span class="p">,</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="n n-Quoted">`https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback`</span>
 <span class="mf">4.</span><span class="w"> </span><span class="n">Save</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">copy</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="o">**</span><span class="k">Client</span><span class="w"> </span><span class="n">ID</span><span class="o">**</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="o">**</span><span class="k">Client</span><span class="w"> </span><span class="n">Secret</span><span class="o">**</span>
 
-<span class="o">**</span><span class="k">Add</span><span class="w"> </span><span class="n">secrets</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">Supabase</span><span class="o">**</span><span class="w"> </span><span class="p">(</span><span class="o">**</span><span class="n">Project</span><span class="w"> </span><span class="k">Set</span><span class="n">tings</span><span class="w"> </span><span class="n">→</span><span class="w"> </span><span class="n">Edge</span><span class="w"> </span><span class="n">Functions</span><span class="w"> </span><span class="n">→</span><span class="w"> </span><span class="n">Secrets</span><span class="o">**</span><span class="p">)</span><span class="o">:</span>
+<span class="o">**</span><span class="k">Add</span><span class="w"> </span><span class="n">secrets</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">Supabase</span><span class="o">**</span><span class="w"> </span><span class="p">(</span><span class="n">Project</span><span class="w"> </span><span class="k">Set</span><span class="n">tings</span><span class="w"> </span><span class="n">→</span><span class="w"> </span><span class="n">Edge</span><span class="w"> </span><span class="n">Functions</span><span class="w"> </span><span class="n">→</span><span class="w"> </span><span class="n">Secrets</span><span class="p">)</span><span class="o">:</span>
 
 <span class="o">|</span><span class="w"> </span><span class="n">Secret</span><span class="w"> </span><span class="k">name</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Value</span><span class="w"> </span><span class="o">|</span>
 <span class="o">|---|---|</span>
 <span class="o">|</span><span class="w"> </span><span class="n n-Quoted">`OURA_CLIENT_ID`</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Client</span><span class="w"> </span><span class="n">ID</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">above</span><span class="w"> </span><span class="o">|</span>
 <span class="o">|</span><span class="w"> </span><span class="n n-Quoted">`OURA_CLIENT_SECRET`</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Client</span><span class="w"> </span><span class="n">Secret</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">above</span><span class="w"> </span><span class="o">|</span>
 
-<span class="o">**</span><span class="n">Test</span><span class="o">:**</span>
-<span class="n n-Quoted">`</span><span class="n n-Quoted n-Quoted-Escape">``</span>
-<span class="n n-Quoted">https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=oura&amp;user_id=test</span>
-<span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">`</span>
-<span class="n">You</span><span class="w"> </span><span class="n">should</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">redirected</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">Oura</span><span class="w"> </span><span class="n">authorisation</span><span class="w"> </span><span class="k">page</span><span class="p">.</span>
+<span class="o">**</span><span class="n">Test</span><span class="o">**</span><span class="w"> </span><span class="n">—</span><span class="w"> </span><span class="n">visit</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="k">URL</span><span class="p">,</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">should</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">redirected</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">Oura</span><span class="w"> </span><span class="n">authorisation</span><span class="o">:</span>
+
+<span class="n n-Quoted">`https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=oura&amp;user_id=test`</span>
 </code></pre></div>
 
 </div>
 </div>
 <hr />
-<h2 id="part-3-install-the-client-package">Part 3 — Install the client package<a class="headerlink" href="#part-3-install-the-client-package" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Python</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code>```bash
-pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
-python -m tokenbridge
-<span class="gh">#</span> When prompted:
-<span class="gh">#</span>   URL:     https://YOUR_PROJECT_REF.supabase.co/functions/v1
-<span class="gh">#</span>   API key: the TOKENBRIDGE_API_KEY you set in Step 3
-```
-</code></pre></div>
-
-</div>
-<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">R</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="nx">r</span>
-<span class="nx">install</span><span class="p">.</span><span class="nx">packages</span><span class="p">(</span><span class="s">&quot;devtools&quot;</span><span class="p">)</span>
-<span class="nx">devtools</span><span class="o">::</span><span class="nx">install_github</span><span class="p">(</span><span class="s">&quot;jackmanners/tokenbridge&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">subdir</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">)</span>
-
-<span class="kn">library</span><span class="p">(</span><span class="nx">tokenbridge</span><span class="p">)</span>
-<span class="nx">tb_setup</span><span class="p">()</span>
-<span class="err">#</span><span class="w"> </span><span class="nx">When</span><span class="w"> </span><span class="nx">prompted</span><span class="p">:</span>
-<span class="err">#</span><span class="w">   </span><span class="nx">URL</span><span class="p">:</span><span class="w">     </span><span class="nx">https</span><span class="p">:</span><span class="c1">//YOUR_PROJECT_REF.supabase.co/functions/v1</span>
-<span class="err">#</span><span class="w">   </span><span class="nx">API</span><span class="w"> </span><span class="nx">key</span><span class="p">:</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">TOKENBRIDGE_API_KEY</span><span class="w"> </span><span class="nx">you</span><span class="w"> </span><span class="nx">set</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">Step</span><span class="w"> </span><span class="mi">3</span>
-<span class="err">```</span>
-</code></pre></div>
-
-</div>
-</div>
-<hr />
-<h2 id="part-4-basic-usage">Part 4 — Basic usage<a class="headerlink" href="#part-4-basic-usage" title="Permanent link">&para;</a></h2>
-<div class="codehilite"><pre><span></span><code><span class="nf">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
-
-<span class="c1"># Generate auth links for participants and send them</span>
-<span class="n">links</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">))</span>
-<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">links</span><span class="p">))</span><span class="w"> </span><span class="nf">cat</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-&gt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">links</span><span class="p">[[</span><span class="n">id</span><span class="p">]],</span><span class="w"> </span><span class="s">&quot;\n&quot;</span><span class="p">)</span>
-
-<span class="c1"># Withings or Oura participants get provider-specific links</span>
-<span class="n">wt_links</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;withings&quot;</span><span class="p">)</span>
-<span class="n">ou_links</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;oura&quot;</span><span class="p">)</span>
-
-<span class="c1"># Fetch data (once participants have authorised)</span>
-<span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
-
-<span class="c1"># Provider-specific fetchers</span>
-<span class="n">activity</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;activity&quot;</span><span class="p">,</span><span class="w">        </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
-<span class="n">readiness</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ou_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;daily-readiness&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
-
-<span class="c1"># Audit data coverage</span>
-<span class="nf">gh_data_completeness</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p002&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p003&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>For full package documentation see the <a href="../python/reference.md">Python reference</a> and <a href="../r/reference.md">R reference</a>.</p>
+<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>The backend is set up. To start pulling data, see <a href="../without-packages/">Using TokenBridge without packages</a> — it shows the full flow (auth link → token request → API call) using plain HTTP requests.</p>
+<p>If you'd prefer a Python or R wrapper, see <a href="../python/index.md">Client packages</a>.</p>
   </div>
   
   <script>
@@ -953,42 +930,9 @@ python -m tokenbridge
                 </div>
                 
                 <div class="flex flex-col gap-4">
-                    <div class="text-muted-foreground text-sm font-medium">Python</div>
+                    <div class="text-muted-foreground text-sm font-medium">Client packages</div>
                     
                     <div class="flex flex-col gap-3">
-                        
-                        <a class="text-2xl font-medium" href="../python/">
-                            
-                            Index
-                            
-                        </a>
-                        
-                        <a class="text-2xl font-medium" href="../python/reference/">
-                            
-                            API Reference
-                            
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-                
-                <div class="flex flex-col gap-4">
-                    <div class="text-muted-foreground text-sm font-medium">R</div>
-                    
-                    <div class="flex flex-col gap-3">
-                        
-                        <a class="text-2xl font-medium" href="../r/">
-                            
-                            Index
-                            
-                        </a>
-                        
-                        <a class="text-2xl font-medium" href="../r/reference/">
-                            
-                            API Reference
-                            
-                        </a>
                         
                     </div>
                     
@@ -1055,18 +999,10 @@ python -m tokenbridge
         
 
         
-        <a href="#part-3-install-the-client-package"
+        <a href="#next-steps"
             class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#part-3-install-the-client-package');">
-            Part 3 — Install the client package
-        </a>
-        
-
-        
-        <a href="#part-4-basic-usage"
-            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#part-4-basic-usage');">
-            Part 4 — Basic usage
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#next-steps');">
+            Next steps
         </a>
         
 

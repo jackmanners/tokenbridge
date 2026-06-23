@@ -31,20 +31,18 @@ If someone in your lab has already set this up, you just need the client package
 
 /// tab | Python
 
-    ```bash
+    :::bash
     pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
-    python -m tokenbridge   # interactive setup â€” saves credentials to .env
-    ```
+    python -m tokenbridge
 
 ///
 
 /// tab | R
 
-    ```r
+    :::r
     devtools::install_github("jackmanners/tokenbridge", subdir = "r")
     library(tokenbridge)
-    tb_setup()   # interactive setup â€” saves credentials to .env
-    ```
+    tb_setup()
 
 ///
 
@@ -63,13 +61,12 @@ You need a free [Supabase](https://supabase.com) account. Setup takes around 20â
 
 /// tab | Python
 
-    ```python
+    :::python
     from tokenbridge import TokenBridge
 
     tb = TokenBridge()   # reads .env
 
     # Generate a link for each participant and send it to them
-    # They click once, sign in with Google, and approve access â€” done
     print(tb.auth_url("participant-001"))
 
     # Fetch data as soon as they've authorised
@@ -78,21 +75,14 @@ You need a free [Supabase](https://supabase.com) account. Setup takes around 20â
 
     # One token request for multiple data types
     token = tb.get_token("participant-001")
-    sleep = tb.fetch("participant-001", "sleep",                   start, end, token=token)
-    hrv   = tb.fetch("participant-001", "heart-rate-variability",  start, end, token=token)
-
-    # Audit data coverage across your cohort
-    tb.google.data_completeness(
-        ["p001", "p002", "p003"], start, end,
-        data_types=["sleep", "steps", "heart-rate-variability"],
-    )
-    ```
+    sleep = tb.fetch("participant-001", "sleep",                  start, end, token=token)
+    hrv   = tb.fetch("participant-001", "heart-rate-variability", start, end, token=token)
 
 ///
 
 /// tab | R
 
-    ```r
+    :::r
     library(tokenbridge)
 
     # Generate links for your cohort
@@ -106,13 +96,6 @@ You need a free [Supabase](https://supabase.com) account. Setup takes around 20â
     tok <- tb_get_token("p001")
     sleep <- tb_fetch("p001", "sleep",                  start, end, token = tok)
     hrv   <- tb_fetch("p001", "heart-rate-variability", start, end, token = tok)
-
-    # Audit data coverage
-    gh_data_completeness(
-      c("p001", "p002", "p003"), start, end,
-      data_types = c("sleep", "steps", "heart-rate-variability")
-    )
-    ```
 
 ///
 

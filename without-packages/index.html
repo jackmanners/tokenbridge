@@ -431,9 +431,32 @@
 <div data-slot="sidebar-group" data-sidebar="group" class="relative flex w-full min-w-0 flex-col p-2">
     <div data-slot="sidebar-group-label" data-sidebar="group-label"
         class="flex h-8 shrink-0 items-center rounded-md px-2 text-xs ring-sidebar-ring outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0 group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 font-medium text-muted-foreground">
-        Python</div>
+        Client packages</div>
     <div data-slot="sidebar-group-content" data-sidebar="group-content" class="w-full text-sm">
         <ul data-slot="sidebar-menu" data-sidebar="menu" class="flex w-full min-w-0 flex-col gap-0.5">
+            
+            
+            <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
+    
+    <button data-slot="collapsible-trigger" data-sidebar="menu-button" data-size="default" data-active="false"
+        class="peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 [&amp;&gt;span:last-child]:truncate hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-[0.8rem] font-medium"
+        type="button" aria-expanded="true"
+        data-state="closed"
+        onclick="this.setAttribute('data-state', this.getAttribute('data-state') === 'closed' ? 'open' : 'closed')">
+        
+        Python
+        
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-chevron-right ml-auto transition-[stroke,rotate] duration-200 group-data-[state=open]/menu-button:rotate-90 group-data-[state=closed]/menu-button:stroke-muted-foreground">
+            <path d="m9 18 6-6-6-6"></path>
+        </svg>
+    </button>
+    <div data-state="open" data-slot="collapsible-content"
+        class="grid grid-rows-[0fr] transition-[grid-template-rows] peer-data-[state=open]/menu-button:grid-rows-[1fr] py-0.5">
+        <ul data-slot="sidebar-menu-sub" data-sidebar="menu-sub"
+            class="overflow-hidden ml-3.5 flex flex-col gap-0.5 border-l border-sidebar-border pl-2.5">
+
             
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
@@ -475,16 +498,31 @@
             
         </ul>
     </div>
-</div>
+</li>
+            
+            
+            
+            <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
+    
+    <button data-slot="collapsible-trigger" data-sidebar="menu-button" data-size="default" data-active="false"
+        class="peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 [&amp;&gt;span:last-child]:truncate hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-[0.8rem] font-medium"
+        type="button" aria-expanded="true"
+        data-state="closed"
+        onclick="this.setAttribute('data-state', this.getAttribute('data-state') === 'closed' ? 'open' : 'closed')">
+        
+        R
+        
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-chevron-right ml-auto transition-[stroke,rotate] duration-200 group-data-[state=open]/menu-button:rotate-90 group-data-[state=closed]/menu-button:stroke-muted-foreground">
+            <path d="m9 18 6-6-6-6"></path>
+        </svg>
+    </button>
+    <div data-state="open" data-slot="collapsible-content"
+        class="grid grid-rows-[0fr] transition-[grid-template-rows] peer-data-[state=open]/menu-button:grid-rows-[1fr] py-0.5">
+        <ul data-slot="sidebar-menu-sub" data-sidebar="menu-sub"
+            class="overflow-hidden ml-3.5 flex flex-col gap-0.5 border-l border-sidebar-border pl-2.5">
 
-
-
-<div data-slot="sidebar-group" data-sidebar="group" class="relative flex w-full min-w-0 flex-col p-2">
-    <div data-slot="sidebar-group-label" data-sidebar="group-label"
-        class="flex h-8 shrink-0 items-center rounded-md px-2 text-xs ring-sidebar-ring outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0 group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 font-medium text-muted-foreground">
-        R</div>
-    <div data-slot="sidebar-group-content" data-sidebar="group-content" class="w-full text-sm">
-        <ul data-slot="sidebar-menu" data-sidebar="menu" class="flex w-full min-w-0 flex-col gap-0.5">
             
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
@@ -521,6 +559,11 @@
 
         
     </a>
+</li>
+            
+            
+        </ul>
+    </div>
 </li>
             
             
@@ -617,28 +660,24 @@
 <h2 id="step-1-onboard-a-participant">Step 1 — Onboard a participant<a class="headerlink" href="#step-1-onboard-a-participant" title="Permanent link">&para;</a></h2>
 <p>Generate an auth link and send it to them. This is just a URL — you can print it, email it, put it in a Qualtrics survey, whatever.</p>
 <div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Python</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code>```python
-TOKENBRIDGE_URL = &quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;
+<div class="codehilite"><pre><span></span><code><span class="n">TOKENBRIDGE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;</span>
 
-user_id   = &quot;p001&quot;
-provider  = &quot;google-health&quot;   # or &quot;withings&quot;, &quot;oura&quot;
+<span class="n">user_id</span>  <span class="o">=</span> <span class="s2">&quot;p001&quot;</span>
+<span class="n">provider</span> <span class="o">=</span> <span class="s2">&quot;google-health&quot;</span>   <span class="c1"># or &quot;withings&quot;, &quot;oura&quot;</span>
 
-auth_url = f&quot;{TOKENBRIDGE_URL}/auth-start?provider={provider}&amp;user_id={user_id}&quot;
-print(auth_url)
-```
+<span class="n">auth_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">TOKENBRIDGE_URL</span><span class="si">}</span><span class="s2">/auth-start?provider=</span><span class="si">{</span><span class="n">provider</span><span class="si">}</span><span class="s2">&amp;user_id=</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">auth_url</span><span class="p">)</span>
 </code></pre></div>
 
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">R</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="n">```r</span>
-<span class="n">TOKENBRIDGE_URL &lt;- &quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;</span>
+<div class="codehilite"><pre><span></span><code><span class="n">TOKENBRIDGE_URL</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;</span>
 
-<span class="n">user_id  &lt;- &quot;p001&quot;</span>
-<span class="n">provider &lt;- &quot;google-health&quot;   # or &quot;withings&quot;, &quot;oura&quot;</span>
+<span class="n">user_id</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;p001&quot;</span>
+<span class="n">provider</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;google-health&quot;</span><span class="w">   </span><span class="c1"># or &quot;withings&quot;, &quot;oura&quot;</span>
 
-<span class="n">auth_url &lt;- paste0(TOKENBRIDGE_URL, &quot;/auth-start?provider=&quot;, provider, &quot;&amp;user_id=&quot;, user_id)</span>
-<span class="n">cat(auth_url, &quot;\n&quot;)</span>
-<span class="n">```</span>
+<span class="n">auth_url</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">paste0</span><span class="p">(</span><span class="n">TOKENBRIDGE_URL</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/auth-start?provider=&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">provider</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&amp;user_id=&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">user_id</span><span class="p">)</span>
+<span class="nf">cat</span><span class="p">(</span><span class="n">auth_url</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;\n&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 </div>
@@ -646,10 +685,9 @@ print(auth_url)
 <p>The participant clicks the link, signs in, approves access, and sees a success page. TokenBridge stores their token automatically. You don't need to do anything else on your end.</p>
 <hr />
 <h2 id="step-2-get-an-access-token">Step 2 — Get an access token<a class="headerlink" href="#step-2-get-an-access-token" title="Permanent link">&para;</a></h2>
-<p>Once a participant has authorised, call the <code>/token</code> endpoint to get a valid access token. TokenBridge handles refresh automatically — you always get back a usable token.</p>
+<p>Once a participant has authorised, call the <code>/token</code> endpoint. TokenBridge handles refresh automatically — you always get back a usable token.</p>
 <div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Python</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">python</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 <span class="n">TOKENBRIDGE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;</span>
 <span class="n">API_KEY</span>         <span class="o">=</span> <span class="s2">&quot;your-tokenbridge-api-key&quot;</span>
@@ -662,27 +700,24 @@ print(auth_url)
 <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
 
 <span class="n">access_token</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;access_token&quot;</span><span class="p">]</span>
-<span class="err">```</span>
 </code></pre></div>
 
 </div>
 <input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">R</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="n">```r</span>
-<span class="n">library(httr)</span>
+<div class="codehilite"><pre><span></span><code><span class="nf">library</span><span class="p">(</span><span class="n">httr</span><span class="p">)</span>
 
-<span class="n">TOKENBRIDGE_URL &lt;- &quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;</span>
-<span class="n">API_KEY         &lt;- &quot;your-tokenbridge-api-key&quot;</span>
+<span class="n">TOKENBRIDGE_URL</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;</span>
+<span class="n">API_KEY</span><span class="w">         </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;your-tokenbridge-api-key&quot;</span>
 
-<span class="n">resp &lt;- POST(</span>
-<span class="n">  paste0(TOKENBRIDGE_URL, &quot;/token&quot;),</span>
-<span class="n">  add_headers(&quot;x-api-key&quot; = API_KEY),</span>
-<span class="n">  body   = list(user_id = &quot;p001&quot;, provider = &quot;google-health&quot;),</span>
-<span class="n">  encode = &quot;json&quot;</span>
-<span class="n">)</span>
-<span class="n">stop_for_status(resp)</span>
+<span class="n">resp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">POST</span><span class="p">(</span>
+<span class="w">  </span><span class="nf">paste0</span><span class="p">(</span><span class="n">TOKENBRIDGE_URL</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/token&quot;</span><span class="p">),</span>
+<span class="w">  </span><span class="nf">add_headers</span><span class="p">(</span><span class="s">&quot;x-api-key&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">API_KEY</span><span class="p">),</span>
+<span class="w">  </span><span class="n">body</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;google-health&quot;</span><span class="p">),</span>
+<span class="w">  </span><span class="n">encode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;json&quot;</span>
+<span class="p">)</span>
+<span class="nf">stop_for_status</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
 
-<span class="n">access_token &lt;- content(resp)$access_token</span>
-<span class="n">```</span>
+<span class="n">access_token</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">content</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span><span class="o">$</span><span class="n">access_token</span>
 </code></pre></div>
 
 </div>
@@ -690,58 +725,49 @@ print(auth_url)
 <p>That's it. From here you call the provider API directly using the token as a Bearer credential.</p>
 <hr />
 <h2 id="step-3-call-the-provider-api">Step 3 — Call the provider API<a class="headerlink" href="#step-3-call-the-provider-api" title="Permanent link">&para;</a></h2>
-<p>Pass the token in an <code>Authorization: Bearer</code> header. Below is a minimal example for each provider to confirm everything is working.</p>
+<p>Pass the token in an <code>Authorization: Bearer</code> header. Minimal example for each provider:</p>
 <div class="tabbed-set" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Google Health</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">python</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
-<span class="c1"># List sleep data points</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
     <span class="s2">&quot;https://health.googleapis.com/v4/users/me/dataTypes/sleep/dataPoints&quot;</span><span class="p">,</span>
     <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">access_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
-<span class="err">```</span>
 
-<span class="n">See</span> <span class="n">the</span> <span class="p">[</span><span class="n">Google</span> <span class="n">Health</span> <span class="n">API</span> <span class="n">docs</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">developers</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">health</span><span class="o">/</span><span class="n">api</span><span class="p">)</span> <span class="k">for</span> <span class="n">the</span> <span class="n">full</span> <span class="n">endpoint</span> <span class="nb">list</span><span class="o">.</span> <span class="n">The</span> <span class="n">base</span> <span class="n">URL</span> <span class="ow">is</span> <span class="err">`</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">health</span><span class="o">.</span><span class="n">googleapis</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">v4</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">me</span><span class="err">`</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="p">[</span><span class="n">Google</span> <span class="n">Health</span> <span class="n">API</span> <span class="n">docs</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">developers</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">health</span><span class="o">/</span><span class="n">api</span><span class="p">)</span> <span class="k">for</span> <span class="n">the</span> <span class="n">full</span> <span class="n">endpoint</span> <span class="nb">list</span><span class="o">.</span>
 </code></pre></div>
 
 </div>
 <input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">Withings</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">python</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
-<span class="c1"># Get activity summary</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
     <span class="s2">&quot;https://wbsapi.withings.net/v2/measure&quot;</span><span class="p">,</span>
     <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">access_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
     <span class="n">data</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;getactivity&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;action&quot;</span><span class="p">:</span>       <span class="s2">&quot;getactivity&quot;</span><span class="p">,</span>
         <span class="s2">&quot;startdateymd&quot;</span><span class="p">:</span> <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span>
         <span class="s2">&quot;enddateymd&quot;</span><span class="p">:</span>   <span class="s2">&quot;2026-06-18&quot;</span><span class="p">,</span>
     <span class="p">},</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>   <span class="c1"># {&quot;status&quot;: 0, &quot;body&quot;: {&quot;activities&quot;: [...]}}</span>
-<span class="err">```</span>
 
-<span class="n">All</span> <span class="n">Withings</span> <span class="n">endpoints</span> <span class="n">use</span> <span class="n">POST</span> <span class="k">with</span> <span class="n">an</span> <span class="err">`</span><span class="n">action</span><span class="err">`</span> <span class="n">parameter</span><span class="o">.</span> <span class="n">Responses</span> <span class="n">are</span> <span class="n">wrapped</span> <span class="ow">in</span> <span class="err">`</span><span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="p">{</span><span class="o">...</span><span class="p">}}</span><span class="err">`</span> <span class="err">—</span> <span class="n">status</span> <span class="mi">0</span> <span class="n">means</span> <span class="n">success</span><span class="o">.</span>
+<span class="n">All</span> <span class="n">Withings</span> <span class="n">endpoints</span> <span class="n">use</span> <span class="n">POST</span> <span class="k">with</span> <span class="n">an</span> <span class="err">`</span><span class="n">action</span><span class="err">`</span> <span class="n">parameter</span><span class="o">.</span> <span class="n">Status</span> <span class="mi">0</span> <span class="o">=</span> <span class="n">success</span><span class="o">.</span>
 </code></pre></div>
 
 </div>
 <input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><label for="__tabbed_3_3">Oura</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">python</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
-<span class="c1"># Get daily sleep summaries</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
     <span class="s2">&quot;https://api.ouraring.com/v2/usercollection/daily_sleep&quot;</span><span class="p">,</span>
     <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">access_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
     <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2026-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2026-06-18&quot;</span><span class="p">},</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>   <span class="c1"># {&quot;data&quot;: [...], &quot;next_token&quot;: null}</span>
-<span class="err">```</span>
 
-<span class="n">Oura</span> <span class="n">uses</span> <span class="n">standard</span> <span class="n">REST</span> <span class="n">GET</span> <span class="n">requests</span><span class="o">.</span> <span class="n">Paginate</span> <span class="n">using</span> <span class="err">`</span><span class="n">next_token</span><span class="err">`</span> <span class="k">if</span> <span class="n">present</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">response</span><span class="o">.</span>
+<span class="n">Paginate</span> <span class="n">using</span> <span class="err">`</span><span class="n">next_token</span><span class="err">`</span> <span class="k">if</span> <span class="n">present</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">response</span><span class="o">.</span>
 </code></pre></div>
 
 </div>
@@ -755,7 +781,7 @@ print(auth_url)
 <span class="p">}</span>
 </code></pre></div>
 
-<p><code>expires_at</code> is informational — TokenBridge refreshes the token automatically next time you call <code>/token</code> if it's expired or close to expiry. You don't need to track it yourself.</p>
+<p><code>expires_at</code> is informational — TokenBridge refreshes automatically on the next call if the token is expired or close to expiry.</p>
   </div>
   
   <script>
@@ -867,42 +893,9 @@ print(auth_url)
                 </div>
                 
                 <div class="flex flex-col gap-4">
-                    <div class="text-muted-foreground text-sm font-medium">Python</div>
+                    <div class="text-muted-foreground text-sm font-medium">Client packages</div>
                     
                     <div class="flex flex-col gap-3">
-                        
-                        <a class="text-2xl font-medium" href="../python/">
-                            
-                            Index
-                            
-                        </a>
-                        
-                        <a class="text-2xl font-medium" href="../python/reference/">
-                            
-                            API Reference
-                            
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-                
-                <div class="flex flex-col gap-4">
-                    <div class="text-muted-foreground text-sm font-medium">R</div>
-                    
-                    <div class="flex flex-col gap-3">
-                        
-                        <a class="text-2xl font-medium" href="../r/">
-                            
-                            Index
-                            
-                        </a>
-                        
-                        <a class="text-2xl font-medium" href="../r/reference/">
-                            
-                            API Reference
-                            
-                        </a>
                         
                     </div>
                     

@@ -14,8 +14,7 @@ Two phases:
 1. Sign up at [supabase.com](https://supabase.com) and create a new project
 2. Give it a name, choose a region near you, set a database password
 3. Wait about a minute for it to provision
-4. Go to **Project Settings → General** and copy your **Project reference ID**
-   (looks like `abcdefghijklmnop`)
+4. Go to **Project Settings → General** and copy your **Project reference ID** (looks like `abcdefghijklmnop`)
 
 **Set up the database:**
 
@@ -27,8 +26,7 @@ Two phases:
 
 ### 2. Deploy the edge functions (~5 min)
 
-The functions use shared code so they must be deployed via the Supabase CLI.
-This is a one-time step — after this, pushing to `main` deploys automatically.
+The functions use shared code so they must be deployed via the Supabase CLI. This is a one-time step — after this, pushing to `main` deploys automatically.
 
 ```bash
 npm install -g supabase
@@ -94,24 +92,19 @@ Add one or more providers. Each requires its own OAuth app and two secrets in Su
 
     1. Go to **APIs & Services → Credentials → Create Credentials → OAuth client ID**
     2. Application type: **Web application**
-    3. Under **Authorised redirect URIs**, add:
-       ```
-       https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback
-       ```
+    3. Under **Authorised redirect URIs**, add `https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback`
     4. Click **Create** and copy the **Client ID** and **Client Secret**
 
-    **Add secrets to Supabase** (**Project Settings → Edge Functions → Secrets**):
+    **Add secrets to Supabase** (Project Settings → Edge Functions → Secrets):
 
     | Secret name | Value |
     |---|---|
     | `GOOGLE_HEALTH_CLIENT_ID` | Client ID from above |
     | `GOOGLE_HEALTH_CLIENT_SECRET` | Client Secret from above |
 
-    **Test:**
-    ```
-    https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=google-health&user_id=test
-    ```
-    You should be redirected to a Google sign-in page.
+    **Test** — visit this URL, you should be redirected to Google sign-in:
+
+    `https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=google-health&user_id=test`
 
     !!! note
         Participants will see an "unverified app" warning — tell them to click **Advanced → Continue**.
@@ -121,32 +114,26 @@ Add one or more providers. Each requires its own OAuth app and two secrets in Su
 
 /// tab | Withings
 
-    **Requires:** A Withings developer account. Data comes from Withings devices
-    (scales, blood pressure monitors, sleep mats, activity trackers).
+    **Requires:** A Withings developer account. Data comes from Withings devices (scales, blood pressure monitors, sleep mats, activity trackers).
 
     **Create a Withings app:**
 
     1. Sign up at [developer.withings.com](https://developer.withings.com) and go to your [Dashboard](https://developer.withings.com/dashboard/)
     2. Click **Create an application**
     3. Fill in app name and description
-    4. Under **Callback URL**, add:
-       ```
-       https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback
-       ```
+    4. Under **Callback URL**, add `https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback`
     5. Save and copy the **Client ID** and **Consumer Secret**
 
-    **Add secrets to Supabase** (**Project Settings → Edge Functions → Secrets**):
+    **Add secrets to Supabase** (Project Settings → Edge Functions → Secrets):
 
     | Secret name | Value |
     |---|---|
     | `WITHINGS_CLIENT_ID` | Client ID from above |
     | `WITHINGS_CLIENT_SECRET` | Consumer Secret from above |
 
-    **Test:**
-    ```
-    https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=withings&user_id=test
-    ```
-    You should be redirected to the Withings authorisation page.
+    **Test** — visit this URL, you should be redirected to Withings authorisation:
+
+    `https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=withings&user_id=test`
 
 ///
 
@@ -158,82 +145,26 @@ Add one or more providers. Each requires its own OAuth app and two secrets in Su
 
     1. Sign in at [cloud.ouraring.com](https://cloud.ouraring.com) and go to **My Apps → Create New App**
     2. Fill in your app name and description
-    3. Under **Redirect URIs**, add:
-       ```
-       https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback
-       ```
+    3. Under **Redirect URIs**, add `https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-callback`
     4. Save and copy the **Client ID** and **Client Secret**
 
-    **Add secrets to Supabase** (**Project Settings → Edge Functions → Secrets**):
+    **Add secrets to Supabase** (Project Settings → Edge Functions → Secrets):
 
     | Secret name | Value |
     |---|---|
     | `OURA_CLIENT_ID` | Client ID from above |
     | `OURA_CLIENT_SECRET` | Client Secret from above |
 
-    **Test:**
-    ```
-    https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=oura&user_id=test
-    ```
-    You should be redirected to the Oura authorisation page.
+    **Test** — visit this URL, you should be redirected to Oura authorisation:
+
+    `https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=oura&user_id=test`
 
 ///
 
 ---
 
-## Part 3 — Install the client package
+## Next steps
 
-/// tab | Python
+The backend is set up. To start pulling data, see [Using TokenBridge without packages](without-packages.md) — it shows the full flow (auth link → token request → API call) using plain HTTP requests.
 
-    ```bash
-    pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
-    python -m tokenbridge
-    # When prompted:
-    #   URL:     https://YOUR_PROJECT_REF.supabase.co/functions/v1
-    #   API key: the TOKENBRIDGE_API_KEY you set in Step 3
-    ```
-
-///
-
-/// tab | R
-
-    ```r
-    install.packages("devtools")
-    devtools::install_github("jackmanners/tokenbridge", subdir = "r")
-
-    library(tokenbridge)
-    tb_setup()
-    # When prompted:
-    #   URL:     https://YOUR_PROJECT_REF.supabase.co/functions/v1
-    #   API key: the TOKENBRIDGE_API_KEY you set in Step 3
-    ```
-
-///
-
----
-
-## Part 4 — Basic usage
-
-```r
-library(tokenbridge)
-
-# Generate auth links for participants and send them
-links <- tb_auth_urls(c("p001", "p002", "p003"))
-for (id in names(links)) cat(id, "->", links[[id]], "\n")
-
-# Withings or Oura participants get provider-specific links
-wt_links <- tb_auth_urls(c("p001", "p002"), provider = "withings")
-ou_links  <- tb_auth_urls(c("p001", "p002"), provider = "oura")
-
-# Fetch data (once participants have authorised)
-sleep <- tb_fetch("p001", "sleep", "2026-05-01", "2026-06-18")
-
-# Provider-specific fetchers
-activity <- wt_fetch("p001", "activity",        "2026-05-01", "2026-06-18")
-readiness <- ou_fetch("p001", "daily-readiness", "2026-05-01", "2026-06-18")
-
-# Audit data coverage
-gh_data_completeness(c("p001", "p002", "p003"), "2026-05-01", "2026-06-18")
-```
-
-For full package documentation see the [Python reference](../python/reference.md) and [R reference](../r/reference.md).
+If you'd prefer a Python or R wrapper, see [Client packages](../python/index.md).

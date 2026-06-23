@@ -10,9 +10,8 @@ Installation and first use. If you're setting up your own instance first, see [D
 
     Requires Python 3.10+.
 
-    ```bash
+    :::bash
     pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
-    ```
 
     Dependencies installed automatically: `requests`, `python-dotenv`.
 
@@ -22,12 +21,9 @@ Installation and first use. If you're setting up your own instance first, see [D
 
     Requires R 4.0+.
 
-    ```r
-    # Install devtools if you don't have it
+    :::r
     install.packages("devtools")
-
     devtools::install_github("jackmanners/tokenbridge", subdir = "r")
-    ```
 
     Dependencies installed automatically: `httr`.
 
@@ -48,9 +44,8 @@ The recommended way to store these is in a `.env` file in your project directory
 
 /// tab | Python
 
-    ```bash
+    :::bash
     python -m tokenbridge
-    ```
 
     The wizard prompts for your URL and API key, verifies the connection, and saves them to `.env`.
 
@@ -58,10 +53,9 @@ The recommended way to store these is in a `.env` file in your project directory
 
 /// tab | R
 
-    ```r
+    :::r
     library(tokenbridge)
     tb_setup()
-    ```
 
     Same as the Python wizard — prompts, verifies, saves to `.env`.
 
@@ -77,27 +71,24 @@ If you prefer not to use `.env`, you can pass credentials directly:
 
 /// tab | Python
 
-    ```python
+    :::python
     from tokenbridge import TokenBridge
 
     tb = TokenBridge(
         url="https://abcdef.supabase.co/functions/v1",
         api_key="your-api-key",
     )
-    ```
 
 ///
 
 /// tab | R
 
-    ```r
-    # Set environment variables directly
+    :::r
     Sys.setenv(
       TOKENBRIDGE_URL     = "https://abcdef.supabase.co/functions/v1",
       TOKENBRIDGE_API_KEY = "your-api-key"
     )
     library(tokenbridge)
-    ```
 
 ///
 
@@ -109,7 +100,7 @@ Each participant needs to authorise their account once. Generate a unique URL fo
 
 /// tab | Python
 
-    ```python
+    :::python
     from tokenbridge import TokenBridge
 
     tb = TokenBridge()
@@ -122,20 +113,18 @@ Each participant needs to authorise their account once. Generate a unique URL fo
     urls = tb.auth_urls(["p001", "p002", "p003", "p004"])
     for uid, url in urls.items():
         print(f"{uid}: {url}")
-    ```
 
 ///
 
 /// tab | R
 
-    ```r
+    :::r
     # Single participant
     tb_auth_url("participant-001")
 
     # Batch — returns named character vector
     urls <- tb_auth_urls(c("p001", "p002", "p003", "p004"))
     for (uid in names(urls)) cat(uid, ":", urls[[uid]], "\n")
-    ```
 
 ///
 
@@ -162,7 +151,7 @@ Once a participant has authorised, you can fetch any of their data types immedia
 
 /// tab | Python
 
-    ```python
+    :::python
     from tokenbridge import TokenBridge
 
     tb = TokenBridge()
@@ -173,20 +162,18 @@ Once a participant has authorised, you can fetch any of their data types immedia
 
     print(f"Sleep sessions: {len(sleep)}")
     print(sleep[0])   # first session as a flat dict
-    ```
 
 ///
 
 /// tab | R
 
-    ```r
+    :::r
     sleep <- tb_fetch("p001", "sleep", "2026-05-01", "2026-06-18")
     steps <- tb_fetch("p001", "steps", "2026-05-01", "2026-06-18")
     hrv   <- tb_fetch("p001", "heart-rate-variability", "2026-05-01", "2026-06-18")
 
     nrow(sleep)    # number of sleep sessions
     head(sleep)    # first few rows
-    ```
 
 ///
 
@@ -196,22 +183,20 @@ Results are returned as flat records (Python: `list[dict]`, R: `data.frame`). Ne
 
 /// tab | Python
 
-    ```python
+    :::python
     tb = TokenBridge()
     tb.provider = "google-health"    # default; change to switch providers
 
     tb.fetch("p001", "sleep", start, end)    # uses tb.provider
-    ```
 
 ///
 
 /// tab | R
 
-    ```r
+    :::r
     tb_set_provider("google-health")    # persists for the session
 
     tb_fetch("p001", "sleep", start, end)    # uses the default
-    ```
 
 ///
 
@@ -220,8 +205,8 @@ Results are returned as flat records (Python: `list[dict]`, R: `data.frame`). Ne
 Python exposes provider namespaces as attributes on `tb`. These always use the named provider regardless of `tb.provider`:
 
 ```python
-tb.google.fetch("p001", "sleep", start, end)      # always google-health
-tb.withings.fetch("p001", "activity", start, end) # always withings
+tb.google.fetch("p001", "sleep", start, end)          # always google-health
+tb.withings.fetch("p001", "activity", start, end)     # always withings
 tb.oura.fetch("p001", "daily-readiness", start, end)  # always oura
 ```
 
@@ -231,27 +216,25 @@ Each call to `tb.fetch()` / `tb_fetch()` makes one request to TokenBridge to get
 
 /// tab | Python
 
-    ```python
+    :::python
     token = tb.get_token("p001")
 
-    sleep = tb.fetch("p001", "sleep",                  start, end, token=token)
-    steps = tb.fetch("p001", "steps",                  start, end, token=token)
-    hrv   = tb.fetch("p001", "heart-rate-variability", start, end, token=token)
+    sleep = tb.fetch("p001", "sleep",                    start, end, token=token)
+    steps = tb.fetch("p001", "steps",                    start, end, token=token)
+    hrv   = tb.fetch("p001", "heart-rate-variability",   start, end, token=token)
     rhr   = tb.fetch("p001", "daily-resting-heart-rate", start, end, token=token)
-    ```
 
 ///
 
 /// tab | R
 
-    ```r
+    :::r
     tok <- tb_get_token("p001")
 
-    sleep <- tb_fetch("p001", "sleep",                   start, end, token = tok)
-    steps <- tb_fetch("p001", "steps",                   start, end, token = tok)
-    hrv   <- tb_fetch("p001", "heart-rate-variability",  start, end, token = tok)
+    sleep <- tb_fetch("p001", "sleep",                    start, end, token = tok)
+    steps <- tb_fetch("p001", "steps",                    start, end, token = tok)
+    hrv   <- tb_fetch("p001", "heart-rate-variability",   start, end, token = tok)
     rhr   <- tb_fetch("p001", "daily-resting-heart-rate", start, end, token = tok)
-    ```
 
 ///
 
@@ -263,27 +246,25 @@ Before running analysis, check data completeness across participants:
 
 /// tab | Python
 
-    ```python
+    :::python
     audit = tb.google.data_completeness(
         ["p001", "p002", "p003"],
         "2026-05-01", "2026-06-18",
         data_types=["sleep", "steps", "heart-rate-variability"],
     )
     # list of dicts: user_id, data_type, n, days_with_data, coverage_pct
-    ```
 
 ///
 
 /// tab | R
 
-    ```r
+    :::r
     audit <- gh_data_completeness(
       c("p001", "p002", "p003"),
       "2026-05-01", "2026-06-18",
       data_types = c("sleep", "steps", "heart-rate-variability")
     )
     print(audit)   # data.frame: user_id, data_type, n, days_with_data, coverage_pct
-    ```
 
 ///
 
@@ -295,7 +276,7 @@ Data type IDs are kebab-case strings passed as the `data_type` argument. Each pr
 
 /// tab | Python
 
-    ```python
+    :::python
     from tokenbridge.providers.google_health import DATA_TYPES as GH_DATA_TYPES
     from tokenbridge.providers.withings import DATA_TYPES as WT_DATA_TYPES
     from tokenbridge.providers.oura import DATA_TYPES as OU_DATA_TYPES
@@ -303,17 +284,15 @@ Data type IDs are kebab-case strings passed as the `data_type` argument. Each pr
     print(list(GH_DATA_TYPES))   # e.g. "sleep", "steps", "heart-rate-variability", ...
     print(list(WT_DATA_TYPES))   # e.g. "sleep-summary", "activity", "weight", ...
     print(list(OU_DATA_TYPES))   # e.g. "daily-sleep", "daily-readiness", "heartrate", ...
-    ```
 
 ///
 
 /// tab | R
 
-    ```r
+    :::r
     names(GH_DATA_TYPES)   # Google Health
     names(WT_DATA_TYPES)   # Withings
     names(OU_DATA_TYPES)   # Oura
-    ```
 
 ///
 
