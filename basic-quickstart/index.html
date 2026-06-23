@@ -406,11 +406,11 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../without-packages/"
+        data-size="default" href="../basic-access/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
-        Without Packages
+        Accessing Tokens
         
 
         
@@ -676,7 +676,8 @@ supabase<span class="w"> </span>link<span class="w"> </span>--project-ref<span c
 supabase<span class="w"> </span>functions<span class="w"> </span>deploy<span class="w"> </span>auth-start<span class="w"> </span>auth-callback<span class="w"> </span>token<span class="w"> </span>token-keepalive<span class="w"> </span>--no-verify-jwt
 </code></pre></div>
 
-<p>If you don't have Node/npm, see the <a href="https://supabase.com/docs/guides/cli">Supabase CLI docs</a> for alternative install methods.</p>
+<p>If you don't have Node/npm, see the <a href="https://supabase.com/docs/guides/cli">Supabase CLI docs</a> for alternative install methods.
+Alternatively, you can deploy functions one at a time from the Supabase web dashboard.</p>
 <hr />
 <h3 id="3-set-core-secrets-1-min">3. Set core secrets (~1 min)<a class="headerlink" href="#3-set-core-secrets-1-min" title="Permanent link">&para;</a></h3>
 <p>In your Supabase dashboard, go to <strong>Project Settings → Edge Functions → Secrets</strong> and add:</p>
@@ -696,7 +697,7 @@ supabase<span class="w"> </span>functions<span class="w"> </span>deploy<span cla
 </table></div>
 <p>To generate one: <code>openssl rand -hex 32</code></p>
 <hr />
-<h3 id="4-set-up-github-actions-optional-but-recommended">4. Set up GitHub Actions (optional but recommended)<a class="headerlink" href="#4-set-up-github-actions-optional-but-recommended" title="Permanent link">&para;</a></h3>
+<h3 id="4-set-up-github-actions-optional">4. Set up GitHub Actions (optional)<a class="headerlink" href="#4-set-up-github-actions-optional" title="Permanent link">&para;</a></h3>
 <p>Two workflows live in <code>.github/workflows/</code>:</p>
 <ul>
 <li><strong><code>deploy-functions.yml</code></strong> — redeploys edge functions automatically whenever you push changes to <code>supabase/functions/</code></li>
@@ -728,7 +729,7 @@ supabase<span class="w"> </span>functions<span class="w"> </span>deploy<span cla
 <hr />
 <h2 id="part-2-provider-setup">Part 2 — Provider setup<a class="headerlink" href="#part-2-provider-setup" title="Permanent link">&para;</a></h2>
 <p>Add one or more providers. Each requires its own OAuth app and two secrets in Supabase.</p>
-<div class="tabbed-set" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Google Health (Fitbit)</label><div class="tabbed-content">
+<p>/// tab | Google Health (Fitbit)</p>
 <div class="codehilite"><pre><span></span><code>**<span class="n">Requires:</span>** <span class="n">A</span> <span class="n">Google</span> <span class="n">Cloud</span> <span class="n">project</span>. <span class="n">Data</span> <span class="n">comes</span> <span class="nb">from</span> <span class="n">Fitbit</span> <span class="n">devices</span> <span class="n">linked</span> <span class="nb">to</span> <span class="n">a</span> <span class="n">Google</span> <span class="n">account</span>.
 
 **<span class="n">Create</span> <span class="n">a</span> <span class="n">project</span> <span class="o">and</span> <span class="n">enable</span> <span class="n">the</span> <span class="n">API:</span>**
@@ -766,8 +767,8 @@ supabase<span class="w"> </span>functions<span class="w"> </span>deploy<span cla
     <span class="n">This</span> <span class="n">goes</span> <span class="n">away</span> <span class="n">once</span> <span class="n">Google</span> <span class="n">verifies</span> <span class="n">your</span> <span class="n">app</span> (<span class="nb">optional</span> <span class="k">for</span> <span class="n">small</span> <span class="n">studies</span>).
 </code></pre></div>
 
-</div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Withings</label><div class="tabbed-content">
+<p>///</p>
+<p>/// tab | Withings</p>
 <div class="codehilite"><pre><span></span><code><span class="o">**</span><span class="n">Requires</span><span class="o">:**</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="n">Withings</span><span class="w"> </span><span class="n">developer</span><span class="w"> </span><span class="k">account</span><span class="p">.</span><span class="w"> </span><span class="k">Data</span><span class="w"> </span><span class="n">comes</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">Withings</span><span class="w"> </span><span class="n">devices</span><span class="w"> </span><span class="p">(</span><span class="n">scales</span><span class="p">,</span><span class="w"> </span><span class="n">blood</span><span class="w"> </span><span class="n">pressure</span><span class="w"> </span><span class="n">monitors</span><span class="p">,</span><span class="w"> </span><span class="n">sleep</span><span class="w"> </span><span class="n">mats</span><span class="p">,</span><span class="w"> </span><span class="n">activity</span><span class="w"> </span><span class="n">trackers</span><span class="p">).</span>
 
 <span class="o">**</span><span class="k">Create</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">Withings</span><span class="w"> </span><span class="n">app</span><span class="o">:**</span>
@@ -790,8 +791,8 @@ supabase<span class="w"> </span>functions<span class="w"> </span>deploy<span cla
 <span class="n n-Quoted">`https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=withings&amp;user_id=test`</span>
 </code></pre></div>
 
-</div>
-<input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><label for="__tabbed_1_3">Oura</label><div class="tabbed-content">
+<p>///</p>
+<p>/// tab | Oura</p>
 <div class="codehilite"><pre><span></span><code><span class="o">**</span><span class="n">Requires</span><span class="o">:**</span><span class="w"> </span><span class="n">An</span><span class="w"> </span><span class="n">Oura</span><span class="w"> </span><span class="n">developer</span><span class="w"> </span><span class="k">account</span><span class="p">.</span><span class="w"> </span><span class="k">Data</span><span class="w"> </span><span class="n">comes</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">Oura</span><span class="w"> </span><span class="n">Ring</span><span class="w"> </span><span class="n">devices</span><span class="p">.</span>
 
 <span class="o">**</span><span class="k">Create</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">Oura</span><span class="w"> </span><span class="n">app</span><span class="o">:**</span>
@@ -813,11 +814,10 @@ supabase<span class="w"> </span>functions<span class="w"> </span>deploy<span cla
 <span class="n n-Quoted">`https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=oura&amp;user_id=test`</span>
 </code></pre></div>
 
-</div>
-</div>
+<p>///</p>
 <hr />
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
-<p>The backend is set up. To start pulling data, see <a href="../without-packages/">Using TokenBridge without packages</a> — it shows the full flow (auth link → token request → API call) using plain HTTP requests.</p>
+<p>The backend is set up. To start pulling data, see <a href="../basic-access/">Basic Access via TokenBridge</a> — it shows the full flow (auth link → token request → API call) using plain HTTP requests.</p>
 <p>If you'd prefer a Python or R wrapper, see <a href="../python/index.md">Client packages</a>.</p>
   </div>
   
@@ -919,9 +919,9 @@ supabase<span class="w"> </span>functions<span class="w"> </span>deploy<span cla
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../without-packages/">
+                        <a class="text-2xl font-medium" href="../basic-access/">
                             
-                            Without Packages
+                            Accessing Tokens
                             
                         </a>
                         
@@ -982,10 +982,10 @@ supabase<span class="w"> </span>functions<span class="w"> </span>deploy<span cla
             3. Set core secrets (~1 min)
         </a>
         
-        <a href="#4-set-up-github-actions-optional-but-recommended"
+        <a href="#4-set-up-github-actions-optional"
             class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#4-set-up-github-actions-optional-but-recommended');">
-            4. Set up GitHub Actions (optional but recommended)
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#4-set-up-github-actions-optional');">
+            4. Set up GitHub Actions (optional)
         </a>
         
         

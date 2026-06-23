@@ -36,6 +36,7 @@ supabase functions deploy auth-start auth-callback token token-keepalive --no-ve
 ```
 
 If you don't have Node/npm, see the [Supabase CLI docs](https://supabase.com/docs/guides/cli) for alternative install methods.
+Alternatively, you can deploy functions one at a time from the Supabase web dashboard.
 
 ---
 
@@ -51,7 +52,7 @@ To generate one: `openssl rand -hex 32`
 
 ---
 
-### 4. Set up GitHub Actions (optional but recommended)
+### 4. Set up GitHub Actions (optional)
 
 Two workflows live in `.github/workflows/`:
 
@@ -72,7 +73,7 @@ Both need these repository secrets (**Settings → Secrets → Actions**):
 
 Add one or more providers. Each requires its own OAuth app and two secrets in Supabase.
 
-/// tab | Google Health (Fitbit)
+/// tab \| Google Health (Fitbit)
 
     **Requires:** A Google Cloud project. Data comes from Fitbit devices linked to a Google account.
 
@@ -112,7 +113,7 @@ Add one or more providers. Each requires its own OAuth app and two secrets in Su
 
 ///
 
-/// tab | Withings
+/// tab \| Withings
 
     **Requires:** A Withings developer account. Data comes from Withings devices (scales, blood pressure monitors, sleep mats, activity trackers).
 
@@ -137,7 +138,7 @@ Add one or more providers. Each requires its own OAuth app and two secrets in Su
 
 ///
 
-/// tab | Oura
+/// tab \| Oura
 
     **Requires:** An Oura developer account. Data comes from Oura Ring devices.
 
@@ -165,6 +166,6 @@ Add one or more providers. Each requires its own OAuth app and two secrets in Su
 
 ## Next steps
 
-The backend is set up. To start pulling data, see [Using TokenBridge without packages](without-packages.md) — it shows the full flow (auth link → token request → API call) using plain HTTP requests.
+The backend is set up. To start pulling data, see [Basic Access via TokenBridge](basic-access.md) — it shows the full flow (auth link → token request → API call) using plain HTTP requests.
 
 If you'd prefer a Python or R wrapper, see [Client packages](../python/index.md).

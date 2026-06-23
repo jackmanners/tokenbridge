@@ -18,7 +18,7 @@
     
 
 
-<title>Without Packages</title>
+<title>Accessing Tokens</title>
 
 
 
@@ -28,18 +28,18 @@
 
 
 
-<link rel="canonical" href="https://jackmanners.github.io/tokenbridge/without-packages/">
+<link rel="canonical" href="https://jackmanners.github.io/tokenbridge/basic-access/">
 
 
 <!-- Open Graph (Facebook, LinkedIn) -->
 
-<meta property="og:title" content="Without Packages">
+<meta property="og:title" content="Accessing Tokens">
 
 
 
 
 
-<meta property="og:url" content="https://jackmanners.github.io/tokenbridge/without-packages/">
+<meta property="og:url" content="https://jackmanners.github.io/tokenbridge/basic-access/">
 
 
 
@@ -48,7 +48,7 @@
 
 <!-- Twitter Card -->
 
-<meta name="twitter:title" content="Without Packages">
+<meta name="twitter:title" content="Accessing Tokens">
 
 
 
@@ -410,7 +410,7 @@
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
-        Without Packages
+        Accessing Tokens
         
 
         
@@ -593,12 +593,12 @@
     <div class="flex flex-col gap-2">
       <div id="page-header" class="flex items-start justify-between">
         <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">
-          Without Packages
+          Accessing Tokens
         </h1>
 
         <div class="flex items-center gap-2 pt-1.5">
           <button
-    onclick="fetch(`https://jackmanners.github.io/tokenbridge/without-packages.md`).then((r) => r.blob()).then((blob) => navigator.clipboard.write([new ClipboardItem({ 'text/plain': blob })]))"
+    onclick="fetch(`https://jackmanners.github.io/tokenbridge/basic-access.md`).then((r) => r.blob()).then((blob) => navigator.clipboard.write([new ClipboardItem({ 'text/plain': blob })]))"
     data-slot="button" class="secondary cursor-pointer">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-copy ">
@@ -659,19 +659,21 @@
 <hr />
 <h2 id="step-1-onboard-a-participant">Step 1 — Onboard a participant<a class="headerlink" href="#step-1-onboard-a-participant" title="Permanent link">&para;</a></h2>
 <p>Generate an auth link and send it to them. This is just a URL — you can print it, email it, put it in a Qualtrics survey, whatever.</p>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Python</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="n">TOKENBRIDGE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;</span>
+<p>/// tab | Python</p>
+<div class="codehilite"><pre><span></span><code>:::python
+TOKENBRIDGE_URL = &quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;
 
-<span class="n">user_id</span>  <span class="o">=</span> <span class="s2">&quot;p001&quot;</span>
-<span class="n">provider</span> <span class="o">=</span> <span class="s2">&quot;google-health&quot;</span>   <span class="c1"># or &quot;withings&quot;, &quot;oura&quot;</span>
+user_id  = &quot;p001&quot;
+provider = &quot;google-health&quot;   # or &quot;withings&quot;, &quot;oura&quot;
 
-<span class="n">auth_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">TOKENBRIDGE_URL</span><span class="si">}</span><span class="s2">/auth-start?provider=</span><span class="si">{</span><span class="n">provider</span><span class="si">}</span><span class="s2">&amp;user_id=</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">auth_url</span><span class="p">)</span>
+auth_url = f&quot;{TOKENBRIDGE_URL}/auth-start?provider={provider}&amp;user_id={user_id}&quot;
+print(auth_url)
 </code></pre></div>
 
-</div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">R</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="n">TOKENBRIDGE_URL</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;</span>
+<p>///</p>
+<p>/// tab | R</p>
+<div class="codehilite"><pre><span></span><code><span class="o">:::</span><span class="n">r</span>
+<span class="n">TOKENBRIDGE_URL</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;</span>
 
 <span class="n">user_id</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;p001&quot;</span>
 <span class="n">provider</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;google-health&quot;</span><span class="w">   </span><span class="c1"># or &quot;withings&quot;, &quot;oura&quot;</span>
@@ -680,14 +682,14 @@
 <span class="nf">cat</span><span class="p">(</span><span class="n">auth_url</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;\n&quot;</span><span class="p">)</span>
 </code></pre></div>
 
-</div>
-</div>
+<p>///</p>
 <p>The participant clicks the link, signs in, approves access, and sees a success page. TokenBridge stores their token automatically. You don't need to do anything else on your end.</p>
 <hr />
 <h2 id="step-2-get-an-access-token">Step 2 — Get an access token<a class="headerlink" href="#step-2-get-an-access-token" title="Permanent link">&para;</a></h2>
 <p>Once a participant has authorised, call the <code>/token</code> endpoint. TokenBridge handles refresh automatically — you always get back a usable token.</p>
-<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Python</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<p>/// tab | Python</p>
+<div class="codehilite"><pre><span></span><code><span class="p">:::</span><span class="n">python</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 <span class="n">TOKENBRIDGE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;</span>
 <span class="n">API_KEY</span>         <span class="o">=</span> <span class="s2">&quot;your-tokenbridge-api-key&quot;</span>
@@ -702,9 +704,10 @@
 <span class="n">access_token</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;access_token&quot;</span><span class="p">]</span>
 </code></pre></div>
 
-</div>
-<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">R</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="nf">library</span><span class="p">(</span><span class="n">httr</span><span class="p">)</span>
+<p>///</p>
+<p>/// tab | R</p>
+<div class="codehilite"><pre><span></span><code><span class="o">:::</span><span class="n">r</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">httr</span><span class="p">)</span>
 
 <span class="n">TOKENBRIDGE_URL</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;https://YOUR_PROJECT_REF.supabase.co/functions/v1&quot;</span>
 <span class="n">API_KEY</span><span class="w">         </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;your-tokenbridge-api-key&quot;</span>
@@ -720,14 +723,14 @@
 <span class="n">access_token</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">content</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span><span class="o">$</span><span class="n">access_token</span>
 </code></pre></div>
 
-</div>
-</div>
+<p>///</p>
 <p>That's it. From here you call the provider API directly using the token as a Bearer credential.</p>
 <hr />
 <h2 id="step-3-call-the-provider-api">Step 3 — Call the provider API<a class="headerlink" href="#step-3-call-the-provider-api" title="Permanent link">&para;</a></h2>
 <p>Pass the token in an <code>Authorization: Bearer</code> header. Minimal example for each provider:</p>
-<div class="tabbed-set" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Google Health</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<p>/// tab | Google Health</p>
+<div class="codehilite"><pre><span></span><code><span class="p">:::</span><span class="n">python</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
     <span class="s2">&quot;https://health.googleapis.com/v4/users/me/dataTypes/sleep/dataPoints&quot;</span><span class="p">,</span>
@@ -738,9 +741,10 @@
 <span class="n">See</span> <span class="n">the</span> <span class="p">[</span><span class="n">Google</span> <span class="n">Health</span> <span class="n">API</span> <span class="n">docs</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">developers</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">health</span><span class="o">/</span><span class="n">api</span><span class="p">)</span> <span class="k">for</span> <span class="n">the</span> <span class="n">full</span> <span class="n">endpoint</span> <span class="nb">list</span><span class="o">.</span>
 </code></pre></div>
 
-</div>
-<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">Withings</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<p>///</p>
+<p>/// tab | Withings</p>
+<div class="codehilite"><pre><span></span><code><span class="p">:::</span><span class="n">python</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
     <span class="s2">&quot;https://wbsapi.withings.net/v2/measure&quot;</span><span class="p">,</span>
@@ -756,9 +760,10 @@
 <span class="n">All</span> <span class="n">Withings</span> <span class="n">endpoints</span> <span class="n">use</span> <span class="n">POST</span> <span class="k">with</span> <span class="n">an</span> <span class="err">`</span><span class="n">action</span><span class="err">`</span> <span class="n">parameter</span><span class="o">.</span> <span class="n">Status</span> <span class="mi">0</span> <span class="o">=</span> <span class="n">success</span><span class="o">.</span>
 </code></pre></div>
 
-</div>
-<input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><label for="__tabbed_3_3">Oura</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<p>///</p>
+<p>/// tab | Oura</p>
+<div class="codehilite"><pre><span></span><code><span class="p">:::</span><span class="n">python</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
     <span class="s2">&quot;https://api.ouraring.com/v2/usercollection/daily_sleep&quot;</span><span class="p">,</span>
@@ -770,8 +775,7 @@
 <span class="n">Paginate</span> <span class="n">using</span> <span class="err">`</span><span class="n">next_token</span><span class="err">`</span> <span class="k">if</span> <span class="n">present</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">response</span><span class="o">.</span>
 </code></pre></div>
 
-</div>
-</div>
+<p>///</p>
 <hr />
 <h2 id="token-response-format">Token response format<a class="headerlink" href="#token-response-format" title="Permanent link">&para;</a></h2>
 <p>The <code>/token</code> endpoint returns:</p>
@@ -884,7 +888,7 @@
                         
                         <a class="text-2xl font-medium" href="./">
                             
-                            Without Packages
+                            Accessing Tokens
                             
                         </a>
                         
