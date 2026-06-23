@@ -36,6 +36,7 @@ supabase functions deploy auth-start auth-callback token token-keepalive --no-ve
 ```
 
 If you don't have Node/npm, see the [Supabase CLI docs](https://supabase.com/docs/guides/cli) for alternative install methods.
+Alternatively, you can deploy functions one at a time from the Supabase web dashboard.
 
 ---
 
@@ -51,7 +52,7 @@ To generate one: `openssl rand -hex 32`
 
 ---
 
-### 4. Set up GitHub Actions (optional but recommended)
+### 4. Set up GitHub Actions (optional)
 
 Two workflows live in `.github/workflows/`:
 

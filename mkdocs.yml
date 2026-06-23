@@ -31,7 +31,6 @@ markdown_extensions:
   - admonition
   - fenced_code
   - codehilite
-  - pymdownx.blocks
   - pymdownx.blocks.tab
   - attr_list
   - tables
