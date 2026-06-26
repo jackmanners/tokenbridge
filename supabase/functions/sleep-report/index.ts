@@ -45,8 +45,20 @@ Deno.serve(async (req) => {
   catch { return json({ error: 'invalid json' }, 400) }
 
   const { label, template: templateName = 'full', data } = body
-  if (!label || !data || typeof data !== 'object') {
-    return json({ error: 'label (string) and data (object of arrays) are required' }, 400)
+  if (!label || !data || typeof data !== 'object' || Array.isArray(data)) {
+    return json({
+      error: 'invalid request body',
+      expected: {
+        label: 'string — shown in report header (e.g. participant ID)',
+        template: 'string — template name in DB, defaults to "full"',
+        data: 'object — named arrays of flat records, e.g. { "withings-summary": [...] }',
+      },
+      example: {
+        label: 'P001',
+        template: 'full',
+        data: { 'withings-summary': [{ id: 1, startdate: 1700000000, enddate: 1700030000, timezone: 'Australia/Adelaide' }] },
+      },
+    }, 400)
   }
 
   const supabase = createClient(
