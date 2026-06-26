@@ -47,11 +47,16 @@ Deno.serve(async (req) => {
 
   const callbackUrl = `${Deno.env.get('SUPABASE_URL')}/functions/v1/auth-callback`
 
+  let scopeDelimiter = ' '; // Default fallback
+  if (providerName === 'withings') {
+    scopeDelimiter = ',';
+  }
+
   const params = new URLSearchParams({
     client_id: clientId,
     redirect_uri: callbackUrl,
     response_type: 'code',
-    scope: provider.scopes.join(' '),
+    scope: provider.scopes.join(scopeDelimiter),
     state,
     ...provider.authParams,
   })
