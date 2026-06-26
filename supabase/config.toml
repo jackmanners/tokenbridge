@@ -13,3 +13,12 @@ verify_jwt = false
 
 [functions.webhook]
 verify_jwt = false
+
+[functions.admin]
+verify_jwt = false
+
+[functions.sleep-report]
+verify_jwt = false
+
+[functions.template-manager]
+verify_jwt = false

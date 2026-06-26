@@ -62,7 +62,11 @@ Deno.serve(async (req) => {
     params.set('code_challenge_method', 'S256')
   }
 
-  return Response.redirect(`${provider.authUrl}?${params}`, 302)
+  const authUrl = `${provider.authUrl}?${params}`
+  if (url.searchParams.get('format') === 'json') {
+    return json({ url: authUrl })
+  }
+  return Response.redirect(authUrl, 302)
 })
 
 function json(data: unknown, status = 200): Response {
