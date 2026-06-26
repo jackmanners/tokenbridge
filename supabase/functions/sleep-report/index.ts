@@ -29,7 +29,7 @@ function toDataUri(csv: string): string {
   const bytes = new TextEncoder().encode(csv)
   let binary = ''
   for (const b of bytes) binary += String.fromCharCode(b)
-  return `data:text/csv;base64,${btoa(binary)}`
+  return `data:text/csv;charset=utf-8;base64,${btoa(binary)}`
 }
 
 Deno.serve(async (req) => {
