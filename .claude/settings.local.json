@@ -15,7 +15,9 @@
       "Bash(gh repo *)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:asiffer.github.io)"
+      "WebFetch(domain:asiffer.github.io)",
+      "Bash(Get-Content C:\\\\GitRepos\\\\tokenbridge\\\\.env)",
+      "Bash(Get-Content C:\\\\GitRepos\\\\tokenbridge\\\\.env.local)"
     ]
   }
 }
