@@ -1,0 +1,706 @@
+const cors = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
+const ALL_DATA_FIELDS = [
+  'total_timeinbed', 'total_sleep_time', 'asleepduration',
+  'lightsleepduration', 'remsleepduration', 'deepsleepduration',
+  'sleep_efficiency', 'sleep_latency', 'wakeup_latency',
+  'wakeupduration', 'waso',
+  'nb_rem_episodes', 'apnea_hypopnea_index', 'withings_index',
+  'durationtosleep', 'durationtowakeup', 'out_of_bed_count',
+  'hr_average', 'hr_min', 'hr_max',
+  'rr_average', 'rr_min', 'rr_max',
+  'snoring', 'snoringepisodecount', 'sleep_score',
+  'night_events', 'mvt_score_avg', 'mvt_active_duration',
+  'chest_movement_rate_average', 'chest_movement_rate_min', 'chest_movement_rate_max',
+  'breathing_sounds', 'breathing_sounds_episode_count',
+]
+
+const DURATION_FIELDS_IN_SECONDS = [
+  'total_timeinbed', 'total_sleep_time', 'asleepduration',
+  'lightsleepduration', 'remsleepduration', 'deepsleepduration',
+  'sleep_latency', 'wakeup_latency', 'wakeupduration', 'waso',
+  'durationtosleep', 'durationtowakeup', 'snoring', 'mvt_active_duration',
+]
+
+const EFFICIENCY_FIELDS = ['sleep_efficiency']
+
+const fieldDisplayNameMap: Record<string, string> = {
+  total_timeinbed: 'Total Time in Bed (hours)',
+  total_sleep_time: 'Total Sleep Time (hours)',
+  asleepduration: 'Asleep Duration (hours)',
+  lightsleepduration: 'Light Sleep (hours)',
+  remsleepduration: 'REM Sleep (hours)',
+  deepsleepduration: 'Deep Sleep (hours)',
+  sleep_efficiency: 'Sleep Efficiency (%)',
+  sleep_latency: 'Time to Fall Asleep (minutes)',
+  wakeup_latency: 'Time to Wake Up (minutes)',
+  wakeupduration: 'Wakeup Duration (minutes)',
+  wakeupcount: 'Wakeups (count)',
+  waso: 'Wake After Sleep Onset (WASO) (minutes)',
+  nb_rem_episodes: 'REM Episodes (count)',
+  apnea_hypopnea_index: 'Apnea-Hypopnea Index (events/hour)',
+  withings_index: 'Withings Sleep Index',
+  durationtosleep: 'Time to Fall Asleep (minutes)',
+  durationtowakeup: 'Time to Wake Up (minutes)',
+  out_of_bed_count: 'Out of Bed (count)',
+  hr_average: 'Average Heart Rate (bpm)',
+  hr_min: 'Minimum Heart Rate (bpm)',
+  hr_max: 'Maximum Heart Rate (bpm)',
+  rr_average: 'Average Respiratory Rate (breaths/min)',
+  rr_min: 'Minimum Respiratory Rate (breaths/min)',
+  rr_max: 'Maximum Respiratory Rate (breaths/min)',
+  snoring: 'Snoring Duration (minutes)',
+  snoringepisodecount: 'Snoring Episodes (count)',
+  sleep_score: 'Sleep Score',
+  night_events: 'Night Events (count)',
+  mvt_score_avg: 'Average Movement Score',
+  mvt_active_duration: 'Movement Duration (minutes)',
+  chest_movement_rate_average: 'Average Chest Movement Rate (breaths/min)',
+  chest_movement_rate_min: 'Minimum Chest Movement Rate (breaths/min)',
+  chest_movement_rate_max: 'Maximum Chest Movement Rate (breaths/min)',
+  breathing_sounds: 'Breathing Sounds Intensity',
+  breathing_sounds_episode_count: 'Breathing Sounds Episodes (count)',
+}
+
+// deno-lint-ignore no-explicit-any
+function toCsv(rows: any[], columns: string[]): string {
+  // deno-lint-ignore no-explicit-any
+  const escape = (v: any) => {
+    if (v == null) return ''
+    const s = typeof v === 'object' ? JSON.stringify(v) : String(v)
+    return s.includes(',') || s.includes('"') || s.includes('\n')
+      ? `"${s.replace(/"/g, '""')}"` : s
+  }
+  const header = columns.map(escape).join(',')
+  const body = rows.map(row => columns.map(c => escape(row[c])).join(',')).join('\n')
+  return `${header}\n${body}`
+}
+
+// deno-lint-ignore no-explicit-any
+function dfToDataUri(rows: any[], columns: string[]): string {
+  const csv = toCsv(rows, columns)
+  const bytes = new TextEncoder().encode(csv)
+  let binary = ''
+  for (const b of bytes) binary += String.fromCharCode(b)
+  const b64 = btoa(binary)
+  return `data:text/csv;base64,${b64}`
+}
+
+// deno-lint-ignore no-explicit-any
+function processSummaryData(series: any[], label: string) {
+  return series.map(night => {
+    const row = { ...night, ...(night.data || {}) }
+    delete row.data
+
+    const startdateNum = row.startdate
+    const enddateNum = row.enddate
+
+    const total_sleep_time_hours = typeof row.total_sleep_time === 'number' ? row.total_sleep_time / 3600 : null
+    const sleep_efficiency_percent = typeof row.sleep_efficiency === 'number' ? row.sleep_efficiency * 100 : null
+    const snoring_minutes = typeof row.snoring === 'number' ? row.snoring / 60 : null
+    const apnea_hypopnea_index = row.apnea_hypopnea_index >= 0 ? row.apnea_hypopnea_index : null
+
+    let night_events = row.night_events
+    if (typeof night_events === 'string') {
+      try { night_events = JSON.parse(night_events) } catch { night_events = null }
+    }
+
+    return {
+      ...row,
+      id: row.id || enddateNum,
+      lab_id: label,
+      startdate: startdateNum,
+      enddate: enddateNum,
+      total_sleep_time_hours,
+      sleep_efficiency_percent,
+      snoring_minutes,
+      apnea_hypopnea_index,
+      night_events,
+      night_events_raw: row.night_events,
+    }
+  })
+}
+
+// deno-lint-ignore no-explicit-any
+function generateReport(label: string, summaryData: any[]): string {
+  if (!summaryData || summaryData.length === 0) {
+    throw new Error('No sleep data available to generate a report.')
+  }
+
+  const report_timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19)
+
+  const csvColumns = [
+    ...Object.keys(summaryData[0] || {}).filter(k => k !== 'night_events' && k !== 'startdate_utc' && k !== 'enddate_utc'),
+    'night_events_raw',
+  ]
+  const summary_csv_datauri = dfToDataUri(summaryData, csvColumns)
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Sleep Report: ${label}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"/>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    :root{
+      --c-border:#e2e8f0;--c-bg:#f8fafc;--c-card:#fff;--c-muted:#64748b;
+      --c-text:#0f172a;--c-accent:#3b82f6;--c-accent-bg:#eff6ff;
+      --shadow-sm:0 1px 3px 0 rgb(0 0 0/.07),0 1px 2px -1px rgb(0 0 0/.07);
+      --radius:10px;
+    }
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;line-height:1.5;color:var(--c-text);background:#f1f5f9;margin:0;padding:0}
+    h1,h2,h3{margin:0}
+    h1{font-size:17px;font-weight:700}
+    h2{font-size:13px;font-weight:700}
+    .rpt-header{background:#0f172a;border-bottom:1px solid #1e293b;padding:0 24px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgb(0 0 0/.2)}
+    .rpt-brand{display:flex;align-items:center;gap:10px}
+    .rpt-brand-icon{background:#1e293b;color:#7dd3fc;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+    .rpt-title{color:#f1f5f9;font-size:15px;font-weight:700;letter-spacing:-.02em}
+    .rpt-sub{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#475569;margin-top:1px}
+    .rpt-meta{font-size:10px;color:#475569;text-align:right;line-height:1.6;font-family:'JetBrains Mono',ui-monospace,monospace}
+    .page-wrap{max-width:1200px;margin:0 auto;padding:20px 24px}
+    .kpi-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+    .kpi{background:var(--c-card);border:1px solid var(--c-border);border-radius:8px;padding:10px 16px;box-shadow:var(--shadow-sm)}
+    .kpi b{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--c-muted);margin-bottom:3px}
+    .kpi span{font-size:16px;font-weight:700;color:var(--c-text)}
+    .btn{border:1px solid var(--c-border);background:var(--c-card);padding:5px 12px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:500;color:var(--c-text);transition:background .12s;font-family:'Inter',system-ui,sans-serif;display:inline-flex;align-items:center;gap:4px}
+    .btn:hover{background:var(--c-bg)}
+    .btn-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+    .btn-row a{border:1px solid var(--c-border);background:var(--c-card);padding:5px 12px;border-radius:7px;font-size:11px;font-weight:500;color:var(--c-text);text-decoration:none;transition:background .12s;display:inline-flex;align-items:center;gap:4px}
+    .btn-row a:hover{background:var(--c-bg)}
+    .card{background:var(--c-card);border:1px solid var(--c-border);border-radius:var(--radius);box-shadow:var(--shadow-sm);margin-bottom:14px;overflow:hidden}
+    .card-head{background:#f8fafc;border-bottom:1px solid var(--c-border);padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
+    .card-hint{font-size:10px;color:var(--c-muted);margin-top:3px;font-weight:500}
+    .summary-stats-table{width:100%;border-collapse:collapse}
+    .summary-stats-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--c-muted);background:#f8fafc;padding:9px 12px;border-bottom:1px solid var(--c-border);text-align:left;white-space:nowrap}
+    .summary-stats-table td{padding:8px 12px;border-bottom:1px solid #f1f5f9;font-size:12px;vertical-align:middle}
+    .summary-stats-table tbody tr:last-child td{border-bottom:none}
+    .data-row.expandable{cursor:pointer}
+    .data-row.expandable:hover td{background:#f8fafc}
+    .data-row.expandable td:first-child{position:relative;padding-left:2.5rem}
+    .data-row.expandable td:first-child::before{content:'▸';position:absolute;left:1rem;top:50%;transform:translateY(-50%) rotate(0deg);transition:transform .2s;color:var(--c-muted)}
+    .data-row.expandable.open td:first-child::before{transform:translateY(-50%) rotate(90deg)}
+    .plot-row{display:none}
+    .plot-row.open{display:table-row}
+    .plot-row>td{padding:0;background:#f8fafc}
+    .details-content{padding:1rem}
+    .settings-container{position:fixed;top:1.25rem;right:1.25rem;z-index:1001}
+    .floating-menu-btn{width:2.75rem;height:2.75rem;border-radius:50%;background:var(--c-card);border:1px solid var(--c-border);box-shadow:0 4px 12px rgb(0 0 0/.1);cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .floating-menu-btn:hover{background:var(--c-bg)}
+    .settings-menu{display:none;position:absolute;top:calc(100% + .5rem);right:0;background:var(--c-card);border-radius:8px;box-shadow:0 8px 24px rgb(0 0 0/.12);border:1px solid var(--c-border);width:260px;padding:.5rem 0}
+    .menu-section{padding:.5rem 1rem}
+    .menu-section h3{margin:0 0 .6rem;font-size:.875rem;font-weight:600;color:var(--c-text)}
+    .menu-section .filter-item{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;font-size:12px}
+    .menu-section .filter-item input[type="number"]{width:56px;padding:.25rem .4rem;border:1px solid var(--c-border);border-radius:5px;font-size:12px}
+    .menu-section a{display:flex;align-items:center;gap:6px;padding:.4rem 0;color:var(--c-accent);text-decoration:none;font-size:.875rem;font-weight:500}
+    .menu-section a:hover{text-decoration:underline}
+    .menu-divider{border:none;border-top:1px solid var(--c-border);margin:.4rem 0}
+    #timing-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000;background:rgb(0 0 0/.4);backdrop-filter:blur(5px)}
+    #timing-modal-dialog{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;height:90%;background:#fff;border-radius:12px;overflow:hidden;padding:0;display:flex;flex-direction:column;box-shadow:0 20px 40px rgb(0 0 0/.2)}
+    #timing-modal-header{padding:1rem 1.5rem;border-bottom:1px solid var(--c-border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+    #timing-modal-header h3{font-size:.9rem;color:var(--c-text);margin:0;font-weight:600}
+    #timing-modal-close-btn{width:2rem;height:2rem;border-radius:50%;font-size:1rem;padding:0;display:flex;align-items:center;justify-content:center;background:#f1f5f9;color:var(--c-muted);border:1px solid var(--c-border);cursor:pointer}
+    #timing-modal-body{flex-grow:1;overflow-y:auto;padding:1rem 1.5rem}
+    #timing-modal-content{width:100%;display:flex;flex-direction:column;gap:1rem;overflow-x:auto}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    footer{margin-top:2rem;text-align:center;color:var(--c-muted);padding-bottom:2rem;font-size:11px}
+    @media print{.rpt-header{position:static}.settings-container,.btn-row{display:none!important}.card{box-shadow:none}}
+  </style>
+</head>
+<body>
+<header class="rpt-header">
+  <div class="rpt-brand">
+    <div class="rpt-brand-icon">&#x1F319;</div>
+    <div>
+      <div class="rpt-title">Sleep Report: ${label}</div>
+      <div class="rpt-sub">SAMMA · Withings Sleep Data</div>
+    </div>
+  </div>
+  <div class="rpt-meta"><div>${report_timestamp}</div></div>
+</header>
+
+<div class="settings-container">
+  <button id="floating-settings-btn" class="floating-menu-btn" title="Filters &amp; Downloads">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 0 2.4l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l-.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1 0-2.4l.15.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+  </button>
+  <div id="settings-menu" class="settings-menu">
+    <div class="menu-section">
+      <h3>Filters</h3>
+      <div class="filter-item">
+        <input type="checkbox" id="nap-filter-toggle" onchange="window.applyFilters()">
+        <label for="nap-filter-toggle">Hide short sleep periods</label>
+      </div>
+      <div class="filter-item">
+        <label for="nap-duration-hours">Hide if &lt;</label>
+        <input type="number" id="nap-duration-hours" value="3" min="0" step="0.5" onchange="window.applyFilters()">
+        <span>hours</span>
+      </div>
+    </div>
+    <hr class="menu-divider">
+    <div class="menu-section">
+      <a id="summary-data-link" href="${summary_csv_datauri}" download="sleep_summary.csv">&#8659; Download summary.csv</a>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrap">
+  <div id="top"></div>
+  <div class="kpi-row" id="kpi-container"></div>
+
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <h2>&#128197; Sleep Timing Overview</h2>
+        <div class="card-hint">Each bar spans bedtime to wake-up time · Click a bar to jump to that night</div>
+      </div>
+      <button id="fullscreen-timing-btn" class="btn" title="Expand">&#x2922; Expand</button>
+    </div>
+    <div style="padding:0 4px 4px">
+      <div id="sleep-timing-plot-container-v"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <h2>&#128202; Detailed Sleep Metrics</h2>
+        <div class="card-hint">Click any row to expand trend plot</div>
+      </div>
+    </div>
+    <div id="detailed-metrics-container"></div>
+  </div>
+
+  <div id="timing-modal">
+    <div id="timing-modal-dialog">
+      <div id="timing-modal-header">
+        <h3>Sleep Timing Overview</h3>
+        <button id="timing-modal-close-btn" onclick="document.getElementById('timing-modal').style.display='none'">&#x2715;</button>
+      </div>
+      <div id="timing-modal-body">
+        <div id="timing-modal-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Report generated ${report_timestamp} · SAMMA Sleep Report</footer>
+</div>
+
+<script>
+const DURATION_FIELDS_IN_SECONDS = ${JSON.stringify(DURATION_FIELDS_IN_SECONDS)};
+const EFFICIENCY_FIELDS = ${JSON.stringify(EFFICIENCY_FIELDS)};
+const ALL_DATA_FIELDS = ${JSON.stringify(ALL_DATA_FIELDS)};
+const fieldDisplayNameMap = ${JSON.stringify(fieldDisplayNameMap)};
+const SHOW_GAPS = true;
+const DAY_MS = 86400000;
+const TIMING_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+let fullSummaryData = [];
+let timingGroups = [];
+let timingCategoryArray = [];
+
+document.addEventListener('DOMContentLoaded', () => {
+  const dataLink = document.getElementById('summary-data-link');
+  if (!dataLink) return;
+
+  Papa.parse(dataLink.href, {
+    download: true, header: true, dynamicTyping: true, skipEmptyLines: true,
+    complete: (results) => {
+      fullSummaryData = results.data.map(row => {
+        let events = row.night_events_raw;
+        if (typeof events === 'string') { try { events = JSON.parse(events); } catch(e) { events = null; } }
+        const startdate_utc = row.startdate ? new Date(Number(row.startdate) * 1000) : null;
+        const enddate_utc   = row.enddate   ? new Date(Number(row.enddate)   * 1000) : null;
+        return { ...row, startdate_utc, enddate_utc, night_events: events };
+      }).filter(r => r.startdate_utc && !isNaN(r.startdate_utc) && r.enddate_utc && !isNaN(r.enddate_utc));
+      applyFilters();
+    },
+    error: err => { console.error('CSV parse error:', err); }
+  });
+
+  const settingsBtn = document.getElementById('floating-settings-btn');
+  const settingsMenu = document.getElementById('settings-menu');
+  settingsBtn.addEventListener('click', e => { e.stopPropagation(); settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block'; });
+  window.addEventListener('click', e => { if (!settingsMenu.contains(e.target) && !settingsBtn.contains(e.target)) settingsMenu.style.display = 'none'; });
+});
+
+function applyFilters() {
+  const filterOn = document.getElementById('nap-filter-toggle').checked;
+  const minSec = parseFloat(document.getElementById('nap-duration-hours').value) * 3600;
+  let data = fullSummaryData;
+  if (filterOn && !isNaN(minSec)) data = data.filter(d => (d.total_sleep_time || 0) >= minSec);
+  if (!data.length) { document.getElementById('kpi-container').innerHTML = '<div class="kpi"><b>Result</b><span style="font-size:12px">No data matches filters</span></div>'; return; }
+  updateReport(data);
+}
+
+function updateReport(data) {
+  const sorted = [...data].sort((a, b) => a.startdate_utc - b.startdate_utc);
+  renderKpis(sorted);
+  renderVerticalTimingPlot(sorted);
+  renderMetricsTable(sorted);
+  setupTimingModal(sorted);
+}
+
+function renderKpis(data) {
+  const mean = arr => arr.length ? arr.reduce((a,b) => a+b,0) / arr.length : 0;
+  const std = (arr, avg) => arr.length ? Math.sqrt(arr.map(x => Math.pow(x-avg,2)).reduce((a,b)=>a+b) / arr.length) : 0;
+
+  const durations = data.map(d => d.total_sleep_time / 3600).filter(v => v != null && !isNaN(v));
+  const effs = data.map(d => d.sleep_efficiency * 100).filter(v => v != null && !isNaN(v));
+  const ahis = data.map(d => d.apnea_hypopnea_index).filter(v => v != null && !isNaN(v));
+  const snores = data.map(d => d.snoring / 60).filter(v => v != null && !isNaN(v));
+
+  const mEff = mean(effs); const mAhi = mean(ahis); const mSnore = mean(snores);
+  const minDate = new Date(Math.min(...data.map(d => d.startdate_utc.getTime())));
+  const maxDate = new Date(Math.max(...data.map(d => d.enddate_utc.getTime())));
+
+  const kpis = [
+    { label: 'Date Range', value: minDate.toISOString().split('T')[0] + ' – ' + maxDate.toISOString().split('T')[0], small: true },
+    { label: 'Nights', value: String(data.length) },
+    { label: 'Avg Duration', value: mean(durations).toFixed(1) + ' h' },
+    { label: 'Sleep Efficiency', value: mEff.toFixed(1) + ' ± ' + std(effs, mEff).toFixed(1) + ' %' },
+    { label: 'AHI', value: mAhi.toFixed(1) + ' ± ' + std(ahis, mAhi).toFixed(1) },
+    { label: 'Snoring', value: mSnore.toFixed(1) + ' min/night' },
+  ];
+
+  document.getElementById('kpi-container').innerHTML = kpis.map(k =>
+    \`<div class="kpi"><b>\${k.label}</b><span style="\${k.small?'font-size:12px':''}">\${k.value}</span></div>\`
+  ).join('');
+}
+
+function fmtTZ(date, tz, opts) {
+  try { return new Intl.DateTimeFormat('en-CA', { ...opts, timeZone: tz, hourCycle: 'h23' }).format(date).replace(',',''); } catch { return null; }
+}
+
+function minsFromNoon(date, tz) {
+  try {
+    const parts = new Intl.DateTimeFormat('en-CA', { timeZone: tz, hour: 'numeric', minute: 'numeric', hourCycle: 'h23' }).formatToParts(date);
+    const h = parseInt(parts.find(p => p.type==='hour')?.value ?? 'NaN', 10);
+    const m = parseInt(parts.find(p => p.type==='minute')?.value ?? 'NaN', 10);
+    if (isNaN(h) || isNaN(m)) return null;
+    return (((h*60+m) - 720) + 1440) % 1440;
+  } catch { return null; }
+}
+
+function keyToLabel(key) { const p = key.split('-'); return TIMING_MONTHS[(+p[1])-1] + ' ' + (+p[2]); }
+function fmtDurHM(mins) { const h = Math.floor(mins/60), m = Math.round(mins%60); return (h>0?h+'h ':'') + m + 'm'; }
+function fmtClock(date, tz) { return fmtTZ(date, tz, { hour:'2-digit', minute:'2-digit' }); }
+
+function buildTimingGroups(data) {
+  const groups = new Map();
+  const valid = data.filter(d => d.startdate_utc && d.enddate_utc && !isNaN(d.startdate_utc.getTime()));
+  [...valid].sort((a,b) => a.startdate_utc - b.startdate_utc).forEach(row => {
+    const tz = row.timezone;
+    const bedStartMs = row.startdate_utc.getTime(), bedEndMs = row.enddate_utc.getTime();
+    const slpLatSec = row.sleep_latency ?? row.durationtosleep ?? 0;
+    const wkLatSec = row.wakeup_latency ?? row.durationtowakeup ?? 0;
+    const sleepStartMs = bedStartMs + (slpLatSec||0)*1000;
+    const sleepEndMs = bedEndMs - (wkLatSec||0)*1000;
+    const offStart = minsFromNoon(row.startdate_utc, tz), offEnd = minsFromNoon(row.enddate_utc, tz);
+    if (offStart === null || offEnd === null) return;
+
+    const fmtSubtle = (d, ref) => {
+      const t = fmtClock(d, tz);
+      if (!ref) return t;
+      const da = fmtTZ(d, tz, {year:'numeric',month:'2-digit',day:'2-digit'});
+      const db = fmtTZ(ref, tz, {year:'numeric',month:'2-digit',day:'2-digit'});
+      return da===db ? t : \`\${t} <span style="color:#94a3b8;font-size:9px;margin-left:4px">(\${new Intl.DateTimeFormat('en-AU',{timeZone:tz,month:'short',day:'numeric'}).format(d)})</span>\`;
+    };
+
+    const origSession = {
+      id: row.id, ahi: row.apnea_hypopnea_index,
+      bedtime: fmtSubtle(row.startdate_utc, row.enddate_utc),
+      wakeup: fmtSubtle(row.enddate_utc, row.startdate_utc),
+      onset: fmtSubtle(new Date(sleepStartMs), new Date(sleepEndMs)),
+      offset: fmtSubtle(new Date(sleepEndMs), new Date(sleepStartMs)),
+      totalInBed: fmtDurHM((bedEndMs-bedStartMs)/60000),
+      totalSleep: fmtDurHM(Math.max(0,(sleepEndMs-sleepStartMs))/60000),
+    };
+
+    const wStartA = bedStartMs - offStart*60000, wStartB = bedEndMs - offEnd*60000;
+    const windowStarts = wStartA===wStartB ? [wStartA] : [wStartA, wStartB];
+
+    windowStarts.forEach(W => {
+      const Wend = W + DAY_MS;
+      const iBedStart = Math.max(bedStartMs, W), iBedEnd = Math.min(bedEndMs, Wend);
+      if (iBedStart >= iBedEnd) return;
+      const dateKey = fmtTZ(new Date(Wend), tz, {year:'numeric',month:'2-digit',day:'2-digit'});
+      if (!dateKey) return;
+      if (!groups.has(dateKey)) groups.set(dateKey, { dateKey, label: keyToLabel(dateKey), sessions: [], originalSessions: [], ahi: 0 });
+      const g = groups.get(dateKey);
+      const bedBase = (iBedStart-W)/60000, bedDur = (iBedEnd-iBedStart)/60000;
+      const iSleepStart = Math.max(sleepStartMs,W), iSleepEnd = Math.min(sleepEndMs,Wend);
+      let sleepBase = bedBase, sleepDur = 0;
+      if (iSleepStart < iSleepEnd) { sleepBase = (iSleepStart-W)/60000; sleepDur = (iSleepEnd-iSleepStart)/60000; }
+      g.sessions.push({ bedBase, bedDur, sleepBase, sleepDur, id: row.id });
+      if (!g.originalSessions.some(s => s.bedtime === origSession.bedtime)) g.originalSessions.push(origSession);
+      if (typeof origSession.ahi === 'number' && origSession.ahi > g.ahi) g.ahi = origSession.ahi;
+    });
+  });
+  return Array.from(groups.values()).sort((a,b) => a.dateKey.localeCompare(b.dateKey));
+}
+
+function buildScaffold(groups) {
+  if (!SHOW_GAPS || !groups.length) return groups.map(g => g.label);
+  const keys = groups.map(g => g.dateKey).sort();
+  const out = [];
+  let cur = new Date(keys[0] + 'T00:00:00Z');
+  const end = new Date(keys[keys.length-1] + 'T00:00:00Z');
+  while (cur <= end) { out.push(keyToLabel(cur.toISOString().slice(0,10))); cur.setUTCDate(cur.getUTCDate()+1); }
+  return out;
+}
+
+const TICK_VALS = [0,360,720,1080,1440];
+const TICK_TEXT = ['12 PM','6 PM','Midnight','6 AM','12 PM'];
+
+function renderVerticalTimingPlot(data) {
+  timingGroups = buildTimingGroups(data);
+  if (!timingGroups.length) return;
+  timingCategoryArray = buildScaffold(timingGroups);
+  const x=[], inBase=[], inDur=[], slBase=[], slDur=[];
+  timingGroups.forEach(g => g.sessions.forEach(s => {
+    x.push(g.label); inBase.push(s.bedBase); inDur.push(s.bedDur);
+    slBase.push(s.sleepBase); slDur.push(s.sleepDur);
+  }));
+
+  const container = document.getElementById('sleep-timing-plot-container-v');
+  Plotly.newPlot(container, [
+    { x, y: inDur, base: inBase, width: x.map(()=>0.55), type:'bar', orientation:'v', hoverinfo:'none', marker:{color:'#93c5fd',opacity:0.4,cornerradius:6}, showlegend:false },
+    { x, y: slDur, base: slBase, width: x.map(()=>0.5), type:'bar', orientation:'v', hoverinfo:'none', marker:{color:'#2563eb',opacity:0.9,cornerradius:1}, showlegend:false }
+  ], {
+    paper_bgcolor:'transparent', plot_bgcolor:'transparent',
+    font:{family:"'Inter',system-ui,sans-serif",size:10,color:'#64748b'},
+    hovermode:'x', barmode:'overlay',
+    yaxis:{title:{text:'Time of Day',font:{size:10,color:'#64748b'}},tickmode:'array',tickvals:TICK_VALS,ticktext:TICK_TEXT,range:[0,1440],showgrid:true,gridcolor:'#f1f5f9',zeroline:false},
+    xaxis:{type:'category',categoryorder:'array',categoryarray:timingCategoryArray,tickangle:-45,automargin:true,showgrid:false,zeroline:false,tickfont:{size:9,color:'#94a3b8'}},
+    autosize:true, margin:{l:56,r:16,t:16,b:80}, height:480, showlegend:false,
+    shapes:[{type:'line',xref:'paper',x0:0,x1:1,y0:720,y1:720,line:{color:'#334155',width:1},layer:'below'}]
+  }, { responsive:true, displaylogo:false });
+  attachTimingTooltip(container, 'x');
+}
+
+function attachTimingTooltip(plotEl, axisKey) {
+  let tip = document.getElementById('timing-tooltip');
+  if (!tip) {
+    tip = document.createElement('div');
+    tip.id = 'timing-tooltip';
+    tip.style.cssText = 'display:none;position:fixed;z-index:999;background:#fff;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);padding:10px 13px;font-size:11px;font-family:Inter,system-ui,sans-serif;min-width:210px;pointer-events:none';
+    document.body.appendChild(tip);
+  }
+  const ahiColor = v => v >= 15 ? '#dc2626' : v >= 5 ? '#d97706' : '#059669';
+  plotEl.on('plotly_hover', evt => {
+    if (!evt.points?.length) return;
+    const label = evt.points[0][axisKey];
+    const g = timingGroups.find(gr => gr.label === label);
+    if (!g) { tip.style.display='none'; return; }
+    const sessHTML = g.originalSessions.map((s,i) => \`
+      \${g.originalSessions.length>1 ? \`<div style="\${i>0?'margin-top:8px;padding-top:8px;border-top:1px dashed #e2e8f0;':''}font-size:9px;font-weight:700;text-transform:uppercase;color:#2563eb;margin-bottom:4px">Session \${i+1}</div>\` : ''}
+      <div style="display:flex;justify-content:space-between;gap:16px;font-family:'JetBrains Mono',monospace"><span>Bedtime</span><span>\${s.bedtime}</span></div>
+      <div style="display:flex;justify-content:space-between;gap:16px;font-family:'JetBrains Mono',monospace"><span>Wake Up</span><span>\${s.wakeup}</span></div>
+      <div style="display:flex;justify-content:space-between;gap:16px;font-family:'JetBrains Mono',monospace"><span>In Bed</span><span>\${s.totalInBed}</span></div>
+      <div style="display:flex;justify-content:space-between;gap:16px;font-family:'JetBrains Mono',monospace"><span>Asleep</span><span>\${s.totalSleep}</span></div>
+    \`).join('');
+    tip.innerHTML = \`
+      <div style="font-weight:700;color:#0f172a;margin-bottom:7px;padding-bottom:6px;border-bottom:1px solid #e2e8f0;font-size:12px">\${g.dateKey}</div>
+      \${sessHTML}
+      <div style="margin-top:7px;padding-top:6px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-weight:700;color:#0f172a"><span>AHI</span><span style="color:\${ahiColor(g.ahi)}">\${g.ahi ?? '—'}</span></div>
+    \`;
+    tip.style.display = 'block';
+  });
+  plotEl.on('plotly_unhover', () => { tip.style.display='none'; });
+  plotEl.addEventListener('mousemove', e => {
+    if (tip.style.display==='none') return;
+    const x=e.clientX+14, y=e.clientY-10;
+    tip.style.left = (x + tip.offsetWidth > window.innerWidth ? x - tip.offsetWidth - 28 : x) + 'px';
+    tip.style.top = (y + tip.offsetHeight > window.innerHeight ? y - tip.offsetHeight : y) + 'px';
+  });
+}
+
+function renderMetricsTable(data) {
+  const container = document.getElementById('detailed-metrics-container');
+  container.innerHTML = '';
+  const valid = data.filter(d => d.enddate_utc && !isNaN(d.enddate_utc.getTime()));
+  if (!valid.length) return;
+
+  const mean = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
+  const std = (arr, avg) => arr.length ? Math.sqrt(arr.map(x=>Math.pow(x-avg,2)).reduce((a,b)=>a+b)/arr.length) : 0;
+
+  const table = document.createElement('table');
+  table.className = 'summary-stats-table';
+  table.innerHTML = \`<thead><tr><th>Metric</th><th style="text-align:center">Mean (SD)</th><th style="text-align:center">Min</th><th style="text-align:center">Max</th></tr></thead><tbody></tbody>\`;
+  container.appendChild(table);
+  const tbody = table.querySelector('tbody');
+
+  ALL_DATA_FIELDS.forEach(field => {
+    let values = valid.map(r => r[field]).filter(v => typeof v === 'number' && !isNaN(v));
+    if (!values.length) return;
+    const displayName = fieldDisplayNameMap[field] || field.replace(/_/g,' ').replace(/\\b\\w/g, l=>l.toUpperCase());
+    if (DURATION_FIELDS_IN_SECONDS.includes(field)) values = values.map(v => displayName.includes('(hours)') ? v/3600 : v/60);
+    else if (EFFICIENCY_FIELDS.includes(field)) values = values.map(v => v*100);
+
+    const avg = mean(values), stdev = std(values, avg);
+
+    let plotData = valid.map(r => {
+      const tz = r.timezone;
+      const dateStr = fmtTZ(r.enddate_utc, tz, {year:'numeric',month:'2-digit',day:'2-digit'});
+      if (!dateStr) return null;
+      let y = r[field];
+      if (DURATION_FIELDS_IN_SECONDS.includes(field)) y = y != null ? (displayName.includes('(hours)') ? y/3600 : y/60) : null;
+      else if (EFFICIENCY_FIELDS.includes(field)) y = y != null ? y*100 : null;
+      return { x: dateStr, y };
+    }).filter(d => d && d.y != null && !isNaN(d.y));
+
+    const dataRow = document.createElement('tr');
+    dataRow.className = 'data-row';
+    dataRow.innerHTML = \`
+      <td>\${displayName}</td>
+      <td style="text-align:center;font-variant-numeric:tabular-nums">\${avg.toFixed(2)} <span style="color:var(--c-muted)">(\${stdev.toFixed(2)})</span></td>
+      <td style="text-align:center;font-variant-numeric:tabular-nums">\${Math.min(...values).toFixed(2)}</td>
+      <td style="text-align:center;font-variant-numeric:tabular-nums">\${Math.max(...values).toFixed(2)}</td>
+    \`;
+
+    if (plotData.length > 0) {
+      dataRow.classList.add('expandable');
+      const plotRow = document.createElement('tr');
+      plotRow.className = 'plot-row';
+      plotRow.innerHTML = \`<td colspan="4"><div class="details-content"><div id="plot-\${field}"></div></div></td>\`;
+      tbody.appendChild(dataRow);
+      tbody.appendChild(plotRow);
+
+      dataRow.addEventListener('click', function() {
+        this.classList.toggle('open');
+        const next = this.nextElementSibling;
+        const isOpen = next.classList.toggle('open');
+        if (isOpen && !next.dataset.plotInit) {
+          next.dataset.plotInit = '1';
+          setTimeout(() => {
+            Plotly.newPlot(\`plot-\${field}\`, [{
+              x: plotData.map(d=>d.x), y: plotData.map(d=>d.y),
+              mode:'lines+markers', name: displayName,
+              line:{width:2,color:'#3b82f6',shape:'linear'},
+              marker:{size:5,color:'#fff',line:{color:'#3b82f6',width:1.5}},
+              hovertemplate: \`<b>\${displayName}</b><br>%{x}<br><span style="color:#3b82f6;font-weight:700">%{y:.2f}</span><extra></extra>\`
+            }], {
+              paper_bgcolor:'transparent', plot_bgcolor:'transparent',
+              font:{family:"'Inter',system-ui,sans-serif",size:10,color:'#64748b'},
+              xaxis:{showgrid:false,zeroline:false,showline:true,linecolor:'#e2e8f0'},
+              yaxis:{title:{text:displayName,font:{size:10}},rangemode:'tozero',showgrid:true,gridcolor:'#f1f5f9',zeroline:false,showline:true,linecolor:'#e2e8f0'},
+              autosize:true, margin:{l:72,r:16,t:40,b:40}, hovermode:'x', showlegend:false
+            }, { responsive:true, displaylogo:false });
+          }, 50);
+        } else if (isOpen) {
+          setTimeout(() => { const el = document.getElementById(\`plot-\${field}\`); if (el) Plotly.Plots.resize(el); }, 50);
+        }
+      });
+    } else {
+      tbody.appendChild(dataRow);
+    }
+  });
+}
+
+function setupTimingModal(data) {
+  document.getElementById('fullscreen-timing-btn').onclick = () => {
+    const modal = document.getElementById('timing-modal');
+    modal.style.display = 'block';
+    const container = document.getElementById('timing-modal-content');
+    container.innerHTML = '';
+    if (!timingGroups.length) return;
+    const x=[], inBase=[], inDur=[], slBase=[], slDur=[];
+    timingGroups.forEach(g => g.sessions.forEach(s => {
+      x.push(g.label); inBase.push(s.bedBase); inDur.push(s.bedDur);
+      slBase.push(s.sleepBase); slDur.push(s.sleepDur);
+    }));
+    const cats = timingCategoryArray.length ? [...timingCategoryArray].reverse() : timingGroups.map(g=>g.label).reverse();
+    const div = document.createElement('div');
+    container.appendChild(div);
+    Plotly.newPlot(div, [
+      { y:x, x:inDur, base:inBase, width:x.map(()=>0.55), type:'bar', orientation:'h', hoverinfo:'none', marker:{color:'#93c5fd',opacity:0.4,cornerradius:4}, showlegend:false },
+      { y:x, x:slDur, base:slBase, width:x.map(()=>0.5), type:'bar', orientation:'h', hoverinfo:'none', marker:{color:'#2563eb',opacity:0.9,cornerradius:1}, showlegend:false }
+    ], {
+      paper_bgcolor:'transparent', plot_bgcolor:'transparent',
+      font:{family:"'Inter',system-ui,sans-serif",size:10,color:'#64748b'},
+      hovermode:'y', barmode:'overlay',
+      xaxis:{title:{text:'Time of Day',font:{size:10}},tickmode:'array',tickvals:TICK_VALS,ticktext:TICK_TEXT,range:[0,1440],side:'top',showgrid:true,gridcolor:'#f1f5f9',zeroline:false},
+      yaxis:{type:'category',categoryorder:'array',categoryarray:cats,showgrid:false,zeroline:false,tickfont:{size:9,color:'#94a3b8'}},
+      autosize:true, margin:{l:60,r:16,t:40,b:20},
+      height: Math.max(400, cats.length*26+80), showlegend:false,
+      shapes:[{type:'line',yref:'paper',y0:0,y1:1,x0:720,x1:720,line:{color:'#334155',width:1},layer:'below'}]
+    }, { responsive:true, displaylogo:false });
+    attachTimingTooltip(div, 'y');
+  };
+  document.getElementById('timing-modal-close-btn').onclick = () => document.getElementById('timing-modal').style.display = 'none';
+  window.addEventListener('click', e => { const m = document.getElementById('timing-modal'); if (e.target === m) m.style.display = 'none'; });
+  document.addEventListener('keydown', e => { if (e.key==='Escape') document.getElementById('timing-modal').style.display = 'none'; });
+}
+
+window.applyFilters = applyFilters;
+window.addEventListener('resize', () => {
+  const tp = document.getElementById('sleep-timing-plot-container-v')?.querySelector('.js-plotly-plot');
+  if (tp) Plotly.Plots.resize(tp);
+  document.querySelectorAll('.details-content .js-plotly-plot').forEach(d => Plotly.Plots.resize(d));
+});
+</script>
+</body>
+</html>`
+}
+
+Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors })
+
+  const apiKey = Deno.env.get('TOKENBRIDGE_API_KEY')
+  const auth = req.headers.get('Authorization')
+  if (!apiKey || auth !== `Bearer ${apiKey}`) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+      headers: { ...cors, 'Content-Type': 'application/json' },
+    })
+  }
+
+  if (req.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'method not allowed' }), {
+      status: 405,
+      headers: { ...cors, 'Content-Type': 'application/json' },
+    })
+  }
+
+  let body: { series: unknown[]; label: string; startDate?: string; endDate?: string }
+  try {
+    body = await req.json()
+  } catch {
+    return new Response(JSON.stringify({ error: 'invalid json' }), {
+      status: 400,
+      headers: { ...cors, 'Content-Type': 'application/json' },
+    })
+  }
+
+  const { series, label } = body
+  if (!Array.isArray(series) || !label) {
+    return new Response(JSON.stringify({ error: 'series (array) and label (string) are required' }), {
+      status: 400,
+      headers: { ...cors, 'Content-Type': 'application/json' },
+    })
+  }
+
+  try {
+    // deno-lint-ignore no-explicit-any
+    const summaryData = processSummaryData(series as any[], label)
+    const html = generateReport(label, summaryData)
+    return new Response(html, {
+      status: 200,
+      headers: { ...cors, 'Content-Type': 'text/html; charset=utf-8' },
+    })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'unknown error'
+    return new Response(JSON.stringify({ error: message }), {
+      status: 500,
+      headers: { ...cors, 'Content-Type': 'application/json' },
+    })
+  }
+})
