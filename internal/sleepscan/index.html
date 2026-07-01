@@ -675,46 +675,45 @@
     <blockquote>
 <p><strong>Internal</strong> — requires a SleepScan API key. Not relevant for external deployments.</p>
 </blockquote>
-<p>SleepScan is a separate system that manages Withings OAuth tokens for study participants. When a participant's token is held by SleepScan rather than TokenBridge, use the <code>sleepscan=</code> parameter to fetch their data via the same <code>tb.fetch()</code> / <code>tb_fetch()</code> interface.</p>
-<p>Set <code>SLEEPSCAN_API_KEY</code> in your <code>.env</code> file, then pass <code>sleepscan=</code> with the participant's email, SleepScan participant ID, or Withings user ID:</p>
+<p>SleepScan is a separate system that manages Withings OAuth tokens for study participants. When a participant's token is held by SleepScan rather than TokenBridge, pass their identifier as <code>user_id</code> and set <code>sleepscan=True</code> — the same <code>tb.fetch()</code> / <code>tb_fetch()</code> interface is used throughout.</p>
+<p>Set <code>SLEEPSCAN_API_KEY</code> in your <code>.env</code> file. The <code>user_id</code> argument becomes the SleepScan lookup key:
+- An email string (contains <code>@</code>) → looks up by email
+- An integer → looks up by Withings user ID
+- Any other string → looks up by SleepScan participant ID</p>
+<p><code>sleepscan=True</code> always takes priority, even if a <code>token=</code> is also passed.</p>
 <h2 id="python">Python<a class="headerlink" href="#python" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenBridge</span>
 
 <span class="n">tb</span> <span class="o">=</span> <span class="n">TokenBridge</span><span class="p">()</span>   <span class="c1"># reads SLEEPSCAN_API_KEY from .env automatically</span>
 
 <span class="c1"># By email</span>
-<span class="n">sleep</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep-summary&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
-                 <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;withings&quot;</span><span class="p">,</span> <span class="n">sleepscan</span><span class="o">=</span><span class="s2">&quot;participant@example.com&quot;</span><span class="p">)</span>
+<span class="n">sleep</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;participant@example.com&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep-summary&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+                 <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;withings&quot;</span><span class="p">,</span> <span class="n">sleepscan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># By Withings user ID (integer)</span>
-<span class="n">bp</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">withings</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;blood-pressure&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
-                        <span class="n">sleepscan</span><span class="o">=</span><span class="mi">12345678</span><span class="p">)</span>
+<span class="n">bp</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">withings</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="mi">12345678</span><span class="p">,</span> <span class="s2">&quot;blood-pressure&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+                        <span class="n">sleepscan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># By SleepScan participant ID</span>
-<span class="n">sleep</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep-summary&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
-                 <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;withings&quot;</span><span class="p">,</span> <span class="n">sleepscan</span><span class="o">=</span><span class="s2">&quot;SS-P001&quot;</span><span class="p">)</span>
+<span class="n">sleep</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;SS-P001&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep-summary&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+                 <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;withings&quot;</span><span class="p">,</span> <span class="n">sleepscan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 
-<p><code>sleepscan=</code> can be:
-- An email string (contains <code>@</code>) → looks up by email
-- An integer → looks up by Withings user ID
-- Any other string → looks up by SleepScan participant ID</p>
-<p>The <code>user_id</code> first argument is still required (used as your local participant label) but is not sent to SleepScan — the <code>sleepscan=</code> value is the actual lookup key.</p>
 <h2 id="r">R<a class="headerlink" href="#r" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span><code><span class="nf">library</span><span class="p">(</span><span class="n">tokenbridge</span><span class="p">)</span>
 
 <span class="c1"># By email (SLEEPSCAN_API_KEY read from .env)</span>
 <span class="nf">tb_set_provider</span><span class="p">(</span><span class="s">&quot;withings&quot;</span><span class="p">)</span>
-<span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep-summary&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2024-01-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2024-06-30&quot;</span><span class="p">,</span>
-<span class="w">                  </span><span class="n">sleepscan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;participant@example.com&quot;</span><span class="p">)</span>
+<span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;participant@example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep-summary&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2024-01-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">sleepscan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span>
 
-<span class="c1"># Via the Withings shorthand</span>
-<span class="n">bp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;blood-pressure&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2024-01-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2024-06-30&quot;</span><span class="p">,</span>
-<span class="w">               </span><span class="n">sleepscan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">12345678L</span><span class="p">)</span>
+<span class="c1"># Via the Withings shorthand, by Withings user ID</span>
+<span class="n">bp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="m">12345678L</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;blood-pressure&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2024-01-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="w">               </span><span class="n">sleepscan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span>
 
 <span class="c1"># Explicit key (overrides env)</span>
-<span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep-summary&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2024-01-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2024-06-30&quot;</span><span class="p">,</span>
-<span class="w">                  </span><span class="n">sleepscan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;SS-P001&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sleepscan_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;my-key&quot;</span><span class="p">)</span>
+<span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="s">&quot;SS-P001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep-summary&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2024-01-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">sleepscan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">sleepscan_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;my-key&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 <h2 id="env-setup">.env setup<a class="headerlink" href="#env-setup" title="Permanent link">&para;</a></h2>
@@ -726,8 +725,8 @@
 <h2 id="token-source-resolution">Token source resolution<a class="headerlink" href="#token-source-resolution" title="Permanent link">&para;</a></h2>
 <p>When <code>tb.fetch()</code> is called, token resolution priority is:</p>
 <ol>
-<li><code>token=</code> — explicit pre-fetched token (always wins)</li>
-<li><code>sleepscan=</code> — fetch from SleepScan API</li>
+<li><code>sleepscan=True</code> — fetch from SleepScan API (always wins when set)</li>
+<li><code>token=</code> — explicit pre-fetched token</li>
 <li>Default — fetch from TokenBridge <code>/token</code> endpoint</li>
 </ol>
   </div>

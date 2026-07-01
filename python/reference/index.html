@@ -959,7 +959,7 @@ be resolved from arguments or environment.</p>
 
 
 <h4 id="tokenbridge.TokenBridge.fetch" class="doc doc-heading">
-            <code class=" language-python"><span class="n">fetch</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">provider</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">sleepscan</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span></code>
+            <code class=" language-python"><span class="n">fetch</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">provider</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">sleepscan</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span></code>
 
 <a href="#tokenbridge.TokenBridge.fetch" class="headerlink" title="Permanent link">&para;</a></h4>
 
@@ -1092,20 +1092,19 @@ round-trips.  Obtain with <code>tb.get_token(user_id)</code>.</p>
                 <code>sleepscan</code>
             </td>
             <td>
-                  <code><span title="str">str</span> | <span title="int">int</span> | None</code>
+                  <code><span title="bool">bool</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Participant identifier for SleepScan token lookup
-(Withings provider only).  Pass an email string, a Withings
-user ID (int), or a SleepScan participant ID string.  When
-set, the token is retrieved from SleepScan instead of
-TokenBridge.  Requires <code>sleepscan_key</code> on the client or
-<code>SLEEPSCAN_API_KEY</code> in the environment.</p>
+                <p>If <code>True</code>, resolve the Withings token via SleepScan
+using <code>user_id</code> as the lookup key (email, Withings user ID
+as an int, or SleepScan participant ID string).  Takes
+priority over <code>token=</code>.  Requires <code>sleepscan_key</code> on the
+client or <code>SLEEPSCAN_API_KEY</code> in the environment.</p>
               </div>
             </td>
             <td>
-                  <code>None</code>
+                  <code>False</code>
             </td>
           </tr>
       </tbody>
