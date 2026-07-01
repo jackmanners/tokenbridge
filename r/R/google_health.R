@@ -1,7 +1,7 @@
 # Google Health API v4 provider
 #
 # Wraps https://health.googleapis.com/v4 - uses TokenBridge for auth,
-# handles pagination and client-side date filtering.
+# handles pagination and server-side date filtering via the filter query param.
 #
 # You rarely need to call these functions directly.
 # The canonical way is via tb_fetch() in tokenbridge.R:
@@ -201,18 +201,70 @@ gh_data_completeness <- function(user_ids, start_date, end_date,
          call. = FALSE)
 }
 
+# Filter field per data type for the Google Health v4 filter query param.
+# See: https://health.googleapis.com/$discovery/rest?version=v4
+.GH_FILTER_FIELD <- c(
+  # interval types
+  "steps"                               = "steps.interval.start_time",
+  "distance"                            = "distance.interval.start_time",
+  "active-minutes"                      = "active_minutes.interval.start_time",
+  "active-zone-minutes"                 = "active_zone_minutes.interval.start_time",
+  "active-energy-burned"                = "active_energy_burned.interval.start_time",
+  "activity-level"                      = "activity_level.interval.start_time",
+  "sedentary-period"                    = "sedentary_period.interval.start_time",
+  "altitude"                            = "altitude.interval.start_time",
+  "swim-lengths-data"                   = "swim_lengths_data.interval.start_time",
+  "time-in-heart-rate-zone"             = "time_in_heart_rate_zone.interval.start_time",
+  "exercise"                            = "exercise.interval.start_time",
+  "vo2-max"                             = "vo2_max.interval.start_time",
+  "run-vo2-max"                         = "run_vo2_max.interval.start_time",
+  "electrocardiogram"                   = "electrocardiogram.interval.start_time",
+  "irregular-rhythm-notification"       = "irregular_rhythm_notification.interval.start_time",
+  # sleep — filters by end_time only (API quirk)
+  "sleep"                               = "sleep.interval.end_time",
+  # sample types
+  "heart-rate"                          = "heart_rate.sample_time.physical_time",
+  "heart-rate-variability"              = "heart_rate_variability.sample_time.physical_time",
+  "oxygen-saturation"                   = "oxygen_saturation.sample_time.physical_time",
+  "core-body-temperature"               = "core_body_temperature.sample_time.physical_time",
+  "blood-glucose"                       = "blood_glucose.sample_time.physical_time",
+  "weight"                              = "weight.sample_time.physical_time",
+  "body-fat"                            = "body_fat.sample_time.physical_time",
+  "height"                              = "height.sample_time.physical_time",
+  "food"                                = "food.sample_time.physical_time",
+  "hydration-log"                       = "hydration_log.sample_time.physical_time",
+  # daily types
+  "daily-vo2-max"                       = "daily_vo2_max.date",
+  "daily-resting-heart-rate"            = "daily_resting_heart_rate.date",
+  "daily-heart-rate-zones"              = "daily_heart_rate_zones.date",
+  "daily-heart-rate-variability"        = "daily_heart_rate_variability.date",
+  "daily-oxygen-saturation"             = "daily_oxygen_saturation.date",
+  "daily-respiratory-rate"              = "daily_respiratory_rate.date",
+  "daily-sleep-temperature-derivations" = "daily_sleep_temperature_derivations.date",
+  "respiratory-rate-sleep-summary"      = "respiratory_rate_sleep_summary.date",
+  "nutrition-log"                       = "nutrition_log.date"
+)
+
 .gh_fetch_datapoints <- function(token, data_type, start_date, end_date) {
   url        <- paste0("https://health.googleapis.com/v4/users/me/dataTypes/",
                        data_type, "/dataPoints")
   all_points <- list()
   page_token <- NULL
 
+  ts_field <- .GH_FILTER_FIELD[data_type]
+  if (!is.na(ts_field) && endsWith(ts_field, ".date")) {
+    filter_expr <- sprintf('%s >= "%s" AND %s < "%s"',
+                           ts_field, start_date, ts_field, end_date)
+  } else if (!is.na(ts_field)) {
+    filter_expr <- sprintf('%s >= "%sT00:00:00Z" AND %s < "%sT23:59:59Z"',
+                           ts_field, start_date, ts_field, end_date)
+  } else {
+    filter_expr <- NULL
+  }
+
   repeat {
-    query <- list(
-      pageSize  = 1000,
-      startTime = paste0(start_date, "T00:00:00Z"),
-      endTime   = paste0(end_date,   "T23:59:59Z")
-    )
+    query <- list(pageSize = 1000)
+    if (!is.null(filter_expr)) query$filter <- filter_expr
     if (!is.null(page_token)) query$pageToken <- page_token
 
     resp <- httr::GET(

@@ -86,6 +86,53 @@ DATA_TYPES: dict[str, str] = {
 }
 
 
+# Filter field per data type, derived from the v4 discovery doc.
+# Interval types  → {snake_type}.interval.start_time
+# Sample types    → {snake_type}.sample_time.physical_time
+# Daily types     → {snake_type}.date
+# See: https://health.googleapis.com/$discovery/rest?version=v4
+_FILTER_FIELD: dict[str, str] = {
+    # interval
+    "steps":                               "steps.interval.start_time",
+    "distance":                            "distance.interval.start_time",
+    "active-minutes":                      "active_minutes.interval.start_time",
+    "active-zone-minutes":                 "active_zone_minutes.interval.start_time",
+    "active-energy-burned":                "active_energy_burned.interval.start_time",
+    "activity-level":                      "activity_level.interval.start_time",
+    "sedentary-period":                    "sedentary_period.interval.start_time",
+    "altitude":                            "altitude.interval.start_time",
+    "swim-lengths-data":                   "swim_lengths_data.interval.start_time",
+    "time-in-heart-rate-zone":             "time_in_heart_rate_zone.interval.start_time",
+    "exercise":                            "exercise.interval.start_time",
+    "vo2-max":                             "vo2_max.interval.start_time",
+    "run-vo2-max":                         "run_vo2_max.interval.start_time",
+    "sleep":                               "sleep.interval.end_time",
+    "electrocardiogram":                   "electrocardiogram.interval.start_time",
+    "irregular-rhythm-notification":       "irregular_rhythm_notification.interval.start_time",
+    # sample
+    "heart-rate":                          "heart_rate.sample_time.physical_time",
+    "heart-rate-variability":              "heart_rate_variability.sample_time.physical_time",
+    "oxygen-saturation":                   "oxygen_saturation.sample_time.physical_time",
+    "core-body-temperature":               "core_body_temperature.sample_time.physical_time",
+    "blood-glucose":                       "blood_glucose.sample_time.physical_time",
+    "weight":                              "weight.sample_time.physical_time",
+    "body-fat":                            "body_fat.sample_time.physical_time",
+    "height":                              "height.sample_time.physical_time",
+    "food":                                "food.sample_time.physical_time",
+    "hydration-log":                       "hydration_log.sample_time.physical_time",
+    # daily
+    "daily-vo2-max":                       "daily_vo2_max.date",
+    "daily-resting-heart-rate":            "daily_resting_heart_rate.date",
+    "daily-heart-rate-zones":              "daily_heart_rate_zones.date",
+    "daily-heart-rate-variability":        "daily_heart_rate_variability.date",
+    "daily-oxygen-saturation":             "daily_oxygen_saturation.date",
+    "daily-respiratory-rate":              "daily_respiratory_rate.date",
+    "daily-sleep-temperature-derivations": "daily_sleep_temperature_derivations.date",
+    "respiratory-rate-sleep-summary":      "respiratory_rate_sleep_summary.date",
+    "nutrition-log":                       "nutrition_log.date",
+}
+
+
 class GoogleHealth(HealthProvider):
     """Google Health API v4 provider (Fitbit-backed).
 
@@ -242,18 +289,30 @@ def _validate_dates(start_date: str, end_date: str) -> None:
 def _fetch_datapoints(
     token: str, data_type: str, start_date: str, end_date: str
 ) -> list[dict]:
-    """Paginate the dataPoints list endpoint with server-side date filtering."""
-    url     = f"{_BASE}/dataTypes/{data_type}/dataPoints"
-    headers = {"Authorization": f"Bearer {token}"}
-    points  = []
+    """Paginate the dataPoints list endpoint using the API filter parameter.
+
+    Date filtering uses the filter query param per the discovery doc:
+      https://health.googleapis.com/$discovery/rest?version=v4
+    Sleep/exercise max page size is 25; other types max at 10000.
+    """
+    url        = f"{_BASE}/dataTypes/{data_type}/dataPoints"
+    headers    = {"Authorization": f"Bearer {token}"}
+    points     = []
     page_token = None
 
+    ts_field = _FILTER_FIELD.get(data_type)
+    if ts_field and ts_field.endswith(".date"):
+        filter_expr = f'{ts_field} >= "{start_date}" AND {ts_field} < "{end_date}"'
+    elif ts_field:
+        filter_expr = (f'{ts_field} >= "{start_date}T00:00:00Z"'
+                       f' AND {ts_field} < "{end_date}T23:59:59Z"')
+    else:
+        filter_expr = None
+
     while True:
-        params: dict = {
-            "pageSize":  1000,
-            "startTime": f"{start_date}T00:00:00Z",
-            "endTime":   f"{end_date}T23:59:59Z",
-        }
+        params: dict = {"pageSize": 1000}
+        if filter_expr:
+            params["filter"] = filter_expr
         if page_token:
             params["pageToken"] = page_token
 

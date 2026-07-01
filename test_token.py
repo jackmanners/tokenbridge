@@ -1,7 +1,9 @@
 """
 test_token.py - personal dev script, not intended for end users.
 
-Fetches sleep and respiratory rate for a single user and prints a preview.
+Checks that tokens are valid and data is fetchable for both Google Health
+and Withings providers. Prints a brief summary per provider.
+
 Requires the Python package to be installed:
     cd python && pip install -e .
 
@@ -12,29 +14,44 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "python"))
 
-from tokenbridge import TokenBridge, GoogleHealth
+from datetime import date, datetime, timedelta, timezone
+from tokenbridge import TokenBridge
 
-USER_ID    = "your_user_id"
-START_DATE = "2026-05-01"
-END_DATE   = "2026-06-18"
+USER_ID = "jackmanners"
+END     = date.today().isoformat()
+START   = (date.today() - timedelta(days=7)).isoformat()
 
 tb = TokenBridge()
-gh = GoogleHealth(tb)
+print(f"TokenBridge: {tb.url}")
+print(f"User:        {USER_ID}")
+print(f"Window:      {START} → {END}\n")
 
-print(f"Fetching sleep for {USER_ID} ({START_DATE} → {END_DATE}) ...")
-sleep = gh.fetch_sleep(USER_ID, START_DATE, END_DATE)
-print(f"  {len(sleep)} sessions")
-if sleep:
-    print("  Keys:", list(sleep[0].keys())[:6], "...")
+for provider, data_type in (("google-health", "sleep"), ("withings", "sleep-summary")):
+    try:
+        records = tb.fetch(USER_ID, data_type, START, END, provider=provider)
+        print(f"[OK]   {provider:20s}  {len(records)} records")
 
-print(f"\nFetching respiratory rate for {USER_ID} ...")
-rr = gh.fetch_respiratory_rate(USER_ID, START_DATE, END_DATE)
-print(f"  {len(rr)} measurements")
-if rr:
-    print("  Keys:", list(rr[0].keys())[:6], "...")
+        if records:
+            if provider == "withings":
+                latest = max(records, key=lambda r: r.get("startdate", 0))
+                start  = datetime.fromtimestamp(latest["startdate"], timezone.utc).strftime("%Y-%m-%d %H:%M")
+                end    = datetime.fromtimestamp(latest["enddate"],   timezone.utc).strftime("%Y-%m-%d %H:%M")
+                d      = latest.get("data") or {}
+                mins    = d.get("total_sleep_time")
+                ahi    = d.get("apnea_hypopnea_index")
+                print(f"       latest:   {start} → {end}")
+                print(f"       asleep: {f'{mins//3600}h {(mins%3600)//3600}m' if mins is not None else 'n/a'}"
+                      f"   AHI: {ahi if ahi is not None else 'n/a'}")
+            else:
+                latest = max(records, key=lambda r: r.get("sleep.interval.endTime", ""))
+                start  = latest.get("sleep.interval.startTime", "n/a")
+                end    = latest.get("sleep.interval.endTime",   "n/a")
+                mins   = latest.get("sleep.summary.minutesAsleep")
+                print(f"       latest:   {start} → {end}")
+                print(f"       asleep:   {f'{int(mins)//60}h {int(mins)%60}m' if mins else 'n/a'}")
 
-print(f"\nSummary:")
-s = gh.summary(USER_ID, START_DATE, END_DATE)
-print(f"  Sleep:  {s['sleep']['n']} sessions, {s['sleep']['coverage_pct']}% coverage")
-print(f"  RR:     {s['respiratory_rate']['n']} measurements, "
-      f"{s['respiratory_rate']['coverage_pct']}% coverage")
+    except Exception as e:
+        print(f"[FAIL] {provider:20s}  {e}")
+        if hasattr(e, "response") and e.response is not None:
+            print(f"       {e.response.text[:300]}")
+    print()
