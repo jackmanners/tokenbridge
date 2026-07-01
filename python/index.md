@@ -55,6 +55,24 @@ tb.oura.fetch("p001", "daily-readiness", start, end)
 tb.fetch("p001", "sleep", start, end, provider="withings")
 ```
 
+## Reports
+
+```python
+import requests
+
+resp = requests.post(
+    f"{tb.url}/sleep-report",
+    headers={"Authorization": f"Bearer {tb.api_key}"},
+    json={"label": "P001", "template": "sleep-bp", "data": {
+        "withings-summary": sleep_records,
+        "withings-bp":      bp_records,
+    }},
+)
+open("report_p001.html", "wb").write(resp.content)
+```
+
+→ [Reports & template authoring](../reports.md)
+
 ## See also
 
 - [Getting Started](../getting-started.md)

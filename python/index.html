@@ -745,6 +745,21 @@
 <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;p001&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep&quot;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;withings&quot;</span><span class="p">)</span>
 </code></pre></div>
 
+<h2 id="reports">Reports<a class="headerlink" href="#reports" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+<span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tb</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">/sleep-report&quot;</span><span class="p">,</span>
+    <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">tb</span><span class="o">.</span><span class="n">api_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+    <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;P001&quot;</span><span class="p">,</span> <span class="s2">&quot;template&quot;</span><span class="p">:</span> <span class="s2">&quot;sleep-bp&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;withings-summary&quot;</span><span class="p">:</span> <span class="n">sleep_records</span><span class="p">,</span>
+        <span class="s2">&quot;withings-bp&quot;</span><span class="p">:</span>      <span class="n">bp_records</span><span class="p">,</span>
+    <span class="p">}},</span>
+<span class="p">)</span>
+<span class="nb">open</span><span class="p">(</span><span class="s2">&quot;report_p001.html&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</code></pre></div>
+
+<p>→ <a href="../reports/">Reports &amp; template authoring</a></p>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../getting-started/">Getting Started</a></li>
@@ -930,6 +945,14 @@
             class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
             data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#quick-start');">
             Quick start
+        </a>
+        
+
+        
+        <a href="#reports"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#reports');">
+            Reports
         </a>
         
 
