@@ -176,9 +176,9 @@ tb_auth_urls <- function(user_ids, provider = tb_get_provider(), env_file = ".en
 #' @param provider   Provider ID. Defaults to tb_get_provider().
 #'   Pass explicitly to override for a single call without changing the session default:
 #'   \code{tb_fetch("p001", "sleep", s, e, provider = "withings")}
-#' @param sleepscan  Participant identifier for SleepScan token lookup (Withings only).
-#'   Pass an email string, a Withings user ID (integer), or a SleepScan participant ID.
-#'   When set, the Withings token is retrieved via SleepScan instead of TokenBridge.
+#' @param sleepscan  If \code{TRUE}, resolve the Withings token via SleepScan using
+#'   \code{user_id} as the lookup key (email, Withings user ID as integer, or
+#'   SleepScan participant ID). Takes priority over \code{token=}.
 #'   Requires \code{SLEEPSCAN_API_KEY} in the environment or \code{sleepscan_key=}.
 #' @param sleepscan_key  SleepScan API key. Falls back to \code{SLEEPSCAN_API_KEY} env var.
 #' @param env_file   Path to .env file (default ".env")

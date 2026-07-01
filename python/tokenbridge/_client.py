@@ -192,7 +192,7 @@ class TokenBridge:
         *,
         provider: Optional[str] = None,
         token: Optional[str] = None,
-        sleepscan: "str | int | None" = None,
+        sleepscan: bool = False,
     ) -> list[dict]:
         """Fetch health data for a participant.
 
@@ -218,12 +218,11 @@ class TokenBridge:
             token: Pre-fetched access token.  Pass when fetching multiple
                 types for the same participant to avoid repeated TokenBridge
                 round-trips.  Obtain with `tb.get_token(user_id)`.
-            sleepscan: Participant identifier for SleepScan token lookup
-                (Withings provider only).  Pass an email string, a Withings
-                user ID (int), or a SleepScan participant ID string.  When
-                set, the token is retrieved from SleepScan instead of
-                TokenBridge.  Requires `sleepscan_key` on the client or
-                `SLEEPSCAN_API_KEY` in the environment.
+            sleepscan: If ``True``, resolve the Withings token via SleepScan
+                using ``user_id`` as the lookup key (email, Withings user ID
+                as an int, or SleepScan participant ID string).  Takes
+                priority over ``token=``.  Requires ``sleepscan_key`` on the
+                client or ``SLEEPSCAN_API_KEY`` in the environment.
 
         Returns:
             List of dicts, one per data point.  Returns an empty list if no
@@ -245,8 +244,8 @@ class TokenBridge:
             ```
         """
         p = provider or self.provider
-        if sleepscan is not None:
-            token = self._sleepscan_token(sleepscan)
+        if sleepscan:
+            token = self._sleepscan_token(user_id)
         return self._get_provider(p).fetch(user_id, data_type, start_date, end_date, token=token)
 
     # ── Auth URL helpers ──────────────────────────────────────────────────────
@@ -404,18 +403,18 @@ class _ProviderProxy:
         end_date: str,
         *,
         token=None,
-        sleepscan=None,
+        sleepscan: bool = False,
     ) -> list[dict]:
         """Fetch data using this proxy's pre-bound provider.
 
         Args:
-            user_id: TokenBridge participant ID.
+            user_id: Participant ID (or SleepScan lookup key when ``sleepscan=True``).
             data_type: Kebab-case data type ID.
             start_date: `"YYYY-MM-DD"`.
             end_date: `"YYYY-MM-DD"`.
             token: Pre-fetched access token.
-            sleepscan: Participant identifier for SleepScan token lookup.
-                See `TokenBridge.fetch()` for full details.
+            sleepscan: If ``True``, resolve the token via SleepScan using
+                ``user_id`` as the lookup key.  See ``TokenBridge.fetch()``.
 
         Returns:
             List of dicts, one per data point.

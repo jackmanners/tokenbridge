@@ -75,9 +75,9 @@ WT_DATA_TYPES <- list(
 #' @param start_date "YYYY-MM-DD"
 #' @param end_date   "YYYY-MM-DD"
 #' @param token      Pre-fetched access token (skips TokenBridge round-trip)
-#' @param sleepscan  Participant identifier for SleepScan token lookup.
-#'   Pass an email string, a Withings user ID (integer), or a SleepScan participant ID.
-#'   When set, the token is retrieved via SleepScan instead of TokenBridge.
+#' @param sleepscan  If \code{TRUE}, resolve the Withings token via SleepScan using
+#'   \code{user_id} as the lookup key (email, Withings user ID as integer, or
+#'   SleepScan participant ID). Takes priority over \code{token=}.
 #'   Requires \code{SLEEPSCAN_API_KEY} in the environment or \code{sleepscan_key=}.
 #' @param sleepscan_key  SleepScan API key. Falls back to \code{SLEEPSCAN_API_KEY} env var.
 #' @param env_file   Path to .env file (default ".env")
@@ -98,12 +98,10 @@ wt_fetch <- function(user_id, data_type, start_date, end_date,
     )
   }
 
-  if (is.null(token)) {
-    if (!is.null(sleepscan)) {
-      token <- .wt_sleepscan_token(sleepscan, sleepscan_key)
-    } else {
-      token <- tb_get_token(user_id, provider = "withings", env_file = env_file)
-    }
+  if (isTRUE(sleepscan)) {
+    token <- .wt_sleepscan_token(user_id, sleepscan_key)
+  } else if (is.null(token)) {
+    token <- tb_get_token(user_id, provider = "withings", env_file = env_file)
   }
 
   .wt_fetch_all(token, data_type, start_date, end_date)
