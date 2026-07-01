@@ -110,3 +110,11 @@ You need a free [Supabase](https://supabase.com) account. Setup takes around 20�
 | `oura` | Supported | Requires Oura Ring (Gen 2 or Gen 3) |
 
 Full list of data types, units, and endpoint notes: [Providers](providers/index.md)
+
+---
+
+## Reports
+
+Generate self-contained HTML reports from participant data — sleep summaries, blood pressure over time, or combined views. Reports are rendered server-side from stored templates.
+
+→ [Reports & template authoring](reports.md)

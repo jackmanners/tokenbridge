@@ -75,11 +75,19 @@ WT_DATA_TYPES <- list(
 #' @param start_date "YYYY-MM-DD"
 #' @param end_date   "YYYY-MM-DD"
 #' @param token      Pre-fetched access token (skips TokenBridge round-trip)
+#' @param sleepscan  Participant identifier for SleepScan token lookup.
+#'   Pass an email string, a Withings user ID (integer), or a SleepScan participant ID.
+#'   When set, the token is retrieved via SleepScan instead of TokenBridge.
+#'   Requires \code{SLEEPSCAN_API_KEY} in the environment or \code{sleepscan_key=}.
+#' @param sleepscan_key  SleepScan API key. Falls back to \code{SLEEPSCAN_API_KEY} env var.
 #' @param env_file   Path to .env file (default ".env")
 #' @return data.frame, one row per record
 #' @export
 wt_fetch <- function(user_id, data_type, start_date, end_date,
-                     token = NULL, env_file = ".env") {
+                     token         = NULL,
+                     sleepscan     = NULL,
+                     sleepscan_key = NULL,
+                     env_file      = ".env") {
   .wt_validate_dates(start_date, end_date)
 
   if (!data_type %in% names(WT_DATA_TYPES)) {
@@ -91,13 +99,32 @@ wt_fetch <- function(user_id, data_type, start_date, end_date,
   }
 
   if (is.null(token)) {
-    token <- tb_get_token(user_id, provider = "withings", env_file = env_file)
+    if (!is.null(sleepscan)) {
+      token <- .wt_sleepscan_token(sleepscan, sleepscan_key)
+    } else {
+      token <- tb_get_token(user_id, provider = "withings", env_file = env_file)
+    }
   }
 
   .wt_fetch_all(token, data_type, start_date, end_date)
 }
 
 # ── Internal ───────────────────────────────────────────────────────────────────
+
+.wt_sleepscan_token <- function(sleepscan, sleepscan_key = NULL) {
+  key <- sleepscan_key %||% Sys.getenv("SLEEPSCAN_API_KEY")
+  if (!nchar(key))
+    stop("sleepscan= requires SLEEPSCAN_API_KEY in environment or sleepscan_key= argument.",
+         call. = FALSE)
+  client <- ss_client(key)
+  if (is.numeric(sleepscan)) {
+    ss_get_token(client, withings_user_id = as.integer(sleepscan))
+  } else if (grepl("@", sleepscan, fixed = TRUE)) {
+    ss_get_token(client, email = sleepscan)
+  } else {
+    ss_get_token(client, participant_id = sleepscan)
+  }
+}
 
 .wt_validate_dates <- function(start_date, end_date) {
   fmt <- "%Y-%m-%d"

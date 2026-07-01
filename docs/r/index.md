@@ -56,6 +56,22 @@ names(WT_DATA_TYPES)
 names(OU_DATA_TYPES)
 ```
 
+## Reports
+
+```r
+resp <- httr::POST(
+  paste0(Sys.getenv("TOKENBRIDGE_URL"), "/sleep-report"),
+  httr::add_headers(Authorization = paste("Bearer", Sys.getenv("TOKENBRIDGE_API_KEY"))),
+  body   = list(label = "P001", template = "sleep-bp",
+                data = list("withings-summary" = sleep_df,
+                            "withings-bp"      = bp_df)),
+  encode = "json"
+)
+writeBin(httr::content(resp, as = "raw"), "report_p001.html")
+```
+
+→ [Reports & template authoring](../reports.md)
+
 ## See also
 
 - [Getting Started](../getting-started.md)

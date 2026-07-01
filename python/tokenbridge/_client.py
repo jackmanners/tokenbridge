@@ -78,6 +78,7 @@ class TokenBridge:
         api_key: Optional[str] = None,
         env_file: str = ".env",
         provider: str = "google-health",
+        sleepscan_key: Optional[str] = None,
     ):
         """Initialise the TokenBridge client.
 
@@ -93,6 +94,10 @@ class TokenBridge:
                 Reads `TOKENBRIDGE_API_KEY` from env if not provided.
             env_file: Path to the `.env` file to load.  Default `".env"`.
             provider: Default provider ID.  Default `"google-health"`.
+            sleepscan_key: SleepScan API key. If provided (or set via
+                `SLEEPSCAN_API_KEY` env var), passing `sleepscan=` to
+                `fetch()` will retrieve the Withings token via SleepScan
+                instead of TokenBridge.
 
         Raises:
             RuntimeError: If `TOKENBRIDGE_URL` or `TOKENBRIDGE_API_KEY` cannot
@@ -123,6 +128,13 @@ class TokenBridge:
             raise RuntimeError(
                 "TOKENBRIDGE_API_KEY not set - run `python -m tokenbridge` to configure."
             )
+
+        _ss_key = sleepscan_key or os.environ.get("SLEEPSCAN_API_KEY", "")
+        if _ss_key:
+            from tokenbridge.sleepscan import SleepScan
+            self._sleepscan: Optional["SleepScan"] = SleepScan(_ss_key)
+        else:
+            self._sleepscan = None
 
         self._provider_cache: dict = {}
 
@@ -180,6 +192,7 @@ class TokenBridge:
         *,
         provider: Optional[str] = None,
         token: Optional[str] = None,
+        sleepscan: "str | int | None" = None,
     ) -> list[dict]:
         """Fetch health data for a participant.
 
@@ -205,6 +218,12 @@ class TokenBridge:
             token: Pre-fetched access token.  Pass when fetching multiple
                 types for the same participant to avoid repeated TokenBridge
                 round-trips.  Obtain with `tb.get_token(user_id)`.
+            sleepscan: Participant identifier for SleepScan token lookup
+                (Withings provider only).  Pass an email string, a Withings
+                user ID (int), or a SleepScan participant ID string.  When
+                set, the token is retrieved from SleepScan instead of
+                TokenBridge.  Requires `sleepscan_key` on the client or
+                `SLEEPSCAN_API_KEY` in the environment.
 
         Returns:
             List of dicts, one per data point.  Returns an empty list if no
@@ -226,6 +245,8 @@ class TokenBridge:
             ```
         """
         p = provider or self.provider
+        if sleepscan is not None:
+            token = self._sleepscan_token(sleepscan)
         return self._get_provider(p).fetch(user_id, data_type, start_date, end_date, token=token)
 
     # ── Auth URL helpers ──────────────────────────────────────────────────────
@@ -304,6 +325,18 @@ class TokenBridge:
 
     # ── Internal ──────────────────────────────────────────────────────────────
 
+    def _sleepscan_token(self, sleepscan: "str | int") -> str:
+        if self._sleepscan is None:
+            raise RuntimeError(
+                "sleepscan= requires a SleepScan API key. "
+                "Pass sleepscan_key= to TokenBridge() or set SLEEPSCAN_API_KEY."
+            )
+        if isinstance(sleepscan, int):
+            return self._sleepscan.get_token(withings_user_id=sleepscan)
+        if "@" in str(sleepscan):
+            return self._sleepscan.get_token(email=str(sleepscan))
+        return self._sleepscan.get_token(participant_id=str(sleepscan))
+
     def _get_provider(self, provider_id: str):
         """Lazy-init and cache provider instances."""
         if provider_id not in self._provider_cache:
@@ -371,6 +404,7 @@ class _ProviderProxy:
         end_date: str,
         *,
         token=None,
+        sleepscan=None,
     ) -> list[dict]:
         """Fetch data using this proxy's pre-bound provider.
 
@@ -380,13 +414,15 @@ class _ProviderProxy:
             start_date: `"YYYY-MM-DD"`.
             end_date: `"YYYY-MM-DD"`.
             token: Pre-fetched access token.
+            sleepscan: Participant identifier for SleepScan token lookup.
+                See `TokenBridge.fetch()` for full details.
 
         Returns:
             List of dicts, one per data point.
         """
         return self._tb.fetch(
             user_id, data_type, start_date, end_date,
-            provider=self._provider_id, token=token,
+            provider=self._provider_id, token=token, sleepscan=sleepscan,
         )
 
     def __getattr__(self, name: str):

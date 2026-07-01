@@ -176,18 +176,26 @@ tb_auth_urls <- function(user_ids, provider = tb_get_provider(), env_file = ".en
 #' @param provider   Provider ID. Defaults to tb_get_provider().
 #'   Pass explicitly to override for a single call without changing the session default:
 #'   \code{tb_fetch("p001", "sleep", s, e, provider = "withings")}
+#' @param sleepscan  Participant identifier for SleepScan token lookup (Withings only).
+#'   Pass an email string, a Withings user ID (integer), or a SleepScan participant ID.
+#'   When set, the Withings token is retrieved via SleepScan instead of TokenBridge.
+#'   Requires \code{SLEEPSCAN_API_KEY} in the environment or \code{sleepscan_key=}.
+#' @param sleepscan_key  SleepScan API key. Falls back to \code{SLEEPSCAN_API_KEY} env var.
 #' @param env_file   Path to .env file (default ".env")
 #' @return data.frame, one row per data point
 #' @export
 tb_fetch <- function(user_id, data_type, start_date, end_date,
-                     token    = NULL,
-                     provider = tb_get_provider(),
-                     env_file = ".env") {
+                     token        = NULL,
+                     provider     = tb_get_provider(),
+                     sleepscan    = NULL,
+                     sleepscan_key = NULL,
+                     env_file     = ".env") {
   switch(provider,
     "google-health" = gh_fetch(user_id, data_type, start_date, end_date,
                                token = token, env_file = env_file),
     "withings"      = wt_fetch(user_id, data_type, start_date, end_date,
-                               token = token, env_file = env_file),
+                               token = token, sleepscan = sleepscan,
+                               sleepscan_key = sleepscan_key, env_file = env_file),
     stop("Unknown provider '", provider, "'. See docs/providers/index.md.", call. = FALSE)
   )
 }

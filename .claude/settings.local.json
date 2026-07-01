@@ -17,7 +17,8 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:asiffer.github.io)",
       "Bash(Get-Content C:\\\\GitRepos\\\\tokenbridge\\\\.env)",
-      "Bash(Get-Content C:\\\\GitRepos\\\\tokenbridge\\\\.env.local)"
+      "Bash(Get-Content C:\\\\GitRepos\\\\tokenbridge\\\\.env.local)",
+      "WebFetch(domain:sleepscan.app)"
     ]
   }
 }

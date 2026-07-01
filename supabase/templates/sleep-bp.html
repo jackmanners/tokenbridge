@@ -26,14 +26,20 @@
     .rpt-sub{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#475569;margin-top:1px}
     .rpt-meta{font-size:10px;color:#475569;text-align:right;line-height:1.6;font-family:'JetBrains Mono',ui-monospace,monospace}
     .page-wrap{max-width:1200px;margin:0 auto;padding:20px 24px}
-    .kpi-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-    .kpi-group{display:contents}
-    .kpi{background:var(--c-card);border:1px solid var(--c-border);border-radius:8px;padding:10px 16px;box-shadow:var(--shadow-sm)}
-    .kpi b{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--c-muted);margin-bottom:3px}
-    .kpi span{font-size:16px;font-weight:700;color:var(--c-text)}
-    .kpi.warn span{color:#dc2626}
-    .kpi.caution span{color:#d97706}
-    .kpi-divider{width:1px;background:var(--c-border);margin:0 4px;align-self:stretch;border-radius:1px}
+    .kpi-section{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+    .kpi-bar{background:var(--c-card);border:1px solid var(--c-border);border-radius:8px;box-shadow:var(--shadow-sm);padding:9px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    .kpi-bar-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--c-muted);white-space:nowrap;min-width:62px;flex-shrink:0;border-right:1px solid var(--c-border);padding-right:12px;align-self:stretch;display:flex;align-items:center}
+    .kpi-overview{background:#f8fafc;font-size:11px;color:#475569;gap:20px}
+    .kpi-overview .kpi-ov-item{display:flex;gap:6px;align-items:center}
+    .kpi-overview .kpi-ov-label{font-weight:600;color:#94a3b8;text-transform:uppercase;font-size:10px;letter-spacing:.05em}
+    .kpi-overview .kpi-ov-val{font-weight:600;font-family:'JetBrains Mono',monospace;font-size:11px}
+    .kpi-chips{display:flex;gap:16px;flex-wrap:wrap;flex:1;align-items:center}
+    .kpi-chip{display:flex;flex-direction:column;gap:1px}
+    .kpi-chip b{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8}
+    .kpi-chip span{font-size:14px;font-weight:700;color:var(--c-text);white-space:nowrap}
+    .kpi-chip.warn span{color:#dc2626}
+    .kpi-chip.caution span{color:#d97706}
+    .kpi-chip-sep{width:1px;background:var(--c-border);align-self:stretch;margin:0 4px}
     .btn{border:1px solid var(--c-border);background:var(--c-card);padding:5px 12px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:500;color:var(--c-text);transition:background .12s;font-family:'Inter',system-ui,sans-serif;display:inline-flex;align-items:center;gap:4px;text-decoration:none}
     .btn:hover{background:var(--c-bg)}
     .card{background:var(--c-card);border:1px solid var(--c-border);border-radius:var(--radius);box-shadow:var(--shadow-sm);margin-bottom:14px;overflow:hidden}
@@ -122,7 +128,7 @@
 </div>
 
 <div class="page-wrap">
-  <div class="kpi-row" id="kpi-container"></div>
+  <div class="kpi-section" id="kpi-container"></div>
 
   <!-- Sleep timing + BP: stacked with shared x-axis sync -->
   <div class="card">
@@ -144,15 +150,13 @@
     <div class="card-head">
       <div>
         <h2>&#x2764; Blood Pressure Over Time</h2>
-        <div class="card-hint">Systolic / Diastolic with hypertension thresholds. X-axis synced with sleep timing above.</div>
+        <div class="card-hint">X-axis synced with sleep timing above &mdash; zoom or pan either chart.</div>
       </div>
     </div>
     <div class="legend-row">
       <div class="legend-item"><div class="legend-swatch" style="background:#dc2626"></div>Systolic</div>
       <div class="legend-item"><div class="legend-swatch" style="background:#3b82f6"></div>Diastolic</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#10b981"></div>Heart Rate (right axis)</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#f87171;opacity:.6"></div>Stage 1 (130/80)</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#dc2626;opacity:.6"></div>Stage 2 (140/90)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#10b981;opacity:.6"></div>Heart Rate (right axis)</div>
     </div>
     <div style="padding:0 4px 4px">
       <div id="bp-plot"></div>
@@ -272,6 +276,7 @@ function applyFilters() {
 
 function updateReport(data) {
   var sorted = data.slice().sort(function(a,b) { return a.startdate_utc - b.startdate_utc; });
+  _sharedXRange = computeSharedXRange(sorted, bpRecords);
   renderKpis(sorted);
   renderTimingPlot(sorted);
   if (bpRecords.length) renderBpPlot();
@@ -299,41 +304,87 @@ function minsFromNoon(date, tz) {
 function fmtDurHM(mins) { var h=Math.floor(mins/60), m=Math.round(mins%60); return (h>0?h+'h ':'') + m + 'm'; }
 function fmtClock(date, tz) { return fmtTZ(date, tz, {hour:'2-digit',minute:'2-digit'}); }
 
+// ── Shared x-axis range ───────────────────────────────────────────────────────
+var _sharedXRange = null;
+
+function computeSharedXRange(sleepData, bpData) {
+  var ms = [];
+  sleepData.forEach(function(d) { ms.push(d.startdate_utc.getTime(), d.enddate_utc.getTime()); });
+  bpData.forEach(function(r)    { ms.push(r.dateObj.getTime()); });
+  if (!ms.length) return null;
+  var pad = 86400000 * 2;
+  return [
+    new Date(Math.min.apply(null,ms) - pad).toISOString().slice(0,10),
+    new Date(Math.max.apply(null,ms) + pad).toISOString().slice(0,10),
+  ];
+}
+
 // ── KPIs ──────────────────────────────────────────────────────────────────────
 function renderKpis(data) {
-  var kpis = [];
+  var html = '';
+  var allDatesMs = [];
 
+  // ── overview bar ─────────────────────────────────────────────────────────────
+  var overviewItems = [];
+  if (data.length) {
+    var minSleep = new Date(Math.min.apply(null,data.map(function(d){return d.startdate_utc.getTime();})));
+    var maxSleep = new Date(Math.max.apply(null,data.map(function(d){return d.enddate_utc.getTime();})));
+    allDatesMs.push(minSleep.getTime(), maxSleep.getTime());
+    overviewItems.push({label:'Sleep', val: minSleep.toISOString().slice(0,10) + ' \u2013 '+ maxSleep.toISOString().slice(0,10)});
+    overviewItems.push({label:'Nights', val: String(data.length)});
+  }
+  if (bpRecords.length) {
+    var minBp = bpRecords[0].dateObj, maxBp = bpRecords[bpRecords.length-1].dateObj;
+    allDatesMs.push(minBp.getTime(), maxBp.getTime());
+    overviewItems.push({label:'BP Range', val: minBp.toISOString().slice(0,10) + ' \u2013 '+ maxBp.toISOString().slice(0,10)});
+    overviewItems.push({label:'Readings', val: String(bpRecords.length)});
+  }
+  html += '<div class="kpi-bar kpi-overview">' +
+    overviewItems.map(function(o) {
+      return '<div class="kpi-ov-item"><span class="kpi-ov-label">' + o.label + '</span><span class="kpi-ov-val">' + o.val + '</span></div>';
+    }).join('<div style="width:1px;background:#e2e8f0;align-self:stretch;margin:0 4px"></div>') +
+  '</div>';
+
+  // ── sleep bar ─────────────────────────────────────────────────────────────────
   if (data.length) {
     var durations = data.map(function(d){return d.total_sleep_time/3600;}).filter(function(v){return v!=null&&!isNaN(v);});
     var effs      = data.map(function(d){return d.sleep_efficiency*100;}).filter(function(v){return v!=null&&!isNaN(v);});
     var ahis      = data.map(function(d){return d.apnea_hypopnea_index;}).filter(function(v){return v!=null&&!isNaN(v);});
-    var mEff = mean(effs), mAhi = mean(ahis);
-    var minDate = new Date(Math.min.apply(null,data.map(function(d){return d.startdate_utc.getTime();})));
-    var maxDate = new Date(Math.max.apply(null,data.map(function(d){return d.enddate_utc.getTime();})));
-    kpis.push({label:'Sleep Range',  value:minDate.toISOString().slice(0,10) + ' – ' + maxDate.toISOString().slice(0,10), small:true});
-    kpis.push({label:'Nights',       value:String(data.length)});
-    kpis.push({label:'Avg Duration', value:mean(durations).toFixed(1) + ' h'});
-    kpis.push({label:'Sleep Eff.',   value:mEff.toFixed(1) + ' ± ' + std(effs,mEff).toFixed(1) + ' %'});
-    kpis.push({label:'AHI',          value:mAhi.toFixed(1)});
+    var mEff = mean(effs), sdEff = std(effs, mEff);
+    var chips = [
+      {label:'Avg Duration', val: mean(durations).toFixed(1) + ' h'},
+      {label:'Sleep Eff.',   val: mEff.toFixed(1) + ' \u00b1 ' + sdEff.toFixed(1) + ' %'},
+      {label:'AHI',          val: ahis.length ? mean(ahis).toFixed(1) : 'No data'},
+    ];
+    html += '<div class="kpi-bar"><div class="kpi-bar-label">&#128197; Sleep</div><div class="kpi-chips">' +
+      chips.map(function(c) {
+        return '<div class="kpi-chip"><b>' + c.label + '</b><span>' + c.val + '</span></div>';
+      }).join('<div class="kpi-chip-sep"></div>') +
+    '</div></div>';
   }
 
+  // ── bp bar ────────────────────────────────────────────────────────────────────
   if (bpRecords.length) {
     var sys  = bpRecords.map(function(r){return r.systolic;});
     var dia  = bpRecords.map(function(r){return r.diastolic;});
+    var pul  = bpRecords.map(function(r){return r.heart_pulse;}).filter(function(v){return v!=null&&!isNaN(v);});
     var mSys = mean(sys), mDia = mean(dia);
     var cls  = mSys >= 140 || mDia >= 90 ? 'warn' : mSys >= 130 || mDia >= 80 ? 'caution' : '';
-    var clsLabel = mSys >= 180 || mDia >= 120 ? 'Crisis' : mSys >= 140 || mDia >= 90 ? 'Stage 2 HTN' : mSys >= 130 || mDia >= 80 ? 'Stage 1 HTN' : mSys >= 120 ? 'Elevated' : 'Normal';
-    if (kpis.length) kpis.push({divider:true});
-    kpis.push({label:'BP Readings',  value:String(bpRecords.length)});
-    kpis.push({label:'Avg Systolic', value:mSys.toFixed(0) + ' mmHg', cls:cls});
-    kpis.push({label:'Avg Diastolic',value:mDia.toFixed(0) + ' mmHg'});
-    kpis.push({label:'BP Class',     value:clsLabel, cls:cls});
+    var clsLabel = mSys >= 180 || mDia >= 120 ? 'Crisis' : mSys >= 140 || mDia >= 90 ? 'Stage 2' : mSys >= 130 || mDia >= 80 ? 'Stage 1' : mSys >= 120 ? 'Elevated' : 'Normal';
+    var bpChips = [
+      {label:'Avg Systolic',  val: mSys.toFixed(0) + ' mmHg', cls: cls},
+      {label:'Avg Diastolic', val: mDia.toFixed(0) + ' mmHg'},
+      {label:'Classification',val: clsLabel, cls: cls},
+    ];
+    if (pul.length) bpChips.push({label:'Avg HR', val: mean(pul).toFixed(0) + ' bpm'});
+    html += '<div class="kpi-bar"><div class="kpi-bar-label">&#x2764; BP</div><div class="kpi-chips">' +
+      bpChips.map(function(c) {
+        return '<div class="kpi-chip' + (c.cls ? ' ' + c.cls : '') + '"><b>' + c.label + '</b><span>' + c.val + '</span></div>';
+      }).join('<div class="kpi-chip-sep"></div>') +
+    '</div></div>';
   }
 
-  document.getElementById('kpi-container').innerHTML = kpis.map(function(k) {
-    if (k.divider) return '<div class="kpi-divider"></div>';
-    return '<div class="kpi' + (k.cls?' '+k.cls:'') + '"><b>' + k.label + '</b><span style="' + (k.small?'font-size:12px':'') + '">' + k.value + '</span></div>';
-  }).join('');
+  document.getElementById('kpi-container').innerHTML = html;
 }
 
 // ── Timing groups (returns dateKey as x) ──────────────────────────────────────
@@ -377,7 +428,7 @@ function buildTimingGroups(data) {
       if (iBedStart >= iBedEnd) return;
       var dateKey = fmtTZ(new Date(Wend), tz, {year:'numeric',month:'2-digit',day:'2-digit'});
       if (!dateKey) return;
-      if (!groups[dateKey]) { groups[dateKey] = {dateKey:dateKey, sessions:[], originalSessions:[], ahi:0}; groupOrder.push(dateKey); }
+      if (!groups[dateKey]) { groups[dateKey] = {dateKey:dateKey, sessions:[], originalSessions:[], ahi:null}; groupOrder.push(dateKey); }
       var g = groups[dateKey];
       var bedBase = (iBedStart-W)/60000, bedDur = (iBedEnd-iBedStart)/60000;
       var iSleepStart = Math.max(sleepStartMs,W), iSleepEnd = Math.min(sleepEndMs,Wend);
@@ -385,7 +436,7 @@ function buildTimingGroups(data) {
       if (iSleepStart < iSleepEnd) { sleepBase = (iSleepStart-W)/60000; sleepDur = (iSleepEnd-iSleepStart)/60000; }
       g.sessions.push({bedBase:bedBase,bedDur:bedDur,sleepBase:sleepBase,sleepDur:sleepDur});
       if (!g.originalSessions.some(function(s){return s.bedtime===origSession.bedtime;})) g.originalSessions.push(origSession);
-      if (typeof origSession.ahi === 'number' && origSession.ahi > g.ahi) g.ahi = origSession.ahi;
+      if (typeof origSession.ahi === 'number' && (g.ahi === null || origSession.ahi > g.ahi)) g.ahi = origSession.ahi;
     });
   });
   return groupOrder.sort().map(function(k){return groups[k];});
@@ -428,7 +479,7 @@ function renderTimingPlot(data) {
     font:{family:"'Inter',system-ui,sans-serif",size:10,color:'#64748b'},
     hovermode:'x', barmode:'overlay',
     yaxis:{title:{text:'Time of Day',font:{size:10,color:'#64748b'}},tickmode:'array',tickvals:TICK_VALS,ticktext:TICK_TEXT,range:[0,1440],showgrid:true,gridcolor:'#f1f5f9',zeroline:false},
-    xaxis:{type:'date',tickformat:'%b %e',tickangle:-45,automargin:true,showgrid:false,zeroline:false,tickfont:{size:9,color:'#94a3b8'},range:[scaffoldX[0],scaffoldX[scaffoldX.length-1]]},
+    xaxis:{type:'date',tickformat:'%b %e',tickangle:-45,automargin:true,showgrid:false,zeroline:false,tickfont:{size:9,color:'#94a3b8'},range:_sharedXRange || [scaffoldX[0],scaffoldX[scaffoldX.length-1]]},
     autosize:true, margin:{l:56,r:16,t:16,b:80}, height:420, showlegend:false,
     shapes:[{type:'line',xref:'paper',x0:0,x1:1,y0:720,y1:720,line:{color:'#334155',width:1},layer:'below'}]
   }, {responsive:true,displaylogo:false});
@@ -450,47 +501,30 @@ function renderBpPlot() {
   var pul   = bpRecords.map(function(r){return r.heart_pulse;});
   var hasPulse = pul.some(function(v){return v!=null;});
 
-  var mrkBase = {size:6, line:{width:1.5}};
-  var lnBase  = {width:2, shape:'linear'};
-
   var traces = [
-    {x:dates, y:sys, name:'Systolic', mode:'lines+markers',
-     line:Object.assign({},lnBase,{color:'#dc2626'}),
-     marker:Object.assign({},mrkBase,{color:'#fff',line:{color:'#dc2626',width:1.5}}),
-     hovertemplate:'<b>Systolic</b><br>%{x}<br><span style="font-weight:700">%{y:.0f} mmHg</span><extra></extra>'},
-    {x:dates, y:dia, name:'Diastolic', mode:'lines+markers',
-     line:Object.assign({},lnBase,{color:'#3b82f6'}),
-     marker:Object.assign({},mrkBase,{color:'#fff',line:{color:'#3b82f6',width:1.5}}),
-     hovertemplate:'<b>Diastolic</b><br>%{x}<br><span style="font-weight:700">%{y:.0f} mmHg</span><extra></extra>'},
-  ];
-
-  if (hasPulse) {
-    traces.push({x:dates, y:pul, name:'Heart Rate', mode:'lines+markers', yaxis:'y2',
-      line:Object.assign({},lnBase,{color:'#10b981',dash:'dot'}),
-      marker:Object.assign({},mrkBase,{color:'#fff',line:{color:'#10b981',width:1.5}}),
-      hovertemplate:'<b>Heart Rate</b><br>%{x}<br><span style="font-weight:700">%{y:.0f} bpm</span><extra></extra>'});
-  }
-
-  // Reference lines
-  var x0 = dates[0], x1 = dates[dates.length-1];
-  [[130,'#f87171'],[140,'#dc2626']].forEach(function(r) {
-    traces.push({x:[x0,x1],y:[r[0],r[0]],mode:'lines',line:{color:r[1],width:1,dash:'dash'},showlegend:false,hoverinfo:'skip'});
-  });
-  [[80,'#93c5fd'],[90,'#3b82f6']].forEach(function(r) {
-    traces.push({x:[x0,x1],y:[r[0],r[0]],mode:'lines',line:{color:r[1],width:1,dash:'dash'},showlegend:false,hoverinfo:'skip'});
-  });
+    // HR first so it renders behind sys/dia
+    hasPulse ? {x:dates, y:pul, name:'Heart Rate', mode:'lines', yaxis:'y2',
+      line:{width:1.5,color:'rgba(16,185,129,0.45)',shape:'spline',smoothing:0.8},
+      hovertemplate:'<b>Heart Rate</b><br>%{x|%Y-%m-%d}<br>%{y:.0f} bpm<extra></extra>'} : null,
+    {x:dates, y:sys, name:'Systolic', mode:'lines',
+     line:{width:2,color:'#dc2626',shape:'spline',smoothing:0.8},
+     hovertemplate:'<b>Systolic</b><br>%{x|%Y-%m-%d}<br>%{y:.0f} mmHg<extra></extra>'},
+    {x:dates, y:dia, name:'Diastolic', mode:'lines',
+     line:{width:2,color:'#3b82f6',shape:'spline',smoothing:0.8},
+     hovertemplate:'<b>Diastolic</b><br>%{x|%Y-%m-%d}<br>%{y:.0f} mmHg<extra></extra>'},
+  ].filter(Boolean);
 
   var layout = {
     paper_bgcolor:'transparent', plot_bgcolor:'transparent',
     font:{family:"'Inter',system-ui,sans-serif",size:10,color:'#64748b'},
     hovermode:'x unified',
-    xaxis:{type:'date',tickformat:'%b %e',tickangle:-45,automargin:true,showgrid:false,zeroline:false,tickfont:{size:9,color:'#94a3b8'}},
-    yaxis:{title:{text:'Blood Pressure (mmHg)',font:{size:10}},showgrid:true,gridcolor:'#f1f5f9',zeroline:false,showline:true,linecolor:'#e2e8f0',rangemode:'tozero'},
-    autosize:true, margin:{l:60,r:16,t:24,b:80}, height:320, showlegend:false,
+    xaxis:{type:'date',tickformat:'%b %e',tickangle:-45,automargin:true,showgrid:false,zeroline:false,tickfont:{size:9,color:'#94a3b8'},range:_sharedXRange||undefined},
+    yaxis:{title:{text:'mmHg',font:{size:10}},showgrid:true,gridcolor:'#f1f5f9',zeroline:false,showline:true,linecolor:'#e2e8f0'},
+    autosize:true, margin:{l:48,r:16,t:16,b:80}, height:280, showlegend:false,
   };
   if (hasPulse) {
-    layout.yaxis2 = {title:{text:'Heart Rate (bpm)',font:{size:10}},overlaying:'y',side:'right',showgrid:false,zeroline:false,showline:true,linecolor:'#e2e8f0'};
-    layout.margin.r = 60;
+    layout.yaxis2 = {title:{text:'bpm',font:{size:10}},overlaying:'y',side:'right',showgrid:false,zeroline:false,showline:true,linecolor:'#e2e8f0'};
+    layout.margin.r = 48;
   }
 
   var bpEl = document.getElementById('bp-plot');
@@ -565,7 +599,16 @@ function renderMetricsTable(data) {
   var tbody = table.querySelector('tbody');
   ALL_DATA_FIELDS.forEach(function(field) {
     var values = valid.map(function(r){return r[field];}).filter(function(v){return typeof v==='number'&&!isNaN(v);});
-    if (!values.length) return;
+    if (!values.length) {
+      // Always show AHI even when missing, so it's explicitly visible as not recorded
+      if (field === 'apnea_hypopnea_index') {
+        var tr = document.createElement('tr');
+        tr.className = 'data-row';
+        tr.innerHTML = '<td>Apnea-Hypopnea Index (events/hour)</td><td colspan="3" style="text-align:center;color:var(--c-muted);font-style:italic">Not recorded by device</td>';
+        tbody.appendChild(tr);
+      }
+      return;
+    }
     var displayName = fieldDisplayNameMap[field] || field.replace(/_/g,' ').replace(/\b\w/g,function(l){return l.toUpperCase();});
     if (DURATION_FIELDS_IN_SECONDS.indexOf(field) !== -1) values = values.map(function(v){return displayName.indexOf('(hours)')!==-1?v/3600:v/60;});
     else if (EFFICIENCY_FIELDS.indexOf(field) !== -1) values = values.map(function(v){return v*100;});
