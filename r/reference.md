@@ -89,9 +89,12 @@ Default at package load: `"google-health"`.
 
 ```r
 tb_fetch(user_id, data_type, start_date, end_date,
-         token    = NULL,
-         provider = tb_get_provider(),
-         env_file = ".env")
+         token        = NULL,
+         provider     = tb_get_provider(),
+         sleepscan    = NULL,
+         sleepscan_key = NULL,
+         raw          = FALSE,
+         env_file     = ".env")
 ```
 
 **The canonical data fetch function.** Fetches health data for one participant and
@@ -104,21 +107,34 @@ for the full list.
 `provider` defaults to `tb_get_provider()`. Pass explicitly to override for a single
 call without changing the session default.
 
+**Token resolution (first match wins):**
+
+1. `sleepscan = TRUE` → SleepScan API, then Clinic fallback (Withings only)
+2. `token = <str>` → used directly
+3. Default → TokenBridge `/token` endpoint using `user_id`
+
 **Arguments**
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
-| `user_id` | character | - | TokenBridge participant ID |
+| `user_id` | character | - | TokenBridge participant ID (or SleepScan lookup key when `sleepscan = TRUE`) |
 | `data_type` | character | - | Kebab-case type ID (e.g. `"sleep"`, `"steps"`) |
 | `start_date` | character | - | Start of date range, `"YYYY-MM-DD"` |
 | `end_date` | character | - | End of date range, `"YYYY-MM-DD"` |
 | `token` | character | `NULL` | Pre-fetched access token. Pass to skip a TokenBridge round-trip when fetching multiple types for the same user |
 | `provider` | character | `tb_get_provider()` | Provider ID. Overrides session default for this call only |
+| `sleepscan` | logical | `NULL` | If `TRUE`, resolve token via SleepScan using `user_id` as lookup key (email, Withings user ID as integer string, or participant ID) |
+| `sleepscan_key` | character | `NULL` | SleepScan API key. Falls back to `SLEEPSCAN_API_KEY` env var |
+| `raw` | logical | `FALSE` | If `TRUE`, return a list of raw page response bodies (zero processing). See **Raw responses** below |
 | `env_file` | character | `".env"` | Path to `.env` file |
 
 **Returns** `data.frame` with one row per data point. Column names are the API field
 names, flattened with dot notation (e.g. `startTime.seconds`).
 Returns an empty `data.frame` if no data exists for the period.
+
+When `raw = TRUE`, returns a `list` of raw page response bodies (one element per
+paginated API request) with zero transformation. Useful when you need fields not
+exposed by normal processing.
 
 **Examples**
 
@@ -504,12 +520,12 @@ low <- audit[!is.na(audit$coverage_pct) & audit$coverage_pct < 80, ]
 
 ```r
 wt_fetch(user_id, data_type, start_date, end_date,
-         token = NULL, env_file = ".env")
+         token         = NULL,
+         sleepscan     = NULL,
+         sleepscan_key = NULL,
+         raw           = FALSE,
+         env_file      = ".env")
 ```
-
-!!! warning "Not yet implemented"
-    The Withings OAuth flow is wired but data fetching is not yet implemented.
-    This function currently raises an error.
 
 Fetch Withings data for a participant. Equivalent to
 `tb_fetch(..., provider = "withings")`.
@@ -518,15 +534,41 @@ Fetch Withings data for a participant. Equivalent to
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
-| `user_id` | character | - | TokenBridge participant ID |
-| `data_type` | character | - | Withings type ID |
+| `user_id` | character | - | TokenBridge participant ID (or SleepScan lookup key when `sleepscan = TRUE`) |
+| `data_type` | character | - | Withings type ID. See [Providers](../providers/index.md) |
 | `start_date` | character | - | `"YYYY-MM-DD"` |
 | `end_date` | character | - | `"YYYY-MM-DD"` |
 | `token` | character | `NULL` | Pre-fetched access token |
+| `sleepscan` | logical | `NULL` | If `TRUE`, resolve token via SleepScan using `user_id` as lookup key |
+| `sleepscan_key` | character | `NULL` | SleepScan API key. Falls back to `SLEEPSCAN_API_KEY` env var |
+| `raw` | logical | `FALSE` | If `TRUE`, return a list of raw page response bodies with zero processing |
 | `env_file` | character | `".env"` | Path to `.env` file |
 
-Planned type IDs: `"sleep"`, `"heart-rate"`, `"weight"`, `"blood-pressure"`.
-See [Providers](../providers/index.md).
+**Returns** `data.frame` with one row per record, or a `list` of raw page bodies when `raw = TRUE`.
+
+**Examples**
+
+```r
+# Sleep summary with AHI
+sleep <- wt_fetch("p001", "sleep-summary", "2026-06-01", "2026-07-01")
+ahi   <- sleep$data.apnea_hypopnea_index   # nested 'data' sub-dict flattened
+
+# Blood pressure
+bp <- wt_fetch("p001", "blood-pressure", "2026-06-01", "2026-07-01")
+# columns: grpid, date, category, systolic_bp_mmhg, diastolic_bp_mmhg
+
+# Via SleepScan (token from SleepScan instead of TokenBridge)
+sleep <- wt_fetch("p@lab.com", "sleep-summary", start, end, sleepscan = TRUE)
+
+# Raw response bodies
+bodies <- wt_fetch("p001", "sleep-summary", start, end, raw = TRUE)
+# bodies[[1]] == list(status = 0, body = list(series = list(...), more = FALSE))
+```
+
+Supported type IDs: `"sleep-summary"`, `"sleep-detail"`, `"activity"`, `"workouts"`,
+`"weight"`, `"height"`, `"fat-ratio"`, `"fat-mass"`, `"blood-pressure"`,
+`"heart-rate"`, `"spo2"`, `"muscle-mass"`, `"bone-mass"`, `"ecg"`.
+See [Providers](../providers/index.md) for full details.
 
 ---
 

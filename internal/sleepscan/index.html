@@ -722,8 +722,38 @@
 <span class="nv">SLEEPSCAN_API_KEY</span><span class="o">=</span>your-sleepscan-key
 </code></pre></div>
 
+<h2 id="standalone-usage-without-a-tokenbridge-user_id">Standalone usage (without a TokenBridge user_id)<a class="headerlink" href="#standalone-usage-without-a-tokenbridge-user_id" title="Permanent link">&para;</a></h2>
+<p>If a participant exists in SleepScan but not TokenBridge, you can fetch without a TB user_id.</p>
+<p><strong>Python:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge.sleepscan</span><span class="w"> </span><span class="kn">import</span> <span class="n">SleepScan</span>
+
+<span class="n">ss</span>    <span class="o">=</span> <span class="n">SleepScan</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="n">clinic_key</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+<span class="n">token</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s2">&quot;p@lab.com&quot;</span><span class="p">)</span>    <span class="c1"># or withings_user_id=123</span>
+
+<span class="c1"># Use the token directly with the Withings provider</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tokenbridge.providers.withings</span><span class="w"> </span><span class="kn">import</span> <span class="n">Withings</span>
+<span class="n">wt</span>   <span class="o">=</span> <span class="n">Withings</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">wt</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;ignored&quot;</span><span class="p">,</span> <span class="s2">&quot;sleep-summary&quot;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>R:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">ss</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ss_client</span><span class="p">(</span><span class="n">api_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">Sys.getenv</span><span class="p">(</span><span class="s">&quot;SLEEPSCAN_API_KEY&quot;</span><span class="p">))</span>
+<span class="n">token</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ss_get_token</span><span class="p">(</span><span class="n">ss</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;p@lab.com&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="s">&quot;ignored&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep-summary&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">token</span><span class="p">)</span>
+
+<span class="c1"># Or fetch in one call — no TB user_id needed</span>
+<span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ss_fetch</span><span class="p">(</span><span class="n">ss</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep-summary&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;p@lab.com&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="clinic-fallback-python-only">Clinic fallback (Python only)<a class="headerlink" href="#clinic-fallback-python-only" title="Permanent link">&para;</a></h2>
+<p>When SleepScan returns no token, Python automatically retries via the Clinic API (<code>CLINIC_SLEEPSCAN_KEY</code>). Set the key in <code>.env</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">CLINIC_SLEEPSCAN_KEY</span><span class="o">=</span>your-clinic-key
+</code></pre></div>
+
+<p>The fallback is transparent — <code>sleepscan=True</code> tries SleepScan first, then Clinic, then raises <code>RuntimeError: Could not retrieve Withings token from any source</code>.</p>
+<p>R does not currently implement the Clinic fallback.</p>
 <h2 id="token-source-resolution">Token source resolution<a class="headerlink" href="#token-source-resolution" title="Permanent link">&para;</a></h2>
-<p>When <code>tb.fetch()</code> is called, token resolution priority is:</p>
+<p>When <code>tb.fetch()</code> / <code>wt_fetch()</code> is called, token resolution priority is:</p>
 <ol>
 <li><code>sleepscan=True</code> — fetch from SleepScan API (always wins when set)</li>
 <li><code>token=</code> — explicit pre-fetched token</li>
@@ -882,6 +912,22 @@
             class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
             data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#env-setup');">
             .env setup
+        </a>
+        
+
+        
+        <a href="#standalone-usage-without-a-tokenbridge-user_id"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#standalone-usage-without-a-tokenbridge-user_id');">
+            Standalone usage (without a TokenBridge user_id)
+        </a>
+        
+
+        
+        <a href="#clinic-fallback-python-only"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#clinic-fallback-python-only');">
+            Clinic fallback (Python only)
         </a>
         
 

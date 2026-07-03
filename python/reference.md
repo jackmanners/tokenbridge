@@ -79,8 +79,8 @@ for dtype in DATA_TYPES:
 
 ## Withings
 
-The Withings provider stub. The OAuth flow is wired but `fetch()` raises
-`NotImplementedError` - implementation is in progress.
+The Withings provider. Fetches health data from Withings devices (scales, blood pressure
+monitors, sleep mats, activity trackers).
 
 ::: tokenbridge.Withings
     options:

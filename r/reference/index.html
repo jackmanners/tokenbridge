@@ -773,9 +773,12 @@ Default at package load: <code>"google-health"</code>.</p>
 <hr />
 <h3 id="tb_fetch">tb_fetch<a class="headerlink" href="#tb_fetch" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><code><span class="nf">tb_fetch</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">data_type</span><span class="p">,</span><span class="w"> </span><span class="n">start_date</span><span class="p">,</span><span class="w"> </span><span class="n">end_date</span><span class="p">,</span>
-<span class="w">         </span><span class="n">token</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span>
-<span class="w">         </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">tb_get_provider</span><span class="p">(),</span>
-<span class="w">         </span><span class="n">env_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;.env&quot;</span><span class="p">)</span>
+<span class="w">         </span><span class="n">token</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span>
+<span class="w">         </span><span class="n">provider</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nf">tb_get_provider</span><span class="p">(),</span>
+<span class="w">         </span><span class="n">sleepscan</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span>
+<span class="w">         </span><span class="n">sleepscan_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span>
+<span class="w">         </span><span class="n">raw</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span>
+<span class="w">         </span><span class="n">env_file</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;.env&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 <p><strong>The canonical data fetch function.</strong> Fetches health data for one participant and
@@ -785,6 +788,12 @@ returns a flat <code>data.frame</code> with one row per data point.</p>
 for the full list.</p>
 <p><code>provider</code> defaults to <code>tb_get_provider()</code>. Pass explicitly to override for a single
 call without changing the session default.</p>
+<p><strong>Token resolution (first match wins):</strong></p>
+<ol>
+<li><code>sleepscan = TRUE</code> → SleepScan API, then Clinic fallback (Withings only)</li>
+<li><code>token = &lt;str&gt;</code> → used directly</li>
+<li>Default → TokenBridge <code>/token</code> endpoint using <code>user_id</code></li>
+</ol>
 <p><strong>Arguments</strong></p>
 <div class="table-wrapper"><table>
 <thead>
@@ -800,7 +809,7 @@ call without changing the session default.</p>
 <td><code>user_id</code></td>
 <td>character</td>
 <td>-</td>
-<td>TokenBridge participant ID</td>
+<td>TokenBridge participant ID (or SleepScan lookup key when <code>sleepscan = TRUE</code>)</td>
 </tr>
 <tr>
 <td><code>data_type</code></td>
@@ -833,6 +842,24 @@ call without changing the session default.</p>
 <td>Provider ID. Overrides session default for this call only</td>
 </tr>
 <tr>
+<td><code>sleepscan</code></td>
+<td>logical</td>
+<td><code>NULL</code></td>
+<td>If <code>TRUE</code>, resolve token via SleepScan using <code>user_id</code> as lookup key (email, Withings user ID as integer string, or participant ID)</td>
+</tr>
+<tr>
+<td><code>sleepscan_key</code></td>
+<td>character</td>
+<td><code>NULL</code></td>
+<td>SleepScan API key. Falls back to <code>SLEEPSCAN_API_KEY</code> env var</td>
+</tr>
+<tr>
+<td><code>raw</code></td>
+<td>logical</td>
+<td><code>FALSE</code></td>
+<td>If <code>TRUE</code>, return a list of raw page response bodies (zero processing). See <strong>Raw responses</strong> below</td>
+</tr>
+<tr>
 <td><code>env_file</code></td>
 <td>character</td>
 <td><code>".env"</code></td>
@@ -843,6 +870,9 @@ call without changing the session default.</p>
 <p><strong>Returns</strong> <code>data.frame</code> with one row per data point. Column names are the API field
 names, flattened with dot notation (e.g. <code>startTime.seconds</code>).
 Returns an empty <code>data.frame</code> if no data exists for the period.</p>
+<p>When <code>raw = TRUE</code>, returns a <code>list</code> of raw page response bodies (one element per
+paginated API request) with zero transformation. Useful when you need fields not
+exposed by normal processing.</p>
 <p><strong>Examples</strong></p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># Basic</span>
 <span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-05-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-18&quot;</span><span class="p">)</span>
@@ -1419,14 +1449,13 @@ per participant × data type - useful for checking data quality before running a
 <h2 id="withings-wt_">Withings (<code>wt_</code>)<a class="headerlink" href="#withings-wt_" title="Permanent link">&para;</a></h2>
 <h3 id="wt_fetch">wt_fetch<a class="headerlink" href="#wt_fetch" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><code><span class="nf">wt_fetch</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">data_type</span><span class="p">,</span><span class="w"> </span><span class="n">start_date</span><span class="p">,</span><span class="w"> </span><span class="n">end_date</span><span class="p">,</span>
-<span class="w">         </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">env_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;.env&quot;</span><span class="p">)</span>
+<span class="w">         </span><span class="n">token</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span>
+<span class="w">         </span><span class="n">sleepscan</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span>
+<span class="w">         </span><span class="n">sleepscan_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span>
+<span class="w">         </span><span class="n">raw</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span>
+<span class="w">         </span><span class="n">env_file</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;.env&quot;</span><span class="p">)</span>
 </code></pre></div>
 
-<div class="admonition warning">
-<p class="admonition-title">Not yet implemented</p>
-<p>The Withings OAuth flow is wired but data fetching is not yet implemented.
-This function currently raises an error.</p>
-</div>
 <p>Fetch Withings data for a participant. Equivalent to
 <code>tb_fetch(..., provider = "withings")</code>.</p>
 <p><strong>Arguments</strong></p>
@@ -1444,13 +1473,13 @@ This function currently raises an error.</p>
 <td><code>user_id</code></td>
 <td>character</td>
 <td>-</td>
-<td>TokenBridge participant ID</td>
+<td>TokenBridge participant ID (or SleepScan lookup key when <code>sleepscan = TRUE</code>)</td>
 </tr>
 <tr>
 <td><code>data_type</code></td>
 <td>character</td>
 <td>-</td>
-<td>Withings type ID</td>
+<td>Withings type ID. See <a href="../../providers/">Providers</a></td>
 </tr>
 <tr>
 <td><code>start_date</code></td>
@@ -1471,6 +1500,24 @@ This function currently raises an error.</p>
 <td>Pre-fetched access token</td>
 </tr>
 <tr>
+<td><code>sleepscan</code></td>
+<td>logical</td>
+<td><code>NULL</code></td>
+<td>If <code>TRUE</code>, resolve token via SleepScan using <code>user_id</code> as lookup key</td>
+</tr>
+<tr>
+<td><code>sleepscan_key</code></td>
+<td>character</td>
+<td><code>NULL</code></td>
+<td>SleepScan API key. Falls back to <code>SLEEPSCAN_API_KEY</code> env var</td>
+</tr>
+<tr>
+<td><code>raw</code></td>
+<td>logical</td>
+<td><code>FALSE</code></td>
+<td>If <code>TRUE</code>, return a list of raw page response bodies with zero processing</td>
+</tr>
+<tr>
 <td><code>env_file</code></td>
 <td>character</td>
 <td><code>".env"</code></td>
@@ -1478,8 +1525,28 @@ This function currently raises an error.</p>
 </tr>
 </tbody>
 </table></div>
-<p>Planned type IDs: <code>"sleep"</code>, <code>"heart-rate"</code>, <code>"weight"</code>, <code>"blood-pressure"</code>.
-See <a href="../../providers/">Providers</a>.</p>
+<p><strong>Returns</strong> <code>data.frame</code> with one row per record, or a <code>list</code> of raw page bodies when <code>raw = TRUE</code>.</p>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Sleep summary with AHI</span>
+<span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep-summary&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-07-01&quot;</span><span class="p">)</span>
+<span class="n">ahi</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sleep</span><span class="o">$</span><span class="n">data.apnea_hypopnea_index</span><span class="w">   </span><span class="c1"># nested &#39;data&#39; sub-dict flattened</span>
+
+<span class="c1"># Blood pressure</span>
+<span class="n">bp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;blood-pressure&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-06-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2026-07-01&quot;</span><span class="p">)</span>
+<span class="c1"># columns: grpid, date, category, systolic_bp_mmhg, diastolic_bp_mmhg</span>
+
+<span class="c1"># Via SleepScan (token from SleepScan instead of TokenBridge)</span>
+<span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="s">&quot;p@lab.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep-summary&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">sleepscan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span>
+
+<span class="c1"># Raw response bodies</span>
+<span class="n">bodies</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="s">&quot;p001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sleep-summary&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="c1"># bodies[[1]] == list(status = 0, body = list(series = list(...), more = FALSE))</span>
+</code></pre></div>
+
+<p>Supported type IDs: <code>"sleep-summary"</code>, <code>"sleep-detail"</code>, <code>"activity"</code>, <code>"workouts"</code>,
+<code>"weight"</code>, <code>"height"</code>, <code>"fat-ratio"</code>, <code>"fat-mass"</code>, <code>"blood-pressure"</code>,
+<code>"heart-rate"</code>, <code>"spo2"</code>, <code>"muscle-mass"</code>, <code>"bone-mass"</code>, <code>"ecg"</code>.
+See <a href="../../providers/">Providers</a> for full details.</p>
 <hr />
 <h2 id="data-type-ids">Data type IDs<a class="headerlink" href="#data-type-ids" title="Permanent link">&para;</a></h2>
 <p>Pass any of these strings as the <code>data_type</code> argument. See <a href="../../providers/">Providers</a>
