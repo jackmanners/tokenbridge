@@ -58,9 +58,50 @@ TOKENBRIDGE_API_KEY=your-tokenbridge-key
 SLEEPSCAN_API_KEY=your-sleepscan-key
 ```
 
+## Standalone usage (without a TokenBridge user_id)
+
+If a participant exists in SleepScan but not TokenBridge, you can fetch without a TB user_id.
+
+**Python:**
+
+```python
+from tokenbridge.sleepscan import SleepScan
+
+ss    = SleepScan(api_key="...", clinic_key="...")
+token = ss.get_token(email="p@lab.com")    # or withings_user_id=123
+
+# Use the token directly with the Withings provider
+from tokenbridge.providers.withings import Withings
+wt   = Withings(None)
+data = wt.fetch("ignored", "sleep-summary", start, end, token=token)
+```
+
+**R:**
+
+```r
+ss    <- ss_client(api_key = Sys.getenv("SLEEPSCAN_API_KEY"))
+token <- ss_get_token(ss, email = "p@lab.com")
+df    <- wt_fetch("ignored", "sleep-summary", start, end, token = token)
+
+# Or fetch in one call — no TB user_id needed
+df <- ss_fetch(ss, "sleep-summary", start, end, email = "p@lab.com")
+```
+
+## Clinic fallback (Python only)
+
+When SleepScan returns no token, Python automatically retries via the Clinic API (`CLINIC_SLEEPSCAN_KEY`). Set the key in `.env`:
+
+```bash
+CLINIC_SLEEPSCAN_KEY=your-clinic-key
+```
+
+The fallback is transparent — `sleepscan=True` tries SleepScan first, then Clinic, then raises `RuntimeError: Could not retrieve Withings token from any source`.
+
+R does not currently implement the Clinic fallback.
+
 ## Token source resolution
 
-When `tb.fetch()` is called, token resolution priority is:
+When `tb.fetch()` / `wt_fetch()` is called, token resolution priority is:
 
 1. `sleepscan=True` — fetch from SleepScan API (always wins when set)
 2. `token=` — explicit pre-fetched token

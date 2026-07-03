@@ -194,6 +194,7 @@ class TokenBridge:
         provider: Optional[str] = None,
         token: Optional[str] = None,
         sleepscan: bool = False,
+        raw: bool = False,
     ) -> list[dict]:
         """Fetch health data for a participant.
 
@@ -247,7 +248,7 @@ class TokenBridge:
         p = provider or self.provider
         if sleepscan:
             token = self._sleepscan_token(user_id)
-        return self._get_provider(p).fetch(user_id, data_type, start_date, end_date, token=token)
+        return self._get_provider(p).fetch(user_id, data_type, start_date, end_date, token=token, raw=raw)
 
     # ── Auth URL helpers ──────────────────────────────────────────────────────
 
@@ -296,7 +297,12 @@ class TokenBridge:
 
     # ── Token management ──────────────────────────────────────────────────────
 
-    def get_token(self, user_id: str, provider: Optional[str] = None) -> str:
+    def get_token(
+        self,
+        user_id: str,
+        provider: Optional[str] = None,
+        sleepscan: bool = False,
+    ) -> str:
         """Fetch a valid access token for a participant.
 
         TokenBridge refreshes automatically if the token is within 5 minutes
@@ -307,20 +313,31 @@ class TokenBridge:
         avoid one TokenBridge round-trip per call:
 
         Args:
-            user_id: TokenBridge participant ID.
+            user_id: TokenBridge participant ID (or SleepScan lookup key when
+                ``sleepscan=True``).
             provider: Provider.  Defaults to `tb.provider`.
+            sleepscan: If ``True``, retrieve the token from SleepScan rather
+                than TokenBridge.  ``user_id`` is used as the lookup key
+                (email, Withings user ID as int, or SleepScan participant ID).
 
         Returns:
             OAuth access token string.
 
         Example:
             ```python
+            # TokenBridge token — reuse across multiple fetches
             token = tb.get_token("p001")
             sleep = tb.fetch("p001", "sleep",  start, end, token=token)
             steps = tb.fetch("p001", "steps",  start, end, token=token)
-            hrv   = tb.fetch("p001", "heart-rate-variability", start, end, token=token)
+
+            # SleepScan token
+            token = tb.get_token("p@lab.com", provider="withings", sleepscan=True)
+            sleep = tb.fetch("p@lab.com", "sleep-summary", start, end, token=token)
+            bp    = tb.fetch("p@lab.com", "blood-pressure", start, end, token=token)
             ```
         """
+        if sleepscan:
+            return self._sleepscan_token(user_id)
         return self._token_response(user_id, provider or self.provider)["access_token"]
 
     # ── Internal ──────────────────────────────────────────────────────────────
@@ -405,6 +422,7 @@ class _ProviderProxy:
         *,
         token=None,
         sleepscan: bool = False,
+        raw: bool = False,
     ) -> list[dict]:
         """Fetch data using this proxy's pre-bound provider.
 
@@ -422,7 +440,7 @@ class _ProviderProxy:
         """
         return self._tb.fetch(
             user_id, data_type, start_date, end_date,
-            provider=self._provider_id, token=token, sleepscan=sleepscan,
+            provider=self._provider_id, token=token, sleepscan=sleepscan, raw=raw,
         )
 
     def __getattr__(self, name: str):

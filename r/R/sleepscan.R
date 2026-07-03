@@ -27,7 +27,7 @@
 #' @param base_url SleepScan API base URL. Defaults to \code{https://sleepscan.app/api}.
 #' @return A SleepScan client object for use with \code{ss_get_token()} and \code{ss_fetch()}.
 #' @export
-ss_client <- function(api_key, base_url = "https://sleepscan.app/api") {
+ss_client <- function(api_key, base_url = "https://sleepscan.app") {
   structure(
     list(
       api_key  = api_key,
@@ -57,22 +57,21 @@ ss_get_token <- function(client,
   stopifnot(inherits(client, "SleepScanClient"))
 
   if (!is.null(email)) {
-    url    <- paste0(client$base_url, "/token/by-email")
-    params <- list(email = email)
+    url <- paste0(client$base_url, "/withings-access-token/by-email/",
+                  utils::URLencode(email, reserved = TRUE))
   } else if (!is.null(withings_user_id)) {
-    url    <- paste0(client$base_url, "/token/by-withings-id")
-    params <- list(withings_user_id = withings_user_id)
+    url <- paste0(client$base_url, "/withings-access-token/by-withings-user-id/",
+                  withings_user_id)
   } else if (!is.null(participant_id)) {
-    url    <- paste0(client$base_url, "/token/by-participant")
-    params <- list(participant_id = participant_id)
+    url <- paste0(client$base_url, "/withings-access-token/by-participant-id/",
+                  utils::URLencode(as.character(participant_id), reserved = TRUE))
   } else {
     stop("Provide one of: email, withings_user_id, or participant_id", call. = FALSE)
   }
 
   resp <- httr::GET(
     url,
-    httr::add_headers("X-API-Key" = client$api_key),
-    query = params
+    httr::add_headers("X-API-Key" = client$api_key)
   )
 
   if (httr::status_code(resp) != 200L) {

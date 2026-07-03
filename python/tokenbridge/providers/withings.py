@@ -156,6 +156,7 @@ class Withings(HealthProvider):
         end_date: str,
         *,
         token: Optional[str] = None,
+        raw: bool = False,
     ) -> list[dict]:
         """Fetch any Withings data type by its ID.
 
@@ -185,12 +186,12 @@ class Withings(HealthProvider):
             )
         if token is None:
             token = self._get_token(user_id)
-        return _fetch_all(token, data_type, start_date, end_date)
+        return _fetch_all(token, data_type, start_date, end_date, raw=raw)
 
 
 # ── Internal fetch helpers ────────────────────────────────────────────────────
 
-def _fetch_all(token: str, data_type: str, start_date: str, end_date: str) -> list[dict]:
+def _fetch_all(token: str, data_type: str, start_date: str, end_date: str, raw: bool = False) -> list[dict]:
     """Fetch all pages for a data type and return combined records."""
     spec = DATA_TYPES[data_type]
     endpoint = spec["endpoint"]
@@ -235,10 +236,16 @@ def _fetch_all(token: str, data_type: str, start_date: str, end_date: str) -> li
                 f"{body.get('error', body)}"
             )
 
+        if raw:
+            records.append(body)
+            if not body.get("body", {}).get("more"):
+                break
+            offset = body["body"].get("offset")
+            continue
+
         data = body.get("body", {})
         page_records = data.get(result_key, []) or []
 
-        # Decode measuregrps into flat dicts
         if result_key == "measuregrps":
             page_records = _decode_measuregrps(page_records)
 

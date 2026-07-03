@@ -97,6 +97,7 @@ class Oura(HealthProvider):
         end_date: str,
         *,
         token: Optional[str] = None,
+        raw: bool = False,
     ) -> list[dict]:
         """Fetch any Oura data type by its ID.
 
@@ -125,12 +126,12 @@ class Oura(HealthProvider):
             )
         if token is None:
             token = self._get_token(user_id)
-        return _fetch_all(token, data_type, start_date, end_date)
+        return _fetch_all(token, data_type, start_date, end_date, raw=raw)
 
 
 # ── Internal fetch helpers ────────────────────────────────────────────────────
 
-def _fetch_all(token: str, data_type: str, start_date: str, end_date: str) -> list[dict]:
+def _fetch_all(token: str, data_type: str, start_date: str, end_date: str, raw: bool = False) -> list[dict]:
     spec     = DATA_TYPES[data_type]
     url      = f"{_BASE}/{spec['path']}"
     headers  = {"Authorization": f"Bearer {token}"}
@@ -154,7 +155,10 @@ def _fetch_all(token: str, data_type: str, start_date: str, end_date: str) -> li
         resp.raise_for_status()
         body = resp.json()
 
-        records.extend(body.get("data", []))
+        if raw:
+            records.append(body)
+        else:
+            records.extend(body.get("data", []))
 
         next_token = body.get("next_token")
         if not next_token:

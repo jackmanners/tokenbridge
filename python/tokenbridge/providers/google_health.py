@@ -162,6 +162,7 @@ class GoogleHealth(HealthProvider):
         end_date: str,
         *,
         token: Optional[str] = None,
+        raw: bool = False,
     ) -> list[dict]:
         """Fetch any Google Health data type by its ID.
 
@@ -198,8 +199,8 @@ class GoogleHealth(HealthProvider):
             token = self._get_token(user_id)
         endpoint = DATA_TYPES.get(data_type, "list")
         if endpoint == "dailyRollup":
-            return _fetch_daily_rollup(token, data_type, start_date, end_date)
-        return _fetch_datapoints(token, data_type, start_date, end_date)
+            return _fetch_daily_rollup(token, data_type, start_date, end_date, raw=raw)
+        return _fetch_datapoints(token, data_type, start_date, end_date, raw=raw)
 
     # ── Analysis helpers ──────────────────────────────────────────────────────
 
@@ -287,7 +288,7 @@ def _validate_dates(start_date: str, end_date: str) -> None:
 
 
 def _fetch_datapoints(
-    token: str, data_type: str, start_date: str, end_date: str
+    token: str, data_type: str, start_date: str, end_date: str, raw: bool = False
 ) -> list[dict]:
     """Paginate the dataPoints list endpoint using the API filter parameter.
 
@@ -320,7 +321,11 @@ def _fetch_datapoints(
         resp.raise_for_status()
 
         body = resp.json()
-        points.extend(_flatten(pt) for pt in body.get("dataPoints", []))
+
+        if raw:
+            points.append(body)
+        else:
+            points.extend(_flatten(pt) for pt in body.get("dataPoints", []))
 
         page_token = body.get("nextPageToken")
         if not page_token:
@@ -330,7 +335,7 @@ def _fetch_datapoints(
 
 
 def _fetch_daily_rollup(
-    token: str, data_type: str, start_date: str, end_date: str
+    token: str, data_type: str, start_date: str, end_date: str, raw: bool = False
 ) -> list[dict]:
     """POST to the dailyRollUp endpoint for types that don't support list."""
     url  = f"{_BASE}/dataTypes/{data_type}/dataPoints:dailyRollUp"
@@ -341,7 +346,10 @@ def _fetch_daily_rollup(
         timeout=30,
     )
     resp.raise_for_status()
-    return [_flatten(r) for r in resp.json().get("dailyRollup", [])]
+    body = resp.json()
+    if raw:
+        return [body]
+    return [_flatten(r) for r in body.get("dailyRollup", [])]
 
 
 def _flatten(obj, prefix: str = "") -> dict:
