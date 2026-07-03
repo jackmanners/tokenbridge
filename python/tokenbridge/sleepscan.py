@@ -106,7 +106,7 @@ class SleepScan:
         withings_user_id: int | None = None,
     ) -> str:
         if email is not None:
-            url = f"{self.base_url}/withings-access-token/by-email/{requests.utils.quote(str(email), safe='')}"
+            url = f"{self.base_url}/withings-access-token/by-email/{requests.utils.quote(str(email), safe='@+')}"
         elif withings_user_id is not None:
             url = f"{self.base_url}/withings-access-token/by-withings-user-id/{withings_user_id}"
         else:
@@ -122,9 +122,9 @@ class SleepScan:
         headers = {"Authorization": f"Bearer {self.clinic_key}"}
 
         for force in (True, False):
-            resp = requests.post(
+            resp = requests.get(
                 url, headers=headers,
-                json={"email": email, "force": force},
+                params={"email": email, "force": force},
                 timeout=30,
             )
             if resp.status_code in (403, 404) and force:
