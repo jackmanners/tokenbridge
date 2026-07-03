@@ -135,6 +135,7 @@ class TokenBridge:
             self._sleepscan: Optional["SleepScan"] = SleepScan(_ss_key)
         else:
             self._sleepscan = None
+        # Clinic key is picked up from env inside SleepScan.__init__ automatically
 
         self._provider_cache: dict = {}
 
