@@ -41,6 +41,17 @@ from tokenbridge._client import TokenBridge
 from tokenbridge.providers.google_health import GoogleHealth, DATA_TYPES
 from tokenbridge.providers.withings import Withings
 from tokenbridge.providers.oura import Oura
+from tokenbridge.providers.polar import Polar
+from tokenbridge.providers.strava import Strava
+from tokenbridge.providers.whoop import Whoop
+from tokenbridge.providers.garmin import Garmin
+from tokenbridge.providers.huawei import Huawei
+from tokenbridge.providers.health_connect import HealthConnect
+from tokenbridge.providers.dexcom import Dexcom
 
-__all__ = ["TokenBridge", "GoogleHealth", "Withings", "Oura", "DATA_TYPES"]
+__all__ = [
+    "TokenBridge", "GoogleHealth", "Withings", "Oura",
+    "Polar", "Strava", "Whoop", "Garmin", "Huawei", "HealthConnect", "Dexcom",
+    "DATA_TYPES",
+]
 __version__ = "0.1.0"

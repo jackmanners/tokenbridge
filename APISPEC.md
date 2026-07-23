@@ -78,7 +78,7 @@ Returns `{TOKENBRIDGE_URL}/auth-start?provider={provider}&user_id={user_id}`. Se
 ### .auth_urls(user_ids, provider) → dict[str, str]
 Batch version of `auth_url`.
 
-### Provider namespaces: tb.google / tb.withings / tb.oura
+### Provider namespaces: tb.google / tb.withings / tb.oura / tb.polar / tb.strava / tb.whoop
 Pre-bind a provider. All proxy to `tb.fetch()` with provider set. Also expose provider-specific methods.
 
 ```python
@@ -86,7 +86,13 @@ tb.withings.fetch("p001", "sleep-summary", start, end)
 tb.google.fetch("p001", "sleep", start, end, sleepscan=True)
 tb.google.summary("p001", start, end)               # GoogleHealth-specific
 tb.google.data_completeness(["p001", "p002"], s, e) # GoogleHealth-specific
+tb.polar.fetch("p001", "sleep", start, end)
+tb.strava.fetch("p001", "activities", start, end)
+tb.strava.streams("p001", activity_id, keys=["heartrate"])  # Strava-specific
+tb.whoop.fetch("p001", "recovery", start, end)
 ```
+
+`tb.garmin`, `tb.huawei`, `tb.health_connect` are also registered but raise `NotImplementedError` — see [Provider Reference](docs/providers/index.md) for status.
 
 ---
 
@@ -103,6 +109,9 @@ Returns a `list` of raw page response bodies, one element per paginated request.
 | `google-health` | `{"dataPoints": [...], "nextPageToken": "..."}` (list endpoint) or `{"dailyRollup": [...]}` (rollup endpoint) |
 | `withings` | `{"status": 0, "body": {"series": [...], "more": False, "offset": N}}` |
 | `oura` | `{"data": [...], "next_token": null}` |
+| `polar` | bare JSON array per 28-day chunk (one list element per chunk when `raw=True`) |
+| `strava` | bare JSON array per page (activities only — `raw=` does not apply to `.streams()`) |
+| `whoop` | `{"records": [...], "next_token": null}` |
 
 ### Google Health (`provider="google-health"`)
 
@@ -168,6 +177,42 @@ Full type list: `from tokenbridge.providers.withings import DATA_TYPES; print(li
 Records returned as-is from `body["data"]` in the Oura v2 API response. No transformation applied.
 
 Full type list: `from tokenbridge.providers.oura import DATA_TYPES; print(list(DATA_TYPES))`
+
+### Polar (`provider="polar"`)
+
+Records returned as-is from the Polar AccessLink v3 API — no transformation. **Access tokens never expire** (no refresh flow); date ranges over 28 days are chunked automatically into multiple sequential requests.
+
+```python
+records = tb.fetch("p001", "sleep", start, end, provider="polar")
+```
+
+Data types: `sleep`, `activity`, `nightly-recharge`, `exercise`. Full list: `from tokenbridge.providers.polar import DATA_TYPES; print(list(DATA_TYPES))`
+
+### Strava (`provider="strava"`)
+
+`fetch()` returns activity summaries as-is from the Strava v3 API — no transformation. Per-activity time-series data (HR, power, GPS) does **not** go through `fetch()` — use `tb.strava.streams()` instead, since streams are keyed by a single `activity_id` rather than a date range.
+
+```python
+activities = tb.fetch("p001", "activities", start, end, provider="strava")
+streams    = tb.strava.streams("p001", activities[0]["id"], keys=["heartrate", "watts"])
+# streams == {"heartrate": {"data": [...], ...}, "watts": {"data": [...], ...}}
+```
+
+Rate limits: 200 req/15min, 2000 req/day — a `RuntimeError` is raised on HTTP 429.
+
+Data types: `activities`. Stream keys: `time`, `distance`, `latlng`, `altitude`, `velocity_smooth`, `heartrate`, `cadence`, `watts`, `temp`, `moving`, `grade_smooth`.
+
+### WHOOP (`provider="whoop"`)
+
+Records returned as-is from `body["records"]` in the WHOOP v1 API response. No transformation. **`recovery` records are keyed by `cycle_id`, not their own id** — join manually on `cycle_id` if you need recovery + sleep + cycle in one row.
+
+```python
+recovery = tb.fetch("p001", "recovery", start, end, provider="whoop")
+r = recovery[0]
+# r keys include: cycle_id, sleep_id, score.recovery_score, score.hrv_rmssd_milli, score.resting_heart_rate
+```
+
+Data types: `recovery`, `sleep`, `workout`, `cycle`. Full list: `from tokenbridge.providers.whoop import DATA_TYPES; print(list(DATA_TYPES))`
 
 ---
 

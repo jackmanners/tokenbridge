@@ -46,9 +46,13 @@ nav:
     - Setup Guide: basic-quickstart.md
     - Accessing Tokens: basic-access.md
   - Providers:
+    - Overview: providers/index.md
     - Google Health: providers/google-health.md
     - Withings: providers/withings.md
     - Oura: providers/oura.md
+    - Polar: providers/polar.md
+    - Strava: providers/strava.md
+    - WHOOP: providers/whoop.md
   - Client packages:
     - Python:
       - python/index.md

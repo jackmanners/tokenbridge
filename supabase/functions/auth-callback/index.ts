@@ -49,12 +49,13 @@ You can close this window and try again.`, 400)
   const clientSecret = Deno.env.get(`${envPrefix(stateRow.provider)}_CLIENT_SECRET`)!
   const callbackUrl = `${Deno.env.get('SUPABASE_URL')}/functions/v1/auth-callback`
 
+  const useBasicAuth = provider.tokenAuthMethod === 'basic'
+
   const tokenParams: Record<string, string> = {
     code,
-    client_id: clientId,
-    client_secret: clientSecret,
     redirect_uri: callbackUrl,
     grant_type: 'authorization_code',
+    ...(useBasicAuth ? {} : { client_id: clientId, client_secret: clientSecret }),
     ...provider.extraTokenParams,
   }
 
@@ -62,9 +63,14 @@ You can close this window and try again.`, 400)
     tokenParams.code_verifier = stateRow.code_verifier
   }
 
+  const tokenHeaders: Record<string, string> = { 'Content-Type': 'application/x-www-form-urlencoded' }
+  if (useBasicAuth) {
+    tokenHeaders.Authorization = `Basic ${btoa(`${clientId}:${clientSecret}`)}`
+  }
+
   const tokenRes = await fetch(provider.tokenUrl, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: tokenHeaders,
     body: new URLSearchParams(tokenParams),
   })
 
@@ -84,7 +90,26 @@ You can close this window and try again.`, 400)
   const scopeStr = tokenData.scope as string | undefined
   const scopes = scopeStr ? scopeStr.split(/[\s,]+/) : provider.scopes
 
-  const providerData = provider.extractProviderData ? provider.extractProviderData(tokenData) : {}
+  let providerData = provider.extractProviderData ? provider.extractProviderData(tokenData) : {}
+
+  if (provider.postTokenExchange) {
+    try {
+      const extra = await provider.postTokenExchange({
+        accessToken: tokenData.access_token as string,
+        clientId,
+        clientSecret,
+        userId: stateRow.user_id,
+      })
+      providerData = { ...providerData, ...extra }
+    } catch (e) {
+      console.error('postTokenExchange failed:', e)
+      return text(
+        `Token exchange succeeded but a required setup step failed: ${e instanceof Error ? e.message : e}\n\n` +
+        'Check the edge function logs for details.',
+        502,
+      )
+    }
+  }
 
   const { error: upsertError } = await supabase.from('oauth_tokens').upsert(
     {

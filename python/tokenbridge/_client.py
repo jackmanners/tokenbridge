@@ -173,14 +173,43 @@ class TokenBridge:
 
     @property
     def withings(self) -> "_ProviderProxy":
-        """Provider namespace pre-bound to `"withings"`.
-
-        Example:
-            ```python
-            tb.withings.fetch("p001", "sleep", start, end)
-            ```
-        """
+        """Provider namespace pre-bound to `"withings"`."""
         return _ProviderProxy(self, "withings")
+
+    @property
+    def polar(self) -> "_ProviderProxy":
+        """Provider namespace pre-bound to `"polar"`."""
+        return _ProviderProxy(self, "polar")
+
+    @property
+    def strava(self) -> "_ProviderProxy":
+        """Provider namespace pre-bound to `"strava"`."""
+        return _ProviderProxy(self, "strava")
+
+    @property
+    def whoop(self) -> "_ProviderProxy":
+        """Provider namespace pre-bound to `"whoop"`."""
+        return _ProviderProxy(self, "whoop")
+
+    @property
+    def garmin(self) -> "_ProviderProxy":
+        """Provider namespace pre-bound to `"garmin"`."""
+        return _ProviderProxy(self, "garmin")
+
+    @property
+    def huawei(self) -> "_ProviderProxy":
+        """Provider namespace pre-bound to `"huawei"`."""
+        return _ProviderProxy(self, "huawei")
+
+    @property
+    def health_connect(self) -> "_ProviderProxy":
+        """Provider namespace pre-bound to `"health-connect"`."""
+        return _ProviderProxy(self, "health-connect")
+
+    @property
+    def dexcom(self) -> "_ProviderProxy":
+        """Provider namespace pre-bound to `"dexcom"`."""
+        return _ProviderProxy(self, "dexcom")
 
     # ── Health data ───────────────────────────────────────────────────────────
 
@@ -366,6 +395,27 @@ class TokenBridge:
             elif provider_id == "withings":
                 from tokenbridge.providers.withings import Withings
                 self._provider_cache[provider_id] = Withings(self)
+            elif provider_id == "polar":
+                from tokenbridge.providers.polar import Polar
+                self._provider_cache[provider_id] = Polar(self)
+            elif provider_id == "strava":
+                from tokenbridge.providers.strava import Strava
+                self._provider_cache[provider_id] = Strava(self)
+            elif provider_id == "whoop":
+                from tokenbridge.providers.whoop import Whoop
+                self._provider_cache[provider_id] = Whoop(self)
+            elif provider_id == "garmin":
+                from tokenbridge.providers.garmin import Garmin
+                self._provider_cache[provider_id] = Garmin(self)
+            elif provider_id == "huawei":
+                from tokenbridge.providers.huawei import Huawei
+                self._provider_cache[provider_id] = Huawei(self)
+            elif provider_id == "health-connect":
+                from tokenbridge.providers.health_connect import HealthConnect
+                self._provider_cache[provider_id] = HealthConnect(self)
+            elif provider_id == "dexcom":
+                from tokenbridge.providers.dexcom import Dexcom
+                self._provider_cache[provider_id] = Dexcom(self)
             else:
                 raise ValueError(
                     f"Unknown provider {provider_id!r}. "
