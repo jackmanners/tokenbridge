@@ -2,62 +2,74 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
     </url>
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/basic-access/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
     </url>
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/basic-quickstart/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
     </url>
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/deployment/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
     </url>
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/getting-started/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
     </url>
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/reports/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
     </url>
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/internal/sleepscan/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
     </url>
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/providers/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
     </url>
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/providers/google-health/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
     </url>
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/providers/oura/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
+    </url>
+    <url>
+         <loc>https://jackmanners.github.io/tokenbridge/providers/polar/</loc>
+         <lastmod>2026-07-23</lastmod>
+    </url>
+    <url>
+         <loc>https://jackmanners.github.io/tokenbridge/providers/strava/</loc>
+         <lastmod>2026-07-23</lastmod>
+    </url>
+    <url>
+         <loc>https://jackmanners.github.io/tokenbridge/providers/whoop/</loc>
+         <lastmod>2026-07-23</lastmod>
     </url>
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/providers/withings/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
     </url>
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/python/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
     </url>
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/python/reference/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
     </url>
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/r/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
     </url>
     <url>
          <loc>https://jackmanners.github.io/tokenbridge/r/reference/</loc>
-         <lastmod>2026-07-03</lastmod>
+         <lastmod>2026-07-23</lastmod>
     </url>
 </urlset>
