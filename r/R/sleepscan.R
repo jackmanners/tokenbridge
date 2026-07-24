@@ -27,7 +27,7 @@
 #' @param base_url SleepScan API base URL. Defaults to \code{https://sleepscan.app/api}.
 #' @return A SleepScan client object for use with \code{ss_get_token()} and \code{ss_fetch()}.
 #' @export
-ss_client <- function(api_key, base_url = "https://sleepscan.app") {
+ss_client <- function(api_key, base_url = "https://sleepscan.app/api") {
   structure(
     list(
       api_key  = api_key,
