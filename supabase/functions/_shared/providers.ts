@@ -71,7 +71,11 @@ export const providers: Record<string, Provider> = {
     authParams: { response_type: 'code' },
     extraTokenParams: { action: 'requesttoken' },
     unwrapTokenResponse: (raw) => (raw.body as Record<string, unknown>) ?? raw,
-    extractProviderData: (td) => ({ userid: td.userid }),
+    // csrf_token is only present for apps with Withings' SDK/webview partner
+    // access enabled - absent otherwise. Used by the device-setup webview
+    // (inappviews.withings.com/sdk/setup) alongside access_token; see
+    // docs/gateway-app.md.
+    extractProviderData: (td) => ({ userid: td.userid, csrf_token: td.csrf_token }),
   },
 
   // ── Polar ─────────────────────────────────────────────────────────────────

@@ -72,6 +72,7 @@ Deno.serve(async (req) => {
       provider: providerName,
       user_id: userId,
       refreshed: false,
+      ...(row.provider_data ?? {}),
     })
   }
 
@@ -117,6 +118,7 @@ Deno.serve(async (req) => {
     provider: providerName,
     user_id: userId,
     refreshed: true,
+    ...providerData,
   })
 })
 

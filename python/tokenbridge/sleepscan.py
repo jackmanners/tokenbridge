@@ -41,7 +41,7 @@ class SleepScan:
     def __init__(
         self,
         api_key: str,
-        base_url: str = "https://sleepscan.app",
+        base_url: str = "https://sleepscan.app/api",
         clinic_key: str | None = None,
         clinic_url: str = "https://clinic.sleepscan.app/api",
     ):
