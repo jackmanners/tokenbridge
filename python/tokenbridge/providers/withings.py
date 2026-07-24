@@ -30,15 +30,43 @@ _BASE = "https://wbsapi.withings.net"
 #   result_key - key inside response body containing the data list
 #   meastype  - (getmeas only) single measure type int
 #   meastypes - (getmeas only) comma-separated type ints string
+#  Withings only returns a minimal default field set unless data_fields is
+#  explicitly passed - these are the full lists per endpoint (v2/sleep API
+#  reference), so sleep-summary/sleep-detail return every available metric
+#  rather than silently omitting AHI, HRV, respiration rate, etc.
+_SLEEP_GET_FIELDS = (
+    "hr,rr,snoring,sdnn_1,rmssd,hrv_quality,mvt_score,"
+    "chest_movement_rate,withings_index,breathing_sounds"
+)
+
+_SLEEP_SUMMARY_FIELDS = (
+    "total_timeinbed,total_sleep_time,asleepduration,lightsleepduration,"
+    "remsleepduration,deepsleepduration,sleep_efficiency,sleep_latency,"
+    "wakeup_latency,wakeupduration,wakeupcount,waso,nb_rem_episodes,"
+    "breathing_disturbances_intensity,apnea_hypopnea_index,withings_index,"
+    "durationtosleep,durationtowakeup,out_of_bed_count,hr_average,hr_min,"
+    "hr_max,rr_average,rr_min,rr_max,breathing_quality_assessment,snoring,"
+    "snoringepisodecount,sleep_score,night_events,mvt_score_avg,"
+    "mvt_active_duration,rmssd_start_avg,rmssd_end_avg,"
+    "chest_movement_rate_wellness_average,chest_movement_rate_wellness_min,"
+    "chest_movement_rate_wellness_max,breathing_sounds,"
+    "breathing_sounds_episode_count,chest_movement_rate_average,"
+    "chest_movement_rate_min,chest_movement_rate_max,"
+    "core_body_temperature_min,core_body_temperature_max,"
+    "core_body_temperature_avg,core_body_temperature_status"
+)
+
 DATA_TYPES: dict[str, dict] = {
     # ── Sleep ────────────────────────────────────────────────────────────────
     "sleep-summary": {
         "endpoint": "/v2/sleep", "action": "getsummary",
         "date_fmt": "ymd", "result_key": "series",
+        "data_fields": _SLEEP_SUMMARY_FIELDS,
     },
     "sleep-detail": {
         "endpoint": "/v2/sleep", "action": "get",
         "date_fmt": "unix", "result_key": "series",
+        "data_fields": _SLEEP_GET_FIELDS,
     },
     # ── Activity ─────────────────────────────────────────────────────────────
     "activity": {
@@ -208,12 +236,14 @@ def _fetch_all(token: str, data_type: str, start_date: str, end_date: str, raw: 
             "enddate":   _to_unix(end_date, end_of_day=True),
         }
 
-    # Extra params for getmeas
+    # Extra params for getmeas / sleep endpoints
     extra: dict = {}
     if "meastype" in spec:
         extra["meastype"] = spec["meastype"]
     if "meastypes" in spec:
         extra["meastypes"] = spec["meastypes"]
+    if "data_fields" in spec:
+        extra["data_fields"] = spec["data_fields"]
 
     headers = {"Authorization": f"Bearer {token}"}
     url = f"{_BASE}{endpoint}"
