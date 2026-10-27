@@ -46,7 +46,18 @@ If someone in your lab has already set this up, you just need the client package
 
 ///
 
+/// tab | JS/TS
+
+    :::bash
+    npm install "git+https://github.com/jackmanners/tokenbridge.git#path:js"
+
+    Token retrieval only - no data-fetching layer. See [JS/TS package](js/index.md).
+
+///
+
 â†’ Continue with [Getting Started](getting-started.md)
+
+Integrating TokenBridge into another script or project (or handing it to an LLM to wire up for you)? [**API Spec**](apispec.md) has single-file, copy-paste-into-context references for Python, R, and JS/TS.
 
 ### Deploying your own instance
 
@@ -99,6 +110,22 @@ You need a free [Supabase](https://supabase.com) account. Setup takes around 20â
 
 ///
 
+/// tab | JS/TS
+
+    :::ts
+    import { TokenBridge } from "tokenbridge";
+
+    const tb = new TokenBridge();   // reads .env
+
+    // Generate a link for each participant and send it to them
+    console.log(tb.authUrl("participant-001", "withings"));
+
+    // Get a token, then call the provider's own API directly - this
+    // package stops at the token, by design. See the API Spec below.
+    const token = await tb.getToken("participant-001", "withings");
+
+///
+
 ---
 
 ## Supported providers
@@ -108,8 +135,11 @@ You need a free [Supabase](https://supabase.com) account. Setup takes around 20â
 | `google-health` | Supported | Requires Fitbit app linked to a Google account |
 | `withings` | Supported | Requires Withings device (scale, BPM cuff, sleep mat, etc.) |
 | `oura` | Supported | Requires Oura Ring (Gen 2 or Gen 3) |
+| `polar` | Supported | Requires Polar watch / H-series HR strap + AccessLink app |
+| `strava` | Supported | Any GPS-capable device, via upload to Strava |
+| `whoop` | Supported | Requires WHOOP band (4.0 / 5.0) |
 
-Full list of data types, units, and endpoint notes: [Providers](providers/index.md)
+Plus Garmin, Huawei Health Kit, Health Connect, and Dexcom as unfinished stubs (token retrieval works; data fetching doesn't). Full list, data types, units, and endpoint notes: [Providers](providers/index.md)
 
 ---
 
