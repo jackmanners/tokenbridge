@@ -23,6 +23,14 @@ Installation and first use. If you're setting up your own instance first, see [D
 
 ///
 
+/// tab | JS/TS (bash)
+    :::bash
+    npm install "git+https://github.com/jackmanners/tokenbridge.git#path:js"
+
+    Token retrieval only - no data-fetching layer, zero runtime dependencies. Requires Node ≥18.
+
+///
+
 ---
 
 ## Configuration
@@ -57,6 +65,15 @@ The recommended way to store these is in a `.env` file in your project directory
 
 ///
 
+/// tab | JS/TS
+
+    :::text
+    # No setup wizard - create .env by hand:
+    TOKENBRIDGE_URL=https://abcdef.supabase.co/functions/v1
+    TOKENBRIDGE_API_KEY=your-api-key
+
+///
+
 !!! warning "Keep .env out of version control"
     Your `.env` file contains your API key. Make sure `.env` is in your `.gitignore`.  
     This repo's [`.gitignore`](https://github.com/jackmanners/tokenbridge/blob/main/.gitignore) already excludes it, but make sure for repo clones.
@@ -85,6 +102,18 @@ If you prefer not to use `.env`, you can pass credentials directly:
       TOKENBRIDGE_API_KEY = "your-api-key"
     )
     library(tokenbridge)
+
+///
+
+/// tab | JS/TS
+
+    :::ts
+    import { TokenBridge } from "tokenbridge";
+
+    const tb = new TokenBridge({
+      url: "https://abcdef.supabase.co/functions/v1",
+      apiKey: "your-api-key",
+    });
 
 ///
 
@@ -124,6 +153,19 @@ Each participant needs to authorise their account once. Generate a unique URL fo
 
 ///
 
+/// tab | JS/TS
+
+    :::ts
+    // Single participant
+    const url = tb.authUrl("participant-001");
+    console.log(url);
+
+    // Batch - returns Record<user_id, url>
+    const urls = tb.authUrls(["p001", "p002", "p003", "p004"]);
+    for (const [uid, url] of Object.entries(urls)) console.log(`${uid}: ${url}`);
+
+///
+
 The participant:
 
 1. Clicks the link
@@ -142,6 +184,9 @@ The participant:
 ## Fetching data
 
 Once a participant has authorised, you can fetch any of their data types immediately.
+
+!!! note "JS/TS"
+    The JS/TS package stops at `getToken()` by design - no data-fetching wrapper. Call the provider's API directly with the token; see the [JS/TS API Spec](apispec-js.md) and [Provider Reference](providers/index.md). The rest of this section (Python/R only) covers the convenience wrappers those packages ship.
 
 ### Basic fetch
 

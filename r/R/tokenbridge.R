@@ -136,9 +136,15 @@ tb_setup <- function(env_file = ".env") {
 #' @export
 tb_auth_url <- function(user_id, provider = tb_get_provider(), env_file = ".env") {
   .tb_load_env(env_file)
+  api_key <- .tb_env("TOKENBRIDGE_API_KEY")
+  exp <- as.integer(Sys.time()) + 7L * 24L * 3600L
+  msg <- paste0(provider, ":", user_id, ":", exp)
+  sig <- as.character(openssl::sha256(charToRaw(msg), key = charToRaw(api_key)))
   paste0(.tb_env("TOKENBRIDGE_URL"),
          "/auth-start?provider=", provider,
-         "&user_id=", user_id)
+         "&user_id=", utils::URLencode(as.character(user_id), reserved = TRUE),
+         "&exp=", exp,
+         "&sig=", sig)
 }
 
 #' Return auth URLs for multiple participants at once

@@ -1,0 +1,22 @@
+{
+  "name": "tokenbridge",
+  "version": "0.1.0",
+  "description": "TokenBridge client (JS/TS) - OAuth token management for research. Token retrieval and auth links only; call provider APIs directly with the token.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "test": "npm run build && node --test test/*.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.0"
+  }
+}

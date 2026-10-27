@@ -75,7 +75,15 @@ export const providers: Record<string, Provider> = {
     // access enabled - absent otherwise. Used by the device-setup webview
     // (inappviews.withings.com/sdk/setup) alongside access_token; see
     // docs/gateway-app.md.
-    extractProviderData: (td) => ({ userid: td.userid, csrf_token: td.csrf_token }),
+    // Only set keys actually present in this response - callers merge this
+    // into the existing provider_data, and e.g. a refresh response may omit
+    // csrf_token even though the initial auth response had it.
+    extractProviderData: (td) => {
+      const data: Record<string, unknown> = {}
+      if (td.userid !== undefined) data.userid = td.userid
+      if (td.csrf_token !== undefined) data.csrf_token = td.csrf_token
+      return data
+    },
   },
 
   // ── Polar ─────────────────────────────────────────────────────────────────
@@ -116,10 +124,13 @@ export const providers: Record<string, Provider> = {
     scopes: ['activity:read_all', 'profile:read_all'],
     pkce: false,
     authParams: { approval_prompt: 'auto' },
-    // Strava returns athlete profile in the token response
-    extractProviderData: (td) => ({
-      athlete_id: (td.athlete as Record<string, unknown>)?.id ?? null,
-    }),
+    // Strava only includes the athlete profile on the initial auth response,
+    // not on a token refresh - omit the key entirely when absent so a refresh
+    // doesn't blow away the athlete_id a prior auth already stored.
+    extractProviderData: (td) => {
+      const athleteId = (td.athlete as Record<string, unknown> | undefined)?.id
+      return athleteId !== undefined ? { athlete_id: athleteId } : {}
+    },
   },
 
   // ── WHOOP ─────────────────────────────────────────────────────────────────

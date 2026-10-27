@@ -32,7 +32,7 @@ Deno.serve(async (req) => {
   // Tokens that haven't been refreshed in 80+ days, oldest first
   const { data: rows, error } = await supabase
     .from('oauth_tokens')
-    .select('user_id, provider, refresh_token, expires_at, scopes, last_refreshed_at')
+    .select('user_id, provider, refresh_token, expires_at, scopes, provider_data, last_refreshed_at')
     .or(`last_refreshed_at.is.null,last_refreshed_at.lt.${cutoff}`)
     .not('refresh_token', 'is', null)
     .order('last_refreshed_at', { ascending: true, nullsFirst: true })

@@ -46,7 +46,18 @@ If someone in your lab has already set this up, you just need the client package
 
 ///
 
+/// tab | JS/TS
+
+    :::bash
+    npm install "git+https://github.com/jackmanners/tokenbridge.git#path:js"
+
+    Token retrieval only - no data-fetching layer. See [JS/TS package](js/index.md).
+
+///
+
 â†’ Continue with [Getting Started](getting-started.md)
+
+Integrating TokenBridge into another script or project (or handing it to an LLM to wire up for you)? [**API Spec**](apispec.md) has single-file, copy-paste-into-context references for Python, R, and JS/TS.
 
 ### Deploying your own instance
 
@@ -96,6 +107,22 @@ You need a free [Supabase](https://supabase.com) account. Setup takes around 20â
     tok <- tb_get_token("p001")
     sleep <- tb_fetch("p001", "sleep",                  start, end, token = tok)
     hrv   <- tb_fetch("p001", "heart-rate-variability", start, end, token = tok)
+
+///
+
+/// tab | JS/TS
+
+    :::ts
+    import { TokenBridge } from "tokenbridge";
+
+    const tb = new TokenBridge();   // reads .env
+
+    // Generate a link for each participant and send it to them
+    console.log(tb.authUrl("participant-001", "withings"));
+
+    // Get a token, then call the provider's own API directly - this
+    // package stops at the token, by design. See the API Spec below.
+    const token = await tb.getToken("participant-001", "withings");
 
 ///
 

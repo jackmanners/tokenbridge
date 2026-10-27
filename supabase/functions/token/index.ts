@@ -91,7 +91,11 @@ Deno.serve(async (req) => {
     ? new Date(Date.now() + td.expires_in * 1000).toISOString()
     : row.expires_at
 
-  const providerData = provider.extractProviderData ? provider.extractProviderData(td) : {}
+  // Merge, don't replace: fields set once at initial auth (e.g. postTokenExchange
+  // results, or provider fields only present on the first token response) must
+  // survive a refresh even if this provider's extractProviderData can't recompute
+  // them from the refresh response alone.
+  const providerData = { ...(row.provider_data ?? {}), ...(provider.extractProviderData ? provider.extractProviderData(td) : {}) }
 
   const { error: updateError } = await supabase
     .from('oauth_tokens')

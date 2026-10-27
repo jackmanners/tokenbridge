@@ -38,7 +38,7 @@ export async function doRefresh(
 
 export async function refreshAndStore(
   supabase: ReturnType<typeof import('@supabase/supabase-js').createClient>,
-  row: { user_id: string; provider: string; refresh_token: string; expires_at: string | null; scopes: string[] },
+  row: { user_id: string; provider: string; refresh_token: string; expires_at: string | null; scopes: string[]; provider_data?: Record<string, unknown> | null },
 ): Promise<{ ok: true } | { ok: false; error: unknown }> {
   const provider = providers[row.provider]
   if (!provider) return { ok: false, error: `unknown provider: ${row.provider}` }
@@ -51,7 +51,8 @@ export async function refreshAndStore(
     ? new Date(Date.now() + (td.expires_in as number) * 1000).toISOString()
     : row.expires_at
 
-  const providerData = provider.extractProviderData ? provider.extractProviderData(td) : {}
+  // Merge, don't replace - see the matching comment in token/index.ts.
+  const providerData = { ...(row.provider_data ?? {}), ...(provider.extractProviderData ? provider.extractProviderData(td) : {}) }
 
   const { error } = await supabase
     .from('oauth_tokens')

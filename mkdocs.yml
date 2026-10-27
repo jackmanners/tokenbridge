@@ -41,6 +41,11 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
+  - API Spec (AI-friendly):
+    - Overview: apispec.md
+    - Python: apispec-python.md
+    - R: apispec-r.md
+    - JS/TS: apispec-js.md
   - Deployment:
     - Overview: deployment.md
     - Setup Guide: basic-quickstart.md
@@ -60,3 +65,6 @@ nav:
     - R:
       - r/index.md
       - API Reference: r/reference.md
+    - JS/TS:
+      - js/index.md
+      - API Reference: apispec-js.md

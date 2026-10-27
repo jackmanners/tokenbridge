@@ -11,7 +11,8 @@ Description: Lightweight client for fetching health data via a TokenBridge
     Withings support planned.
 License: file LICENSE
 Imports:
-    httr
+    httr,
+    openssl
 Suggests:
     testthat (>= 3.0.0)
 Encoding: UTF-8
