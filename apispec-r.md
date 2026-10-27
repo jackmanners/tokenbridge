@@ -1,7 +1,7 @@
 # API Spec — R
 
-Single-file reference for the R package, written to be pasted whole into an
-LLM's context when wiring TokenBridge into another script.
+Reference for the R package's auth and token functions - exact signatures,
+return shapes, and error conditions.
 
 **TokenBridge's job is OAuth token management, full stop.** Get a token, then
 call the provider's own API directly - see [Provider Reference](providers/index.md)

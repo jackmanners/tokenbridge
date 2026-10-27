@@ -16,7 +16,7 @@ This page shows the minimal code to get from zero to a valid access token. What 
 
 ## Step 1 - Onboard a participant
 
-Generate an auth link and send it to them. This is just a URL - you can print it, email it, put it in a Qualtrics survey, whatever.
+Generate an auth link and send it to them - by email, SMS, or embedded in a survey tool such as Qualtrics.
 
 The link must carry an `exp` (expiry) and `sig` (HMAC-SHA256 of `{provider}:{user_id}:{exp}`, keyed with `TOKENBRIDGE_API_KEY`) - `auth-start` rejects any link that's missing these, wrong, or expired. This stops someone from guessing the URL shape and starting an OAuth flow under an arbitrary `user_id`.
 

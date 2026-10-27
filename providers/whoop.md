@@ -42,6 +42,11 @@
 | `WHOOP_CLIENT_ID` | Client ID from above |
 | `WHOOP_CLIENT_SECRET` | Client Secret from above |
 
-**Test** — visit this URL, you should be redirected to WHOOP authorisation:
+**Test:** generate a signed auth link and visit it - you should be redirected to WHOOP authorisation.
 
-`https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=whoop&user_id=test`
+```python
+from tokenbridge import TokenBridge
+print(TokenBridge().auth_url("test", provider="whoop"))
+```
+
+`auth-start` requires a signed, time-limited link (see [API Spec](../apispec-python.md)), so a bare URL with `user_id=test` won't work.
