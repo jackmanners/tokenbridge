@@ -2,7 +2,7 @@
 
 TokenBridge is self-hosted - you run your own Supabase instance and tokens stay in your own database. This page covers the architecture, security model, and config options. For a step-by-step walkthrough, see [Deploying TokenBridge](deploying.md).
 
-This is the platform: the thing you deploy once per lab or study. The [Client Libraries](../clients/index.md) (Python, R, JS/TS) are separate, optional packages that talk to it - you don't need to touch this page again once your instance is running, unless you're changing its configuration.
+This is the platform: the thing you deploy once per lab or study. The [Client Libraries](../clients/index.md) (Python, R, JavaScript) are separate, optional packages that talk to it - you don't need to touch this page again once your instance is running, unless you're changing its configuration.
 
 ---
 

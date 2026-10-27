@@ -79,7 +79,7 @@ The link must carry an `exp` (expiry) and `sig` (HMAC-SHA256 of `{provider}:{use
 
 ///
 
-Using the Python, R, or JS/TS packages instead? `tb.auth_url(user_id)` / `tb_auth_url(user_id)` / `tb.authUrl(userId)` already does this signing for you.
+Using the Python, R, or JavaScript packages instead? `tb.auth_url(user_id)` / `tb_auth_url(user_id)` / `tb.authUrl(userId)` already does this signing for you.
 
 The participant clicks the link, signs in, approves access, and sees a success page. TokenBridge stores their token automatically. You don't need to do anything else on your end.
 

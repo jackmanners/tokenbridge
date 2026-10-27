@@ -22,9 +22,9 @@ The main client class. Import and instantiate once; use `tb.fetch()` for data an
 
 ## Provider namespaces
 
-`tb.google` and `tb.withings` are lightweight proxy objects. They pre-bind a provider
-and forward every call to the underlying provider instance. This means all `GoogleHealth`
-methods are available as `tb.google.<method>`.
+`tb.google`, `tb.withings`, `tb.oura`, `tb.polar`, `tb.strava`, and `tb.whoop` are lightweight
+proxy objects. Each pre-binds a provider and forwards every call to the underlying provider
+instance, so all `GoogleHealth` methods are available as `tb.google.<method>`, and so on.
 
 ```python
 tb.google.fetch("p001", "sleep", start, end)           # same as tb.fetch(..., provider="google-health")
@@ -87,3 +87,78 @@ monitors, sleep mats, activity trackers).
 ::: tokenbridge.Withings
     options:
       show_source: false
+
+---
+
+## Oura
+
+```python
+tb.oura.fetch("p001", "daily-readiness", start, end)
+```
+
+::: tokenbridge.Oura
+    options:
+      show_source: false
+      members:
+        - fetch
+
+---
+
+## Polar
+
+Access tokens never expire (no refresh flow). Date ranges over 28 days are chunked into
+sequential requests automatically.
+
+```python
+tb.polar.fetch("p001", "sleep", start, end)
+```
+
+::: tokenbridge.Polar
+    options:
+      show_source: false
+      members:
+        - fetch
+
+---
+
+## Strava
+
+`fetch()` returns activity summaries; per-activity time-series (HR, power, GPS) is a
+separate call keyed by `activity_id`, not a date range:
+
+```python
+activities = tb.strava.fetch("p001", "activities", start, end)
+streams    = tb.strava.streams("p001", activities[0]["id"], keys=["heartrate", "watts"])
+```
+
+::: tokenbridge.Strava
+    options:
+      show_source: false
+      members:
+        - fetch
+        - streams
+
+---
+
+## Whoop
+
+```python
+tb.whoop.fetch("p001", "recovery", start, end)
+```
+
+`recovery` records are keyed by `cycle_id`, not their own id - join manually if you need
+recovery, sleep, and cycle in one row.
+
+::: tokenbridge.Whoop
+    options:
+      show_source: false
+      members:
+        - fetch
+
+---
+
+## Unfinished providers
+
+`tb.garmin`, `tb.huawei`, `tb.health_connect`, `tb.dexcom` are registered but every method
+raises `NotImplementedError` - these were never finished and aren't planned to be. Use
+`tb.get_token()` for them and call the provider API yourself.

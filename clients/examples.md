@@ -63,7 +63,7 @@ The result is a single, self-contained HTML file - no server round-trips needed 
 
 ---
 
-## Scheduled token refresh for a backend job (JS/TS)
+## Scheduled token refresh for a backend job (JavaScript)
 
 A Node service that needs a fresh Withings token every night to pull the latest readings into your own database - no interactive participant flow, just a scheduled job hitting the provider API directly.
 
@@ -91,4 +91,4 @@ for (const userId of ["p001", "p002", "p003"]) {
 }
 ```
 
-`getToken()` refreshes transparently if the stored token is near expiry, so this can run on a plain cron schedule without any token-management logic of its own. This is the pattern the JS/TS package is built for - see the [Token API Reference](token-reference.md).
+`getToken()` refreshes transparently if the stored token is near expiry, so this can run on a plain cron schedule without any token-management logic of its own. This is the pattern the JavaScript package is built for - see the [Token API Reference](token-reference.md).

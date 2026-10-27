@@ -1,6 +1,6 @@
 # Token API Reference
 
-The interface every client library shares: generate a signed auth link, retrieve a token. This is the whole of the JS/TS package, and the auth/token half of Python and R. For the Python/R data-fetching convenience layer, see the [Data-Fetching Guide](data-fetching.md).
+The interface every client library shares: generate a signed auth link, retrieve a token. This is the whole of the JavaScript package, and the auth/token half of Python and R. For the Python/R data-fetching convenience layer, see the [Data-Fetching Guide](data-fetching.md).
 
 ---
 
@@ -20,7 +20,7 @@ The interface every client library shares: generate a signed auth link, retrieve
 
 ///
 
-/// tab | JS/TS
+/// tab | JavaScript
 
     :::bash
     npm install "git+https://github.com/jackmanners/tokenbridge.git#path:js"
@@ -52,7 +52,7 @@ All three read the same two environment variables, typically from a `.env` file:
 
 ///
 
-/// tab | JS/TS
+/// tab | JavaScript
 
     :::ts
     import { TokenBridge } from "tokenbridge";
@@ -86,7 +86,7 @@ Returns a signed, time-limited URL - `.../auth-start?provider=...&user_id=...&ex
 
 ///
 
-/// tab | JS/TS
+/// tab | JavaScript
 
     :::ts
     tb.authUrl(userId: string, provider?: string): string
@@ -135,7 +135,7 @@ Returns a valid access token for `user_id` + `provider`, auto-refreshing server-
 
 ///
 
-/// tab | JS/TS
+/// tab | JavaScript
 
     :::ts
     tb.getToken(userId: string, provider?: string): Promise<string>
@@ -156,7 +156,7 @@ Returns a valid access token for `user_id` + `provider`, auto-refreshing server-
 
 ## Errors
 
-| Condition | Python | R | JS/TS |
+| Condition | Python | R | JavaScript |
 |---|---|---|---|
 | Missing config | `RuntimeError: TOKENBRIDGE_URL not set` | `stop(".env is not set - run tb_setup() first.")` | `TokenBridgeError: TOKENBRIDGE_URL is not set` |
 | Not yet authorised (404) | `RuntimeError: No token found for user '...'` (includes auth URL) | `stop("No token found for user '...'")` (includes auth URL) | `TokenBridgeError: No token found for user '...'` (includes auth URL) |

@@ -1500,9 +1500,9 @@ than TokenBridge.  <code>user_id</code> is used as the lookup key
 
 </div><hr />
 <h2 id="provider-namespaces">Provider namespaces<a class="headerlink" href="#provider-namespaces" title="Permanent link">&para;</a></h2>
-<p><code>tb.google</code> and <code>tb.withings</code> are lightweight proxy objects. They pre-bind a provider
-and forward every call to the underlying provider instance. This means all <code>GoogleHealth</code>
-methods are available as <code>tb.google.&lt;method&gt;</code>.</p>
+<p><code>tb.google</code>, <code>tb.withings</code>, <code>tb.oura</code>, <code>tb.polar</code>, <code>tb.strava</code>, and <code>tb.whoop</code> are lightweight
+proxy objects. Each pre-binds a provider and forwards every call to the underlying provider
+instance, so all <code>GoogleHealth</code> methods are available as <code>tb.google.&lt;method&gt;</code>, and so on.</p>
 <div class="codehilite"><pre><span></span><code><span class="n">tb</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"sleep"</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>           <span class="c1"># same as tb.fetch(..., provider="google-health")</span>
 <span class="n">tb</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>                  <span class="c1"># GoogleHealth.summary</span>
 <span class="n">tb</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">data_completeness</span><span class="p">([</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"p002"</span><span class="p">],</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>    <span class="c1"># GoogleHealth.data_completeness</span>
@@ -2169,7 +2169,1086 @@ are invalid.</p>
 
     </div>
 
+</div><hr />
+<h2 id="oura">Oura<a class="headerlink" href="#oura" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="n">tb</span><span class="o">.</span><span class="n">oura</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"daily-readiness"</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+</code></pre></div>
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="tokenbridge.Oura" class="doc doc-heading">
+              <code class=" language-python"><span class="n">tokenbridge</span><span class="o">.</span><span class="n">Oura</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span></code>
+
+<a href="#tokenbridge.Oura" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="tokenbridge.providers._base.HealthProvider">HealthProvider</span></code></p>
+
+
+
+        <p>Oura Ring API v2 provider.</p>
+<p>Usually accessed via <code>tb.oura</code> rather than instantiated directly.</p>
+<p>All public methods accept an optional <code>token</code> argument:</p>
+<p>.. code-block:: python</p>
+<div class="codehilite"><pre><span></span><code>token = tb.get_token("p001", provider="oura")
+sleep = ou.fetch("p001", "sleep",          start, end, token=token)
+ready = ou.fetch("p001", "daily-readiness", start, end, token=token)
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+<h3 id="tokenbridge.Oura-functions">Methods:<a href="#tokenbridge.Oura-functions" class="headerlink" title="Permanent link">&para;</a></h3>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="tokenbridge.Oura.fetch" class="doc doc-heading">
+            <code class=" language-python"><span class="n">fetch</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span></code>
+
+<a href="#tokenbridge.Oura.fetch" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Fetch any Oura data type by its ID.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>user_id</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>TokenBridge participant ID.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>data_type</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Type ID from :data:<code>DATA_TYPES</code>, e.g. <code>"sleep"</code>,
+<code>"daily-activity"</code>, <code>"heartrate"</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>start_date</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Start of date range, <code>"YYYY-MM-DD"</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>end_date</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>End of date range, <code>"YYYY-MM-DD"</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>token</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pre-fetched access token.  Obtain with
+<code>tb.get_token(user_id, provider="oura")</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="dict">dict</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of dicts, one per record.  Field names match the Oura API</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="dict">dict</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>exactly.  Returns an empty list if no data exists for the period.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If <code>data_type</code> is not in :data:<code>DATA_TYPES</code> or
+dates are invalid.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    </div>
+
 </div>
+
+
+
+  </div>
+
+    </div>
+
+</div><hr />
+<h2 id="polar">Polar<a class="headerlink" href="#polar" title="Permanent link">&para;</a></h2>
+<p>Access tokens never expire (no refresh flow). Date ranges over 28 days are chunked into
+sequential requests automatically.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">tb</span><span class="o">.</span><span class="n">polar</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"sleep"</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+</code></pre></div>
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="tokenbridge.Polar" class="doc doc-heading">
+              <code class=" language-python"><span class="n">tokenbridge</span><span class="o">.</span><span class="n">Polar</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span></code>
+
+<a href="#tokenbridge.Polar" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="tokenbridge.providers._base.HealthProvider">HealthProvider</span></code></p>
+
+
+
+        <p>Polar AccessLink API v3 provider.</p>
+<p>Usually accessed via <code>tb.polar</code> rather than instantiated directly.</p>
+<p>.. code-block:: python</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">sleep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">tb</span>.<span class="nv">polar</span>.<span class="nv">fetch</span><span class="ss">(</span><span class="s2">"p001"</span>,<span class="w"> </span><span class="s2">"sleep"</span>,<span class="w"> </span><span class="nv">start</span>,<span class="w"> </span><span class="k">end</span><span class="ss">)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+<h3 id="tokenbridge.Polar-functions">Methods:<a href="#tokenbridge.Polar-functions" class="headerlink" title="Permanent link">&para;</a></h3>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="tokenbridge.Polar.fetch" class="doc doc-heading">
+            <code class=" language-python"><span class="n">fetch</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span></code>
+
+<a href="#tokenbridge.Polar.fetch" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Fetch any Polar data type by its ID.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>user_id</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>TokenBridge participant ID.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>data_type</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Type ID from :data:<code>DATA_TYPES</code>, e.g. <code>"sleep"</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>start_date</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Start of date range, <code>"YYYY-MM-DD"</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>end_date</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>End of date range, <code>"YYYY-MM-DD"</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>token</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pre-fetched access token.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="dict">dict</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of dicts, one per record. Field names match the Polar API</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="dict">dict</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>exactly. Automatically chunks ranges longer than 28 days into</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="dict">dict</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>multiple requests (Polar's per-request limit).</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If <code>data_type</code> is not in :data:<code>DATA_TYPES</code> or
+dates are invalid.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="RuntimeError">RuntimeError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If Polar returns a non-2xx response, e.g. because
+the participant hasn't been registered via
+<code>POST /v3/users</code> yet.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><hr />
+<h2 id="strava">Strava<a class="headerlink" href="#strava" title="Permanent link">&para;</a></h2>
+<p><code>fetch()</code> returns activity summaries; per-activity time-series (HR, power, GPS) is a
+separate call keyed by <code>activity_id</code>, not a date range:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">activities</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">strava</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"activities"</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+<span class="n">streams</span>    <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">strava</span><span class="o">.</span><span class="n">streams</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="n">activities</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"id"</span><span class="p">],</span> <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s2">"heartrate"</span><span class="p">,</span> <span class="s2">"watts"</span><span class="p">])</span>
+</code></pre></div>
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="tokenbridge.Strava" class="doc doc-heading">
+              <code class=" language-python"><span class="n">tokenbridge</span><span class="o">.</span><span class="n">Strava</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span></code>
+
+<a href="#tokenbridge.Strava" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="tokenbridge.providers._base.HealthProvider">HealthProvider</span></code></p>
+
+
+
+        <p>Strava API v3 provider.</p>
+<p>Usually accessed via <code>tb.strava</code> rather than instantiated directly.</p>
+<p>.. code-block:: python</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">activities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">tb</span>.<span class="nv">strava</span>.<span class="nv">fetch</span><span class="ss">(</span><span class="s2">"p001"</span>,<span class="w"> </span><span class="s2">"activities"</span>,<span class="w"> </span><span class="nv">start</span>,<span class="w"> </span><span class="k">end</span><span class="ss">)</span>
+<span class="nv">streams</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nv">tb</span>.<span class="nv">strava</span>.<span class="nv">streams</span><span class="ss">(</span><span class="s2">"p001"</span>,<span class="w"> </span><span class="nv">activities</span>[<span class="mi">0</span>][<span class="s2">"id"</span>],<span class="w"> </span><span class="nv">keys</span><span class="o">=</span>[<span class="s2">"heartrate"</span>,<span class="w"> </span><span class="s2">"watts"</span>]<span class="ss">)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+<h3 id="tokenbridge.Strava-functions">Methods:<a href="#tokenbridge.Strava-functions" class="headerlink" title="Permanent link">&para;</a></h3>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="tokenbridge.Strava.fetch" class="doc doc-heading">
+            <code class=" language-python"><span class="n">fetch</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span></code>
+
+<a href="#tokenbridge.Strava.fetch" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Fetch Strava activities for a participant.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>user_id</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>TokenBridge participant ID.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>data_type</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Currently only <code>"activities"</code> is supported. Use
+:meth:<code>streams</code> for per-activity HR/power/GPS data.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>start_date</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Start of date range, <code>"YYYY-MM-DD"</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>end_date</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>End of date range, <code>"YYYY-MM-DD"</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>token</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pre-fetched access token.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="dict">dict</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of activity summary dicts, one per activity.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If <code>data_type</code> is not in :data:<code>DATA_TYPES</code> or
+dates are invalid.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="RuntimeError">RuntimeError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>On HTTP 429 (rate limit exceeded).</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="tokenbridge.Strava.streams" class="doc doc-heading">
+            <code class=" language-python"><span class="n">streams</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">activity_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span></code>
+
+<a href="#tokenbridge.Strava.streams" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Fetch time-series streams (HR, power, GPS, etc.) for one activity.</p>
+<p>Unlike :meth:<code>fetch</code>, this is keyed by a single <code>activity_id</code> rather
+than a date range - call :meth:<code>fetch</code> first to get activity IDs.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>user_id</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>TokenBridge participant ID.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>activity_id</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Strava activity ID (from <code>fetch()</code> results).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>keys</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="list">list</span>[<span title="str">str</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Stream types to request, e.g. <code>["heartrate", "watts"]</code>.
+Defaults to <code>["time", "heartrate", "watts", "latlng", "altitude"]</code>.
+See :data:<code>STREAM_KEYS</code> for all options.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>token</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pre-fetched access token.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="dict">dict</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Dict keyed by stream type, e.g. <code>{"heartrate": {"data": [...], ...}}</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><hr />
+<h2 id="whoop">Whoop<a class="headerlink" href="#whoop" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="n">tb</span><span class="o">.</span><span class="n">whoop</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"recovery"</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+</code></pre></div>
+
+<p><code>recovery</code> records are keyed by <code>cycle_id</code>, not their own id - join manually if you need
+recovery, sleep, and cycle in one row.</p>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="tokenbridge.Whoop" class="doc doc-heading">
+              <code class=" language-python"><span class="n">tokenbridge</span><span class="o">.</span><span class="n">Whoop</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span></code>
+
+<a href="#tokenbridge.Whoop" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="tokenbridge.providers._base.HealthProvider">HealthProvider</span></code></p>
+
+
+
+        <p>WHOOP API v1 provider.</p>
+<p>Usually accessed via <code>tb.whoop</code> rather than instantiated directly.</p>
+<p>.. code-block:: python</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">recovery</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">tb</span>.<span class="nv">whoop</span>.<span class="nv">fetch</span><span class="ss">(</span><span class="s2">"p001"</span>,<span class="w"> </span><span class="s2">"recovery"</span>,<span class="w"> </span><span class="nv">start</span>,<span class="w"> </span><span class="k">end</span><span class="ss">)</span>
+<span class="nv">sleep</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nv">tb</span>.<span class="nv">whoop</span>.<span class="nv">fetch</span><span class="ss">(</span><span class="s2">"p001"</span>,<span class="w"> </span><span class="s2">"sleep"</span>,<span class="w">    </span><span class="nv">start</span>,<span class="w"> </span><span class="k">end</span><span class="ss">)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+<h3 id="tokenbridge.Whoop-functions">Methods:<a href="#tokenbridge.Whoop-functions" class="headerlink" title="Permanent link">&para;</a></h3>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="tokenbridge.Whoop.fetch" class="doc doc-heading">
+            <code class=" language-python"><span class="n">fetch</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span></code>
+
+<a href="#tokenbridge.Whoop.fetch" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Fetch any WHOOP data type by its ID.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>user_id</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>TokenBridge participant ID.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>data_type</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Type ID from :data:<code>DATA_TYPES</code>, e.g. <code>"recovery"</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>start_date</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Start of date range, <code>"YYYY-MM-DD"</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>end_date</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>End of date range, <code>"YYYY-MM-DD"</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>token</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pre-fetched access token.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="dict">dict</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of dicts, one per record. Field names match the WHOOP API</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="dict">dict</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>exactly. Note that <code>"recovery"</code> records use <code>cycle_id</code> rather</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="dict">dict</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>than their own <code>id</code> - see module docstring.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If <code>data_type</code> is not in :data:<code>DATA_TYPES</code> or
+dates are invalid.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><hr />
+<h2 id="unfinished-providers">Unfinished providers<a class="headerlink" href="#unfinished-providers" title="Permanent link">&para;</a></h2>
+<p><code>tb.garmin</code>, <code>tb.huawei</code>, <code>tb.health_connect</code>, <code>tb.dexcom</code> are registered but every method
+raises <code>NotImplementedError</code> - these were never finished and aren't planned to be. Use
+<code>tb.get_token()</code> for them and call the provider API yourself.</p>
   </div>
 </article>
                                 <div id="bottom-navigation" class="mx-auto flex h-16 w-full max-w-2xl items-center justify-between gap-2 px-4 md:px-0">
@@ -2403,6 +3482,84 @@ are invalid.</p>
             Methods:
         </a>
         
+        
+
+        
+        <a href="#oura" data-active="false" data-depth="2">
+            Oura
+        </a>
+        
+
+        
+        <a href="#tokenbridge.Oura" data-active="false" data-depth="2">
+            Oura
+        </a>
+        
+        
+        <a href="#tokenbridge.Oura-functions" data-active="false" data-depth="3">
+            Methods:
+        </a>
+        
+        
+
+        
+        <a href="#polar" data-active="false" data-depth="2">
+            Polar
+        </a>
+        
+
+        
+        <a href="#tokenbridge.Polar" data-active="false" data-depth="2">
+            Polar
+        </a>
+        
+        
+        <a href="#tokenbridge.Polar-functions" data-active="false" data-depth="3">
+            Methods:
+        </a>
+        
+        
+
+        
+        <a href="#strava" data-active="false" data-depth="2">
+            Strava
+        </a>
+        
+
+        
+        <a href="#tokenbridge.Strava" data-active="false" data-depth="2">
+            Strava
+        </a>
+        
+        
+        <a href="#tokenbridge.Strava-functions" data-active="false" data-depth="3">
+            Methods:
+        </a>
+        
+        
+
+        
+        <a href="#whoop" data-active="false" data-depth="2">
+            Whoop
+        </a>
+        
+
+        
+        <a href="#tokenbridge.Whoop" data-active="false" data-depth="2">
+            Whoop
+        </a>
+        
+        
+        <a href="#tokenbridge.Whoop-functions" data-active="false" data-depth="3">
+            Methods:
+        </a>
+        
+        
+
+        
+        <a href="#unfinished-providers" data-active="false" data-depth="2">
+            Unfinished providers
+        </a>
         
 
         

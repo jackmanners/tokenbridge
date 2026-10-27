@@ -6,13 +6,13 @@ A client library is how your research script talks to a TokenBridge instance - i
 
 ## Choosing a language
 
-| | Python | R | JS/TS |
+| | Python | R | JavaScript |
 |---|---|---|---|
 | Auth links + token retrieval | ✓ | ✓ | ✓ |
 | Data-fetching convenience layer | ✓ (6 providers) | ✓ (3 providers) | — |
 | Install | `pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python` | `devtools::install_github("jackmanners/tokenbridge", subdir = "r")` | `npm install "git+https://github.com/jackmanners/tokenbridge.git#path:js"` |
 
-If you just need a token to call a provider API yourself - a backend job, a different language entirely - any of the three works the same way; JS/TS is the leanest for that.
+If you just need a token to call a provider API yourself - a backend job, a different language entirely - any of the three works the same way; JavaScript is the leanest for that.
 
 ## Where to go next
 

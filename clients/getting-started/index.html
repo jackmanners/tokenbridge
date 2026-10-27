@@ -724,7 +724,7 @@ Dependencies<span class="w"> </span>installed<span class="w"> </span>automatical
 </code></pre></div>
 
 </div>
-<input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><label for="__tabbed_1_3">JS/TS (bash)</label><div class="tabbed-content">
+<input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><label for="__tabbed_1_3">JavaScript (bash)</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code>npm<span class="w"> </span>install<span class="w"> </span><span class="s2">"git+https://github.com/jackmanners/tokenbridge.git#path:js"</span>
 
 Token<span class="w"> </span>retrieval<span class="w"> </span>only<span class="w"> </span>-<span class="w"> </span>no<span class="w"> </span>data-fetching<span class="w"> </span>layer,<span class="w"> </span>zero<span class="w"> </span>runtime<span class="w"> </span>dependencies.<span class="w"> </span>Requires<span class="w"> </span>Node<span class="w"> </span>≥18.
@@ -771,7 +771,7 @@ Token<span class="w"> </span>retrieval<span class="w"> </span>only<span class="w
 </code></pre></div>
 
 </div>
-<input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><label for="__tabbed_2_3">JS/TS</label><div class="tabbed-content">
+<input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><label for="__tabbed_2_3">JavaScript</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code># No setup wizard - create .env by hand:
 TOKENBRIDGE_URL=https://abcdef.supabase.co/functions/v1
 TOKENBRIDGE_API_KEY=your-api-key
@@ -805,7 +805,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 </code></pre></div>
 
 </div>
-<input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><label for="__tabbed_3_3">JS/TS</label><div class="tabbed-content">
+<input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><label for="__tabbed_3_3">JavaScript</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">TokenBridge</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"tokenbridge"</span><span class="p">;</span>
 
 <span class="kd">const</span><span class="w"> </span><span class="nx">tb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">TokenBridge</span><span class="p">({</span>
@@ -845,7 +845,7 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 </code></pre></div>
 
 </div>
-<input id="__tabbed_4_3" name="__tabbed_4" type="radio" /><label for="__tabbed_4_3">JS/TS</label><div class="tabbed-content">
+<input id="__tabbed_4_3" name="__tabbed_4" type="radio" /><label for="__tabbed_4_3">JavaScript</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="c1">// Single participant</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">tb</span><span class="p">.</span><span class="nx">authUrl</span><span class="p">(</span><span class="s2">"participant-001"</span><span class="p">);</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
@@ -885,13 +885,13 @@ This repo's <a href="https://github.com/jackmanners/tokenbridge/blob/main/.gitig
 </code></pre></div>
 
 </div>
-<input id="__tabbed_5_3" name="__tabbed_5" type="radio" /><label for="__tabbed_5_3">JS/TS</label><div class="tabbed-content">
+<input id="__tabbed_5_3" name="__tabbed_5" type="radio" /><label for="__tabbed_5_3">JavaScript</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tb</span><span class="p">.</span><span class="nx">getToken</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">);</span>
 </code></pre></div>
 
 </div>
 </div>
-<p>That's the entire JS/TS package - call the provider's API directly with the token from here. Python and R can either do the same, or use the built-in <a href="../data-fetching/">Data-Fetching Guide</a> convenience layer:</p>
+<p>That's the entire JavaScript package - call the provider's API directly with the token from here. Python and R can either do the same, or use the built-in <a href="../data-fetching/">Data-Fetching Guide</a> convenience layer:</p>
 <div class="tabbed-set" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><label for="__tabbed_6_1">Python</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="n">sleep</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"sleep"</span><span class="p">,</span> <span class="s2">"2026-05-01"</span><span class="p">,</span> <span class="s2">"2026-06-18"</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>

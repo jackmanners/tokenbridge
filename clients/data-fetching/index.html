@@ -707,7 +707,7 @@
   <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
     <h1 id="data-fetching-guide">Data-Fetching Guide<a class="headerlink" href="#data-fetching-guide" title="Permanent link">&para;</a></h1>
 <p>Python and R additionally wrap each provider's data endpoints - pagination, date formatting, and (for Google Health/Withings) flattening or decoding raw fields. This layer is real and maintained, but <strong>it's a secondary priority behind the OAuth/token layer</strong> covered in the <a href="../token-reference/">Token API Reference</a>, so it can lag behind a provider's recent API changes. If something looks off or missing, check the provider's own API reference first - see <a href="../../platform/providers/">Providers</a>.</p>
-<p>JS/TS doesn't have this layer at all, by design - see the note at the bottom.</p>
+<p>JavaScript doesn't have this layer at all, by design - see the note at the bottom.</p>
 <hr />
 <h2 id="fetching-data">Fetching data<a class="headerlink" href="#fetching-data" title="Permanent link">&para;</a></h2>
 <div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Python</label><div class="tabbed-content">
@@ -837,8 +837,8 @@
 </div>
 <p>Templates: <code>full</code> (sleep), <code>sleep-bp</code> (sleep + BP), <code>bp</code> (BP only). See <a href="../../platform/reports/">Reports</a> for available templates and writing your own.</p>
 <hr />
-<h2 id="jsts">JS/TS<a class="headerlink" href="#jsts" title="Permanent link">&para;</a></h2>
-<p>Not available - by design, the JS/TS package stops at <code>getToken()</code>. Call the provider's API directly with the token; see <a href="../../platform/providers/">Providers</a> for each one's API base and official docs, or the <a href="../../platform/http-api/">Direct HTTP API</a> if you're not using a client library at all.</p>
+<h2 id="javascript">JavaScript<a class="headerlink" href="#javascript" title="Permanent link">&para;</a></h2>
+<p>Not available - by design, the JavaScript package stops at <code>getToken()</code>. Call the provider's API directly with the token; see <a href="../../platform/providers/">Providers</a> for each one's API base and official docs, or the <a href="../../platform/http-api/">Direct HTTP API</a> if you're not using a client library at all.</p>
 <h2 id="full-reference">Full reference<a class="headerlink" href="#full-reference" title="Permanent link">&para;</a></h2>
 <p>Exhaustive, auto-generated-where-possible function reference for everything on this page: <a href="../python-reference/">Python Reference</a> · <a href="../r-reference/">R Reference</a>.</p>
   </div>
@@ -1035,8 +1035,8 @@
         
 
         
-        <a href="#jsts" data-active="false" data-depth="2">
-            JS/TS
+        <a href="#javascript" data-active="false" data-depth="2">
+            JavaScript
         </a>
         
 

@@ -2,7 +2,7 @@
 
 Python and R additionally wrap each provider's data endpoints - pagination, date formatting, and (for Google Health/Withings) flattening or decoding raw fields. This layer is real and maintained, but **it's a secondary priority behind the OAuth/token layer** covered in the [Token API Reference](token-reference.md), so it can lag behind a provider's recent API changes. If something looks off or missing, check the provider's own API reference first - see [Providers](../platform/providers/index.md).
 
-JS/TS doesn't have this layer at all, by design - see the note at the bottom.
+JavaScript doesn't have this layer at all, by design - see the note at the bottom.
 
 ---
 
@@ -162,9 +162,9 @@ Templates: `full` (sleep), `sleep-bp` (sleep + BP), `bp` (BP only). See [Reports
 
 ---
 
-## JS/TS
+## JavaScript
 
-Not available - by design, the JS/TS package stops at `getToken()`. Call the provider's API directly with the token; see [Providers](../platform/providers/index.md) for each one's API base and official docs, or the [Direct HTTP API](../platform/http-api.md) if you're not using a client library at all.
+Not available - by design, the JavaScript package stops at `getToken()`. Call the provider's API directly with the token; see [Providers](../platform/providers/index.md) for each one's API base and official docs, or the [Direct HTTP API](../platform/http-api.md) if you're not using a client library at all.
 
 ## Full reference
 

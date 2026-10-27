@@ -755,8 +755,8 @@ connection, and saves them to an <code>.env</code> file. Run once before anythin
 </code></pre></div>
 
 <p>Set the default provider for the current R session. All subsequent <code>tb_fetch()</code>,
-<code>tb_auth_url()</code>, <code>tb_get_token()</code>, and <code>tb_token_status()</code> calls use this provider
-unless overridden with <code>provider=</code>.</p>
+<code>tb_auth_url()</code>, and <code>tb_get_token()</code> calls use this provider unless overridden
+with <code>provider=</code>.</p>
 <p>Can be called multiple times to switch providers mid-script.</p>
 <p><strong>Arguments</strong></p>
 <div class="table-wrapper"><table>
@@ -799,7 +799,6 @@ Default at package load: <code>"google-health"</code>.</p>
 <span class="w">         </span><span class="n">provider</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nf">tb_get_provider</span><span class="p">(),</span>
 <span class="w">         </span><span class="n">sleepscan</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span>
 <span class="w">         </span><span class="n">sleepscan_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span>
-<span class="w">         </span><span class="n">raw</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span>
 <span class="w">         </span><span class="n">env_file</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s">".env"</span><span class="p">)</span>
 </code></pre></div>
 
@@ -876,12 +875,6 @@ call without changing the session default.</p>
 <td>SleepScan API key. Falls back to <code>SLEEPSCAN_API_KEY</code> env var</td>
 </tr>
 <tr>
-<td><code>raw</code></td>
-<td>logical</td>
-<td><code>FALSE</code></td>
-<td>If <code>TRUE</code>, return a list of raw page response bodies (zero processing). See <strong>Raw responses</strong> below</td>
-</tr>
-<tr>
 <td><code>env_file</code></td>
 <td>character</td>
 <td><code>".env"</code></td>
@@ -892,9 +885,6 @@ call without changing the session default.</p>
 <p><strong>Returns</strong> <code>data.frame</code> with one row per data point. Column names are the API field
 names, flattened with dot notation (e.g. <code>startTime.seconds</code>).
 Returns an empty <code>data.frame</code> if no data exists for the period.</p>
-<p>When <code>raw = TRUE</code>, returns a <code>list</code> of raw page response bodies (one element per
-paginated API request) with zero transformation. Useful when you need fields not
-exposed by normal processing.</p>
 <p><strong>Examples</strong></p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># Basic</span>
 <span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"sleep"</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-05-01"</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-06-18"</span><span class="p">)</span>
@@ -1058,77 +1048,6 @@ Use it when you want to fetch multiple data types for the same user efficiently:
 </code></pre></div>
 
 <hr />
-<h3 id="tb_token_status">tb_token_status<a class="headerlink" href="#tb_token_status" title="Permanent link">&para;</a></h3>
-<div class="codehilite"><pre><span></span><code><span class="nf">tb_token_status</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">tb_get_provider</span><span class="p">(),</span><span class="w"> </span><span class="n">env_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">".env"</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Return token metadata for a participant without exposing the raw token.
-Useful for auditing whether participants have authorised and when their tokens expire.</p>
-<p><strong>Arguments</strong></p>
-<div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>Argument</th>
-<th>Type</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>user_id</code></td>
-<td>character</td>
-<td>-</td>
-<td>TokenBridge participant ID</td>
-</tr>
-<tr>
-<td><code>provider</code></td>
-<td>character</td>
-<td><code>tb_get_provider()</code></td>
-<td>Provider</td>
-</tr>
-<tr>
-<td><code>env_file</code></td>
-<td>character</td>
-<td><code>".env"</code></td>
-<td>Path to <code>.env</code> file</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Returns</strong> Named list:</p>
-<div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>expires_at</code></td>
-<td>character</td>
-<td>ISO 8601 expiry timestamp</td>
-</tr>
-<tr>
-<td><code>refreshed</code></td>
-<td>logical</td>
-<td><code>TRUE</code> if the token was refreshed on this call</td>
-</tr>
-<tr>
-<td><code>scopes</code></td>
-<td>character vector</td>
-<td>Granted OAuth scopes</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Example</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="n">status</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_token_status</span><span class="p">(</span><span class="s">"p001"</span><span class="p">)</span>
-<span class="nf">cat</span><span class="p">(</span><span class="s">"Expires:"</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="o">$</span><span class="n">expires_at</span><span class="p">,</span><span class="w"> </span><span class="s">"\n"</span><span class="p">)</span>
-<span class="nf">cat</span><span class="p">(</span><span class="s">"Was refreshed:"</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="o">$</span><span class="n">refreshed</span><span class="p">,</span><span class="w"> </span><span class="s">"\n"</span><span class="p">)</span>
-</code></pre></div>
-
-<hr />
 <h2 id="google-health-gh_">Google Health (<code>gh_</code>)<a class="headerlink" href="#google-health-gh_" title="Permanent link">&para;</a></h2>
 <h3 id="gh_data_types">GH_DATA_TYPES<a class="headerlink" href="#gh_data_types" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><code><span class="n">GH_DATA_TYPES</span>
@@ -1228,140 +1147,6 @@ Returns an empty <code>data.frame</code> if no data exists for the period.</p>
 <span class="n">hrv</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">gh_fetch</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"heart-rate-variability"</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
 <span class="n">rhr</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">gh_fetch</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"daily-resting-heart-rate"</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
 <span class="n">spo2</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">gh_fetch</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"daily-oxygen-saturation"</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
-</code></pre></div>
-
-<hr />
-<h3 id="gh_summary">gh_summary<a class="headerlink" href="#gh_summary" title="Permanent link">&para;</a></h3>
-<div class="codehilite"><pre><span></span><code><span class="nf">gh_summary</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">start_date</span><span class="p">,</span><span class="w"> </span><span class="n">end_date</span><span class="p">,</span><span class="w"> </span><span class="n">env_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">".env"</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Summary statistics for one participant covering sleep and respiratory rate.
-Makes a single token request and reuses it for both data fetches.</p>
-<p><strong>Arguments</strong></p>
-<div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>Argument</th>
-<th>Type</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>user_id</code></td>
-<td>character</td>
-<td>-</td>
-<td>TokenBridge participant ID</td>
-</tr>
-<tr>
-<td><code>start_date</code></td>
-<td>character</td>
-<td>-</td>
-<td><code>"YYYY-MM-DD"</code></td>
-</tr>
-<tr>
-<td><code>end_date</code></td>
-<td>character</td>
-<td>-</td>
-<td><code>"YYYY-MM-DD"</code></td>
-</tr>
-<tr>
-<td><code>env_file</code></td>
-<td>character</td>
-<td><code>".env"</code></td>
-<td>Path to <code>.env</code> file</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Returns</strong> Named list:</p>
-<div class="codehilite"><pre><span></span><code>list(
-  user_id      = "p001",
-  period_days  = 48,
-  sleep = list(
-    n                  = 45,      # number of sleep sessions
-    days_with_data     = 44,      # unique days with at least one session
-    coverage_pct       = 91.7,    # days_with_data / period_days * 100
-    mean_duration_hours = 7.23,
-    std_duration_hours  = 0.91
-  ),
-  respiratory_rate = list(
-    n              = 44,
-    days_with_data = 44,
-    coverage_pct   = 91.7,
-    mean           = 15.2,
-    min            = 12.1,
-    max            = 18.4,
-    std            = 1.3
-  )
-)
-</code></pre></div>
-
-<p><strong>Example</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="n">s</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">gh_summary</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-05-01"</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-06-18"</span><span class="p">)</span>
-<span class="nf">cat</span><span class="p">(</span><span class="s">"Sleep coverage:"</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="o">$</span><span class="n">sleep</span><span class="o">$</span><span class="n">coverage_pct</span><span class="p">,</span><span class="w"> </span><span class="s">"%\n"</span><span class="p">)</span>
-<span class="nf">cat</span><span class="p">(</span><span class="s">"Mean sleep duration:"</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="o">$</span><span class="n">sleep</span><span class="o">$</span><span class="n">mean_duration_hours</span><span class="p">,</span><span class="w"> </span><span class="s">"hours\n"</span><span class="p">)</span>
-<span class="nf">cat</span><span class="p">(</span><span class="s">"Mean respiratory rate:"</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="o">$</span><span class="n">respiratory_rate</span><span class="o">$</span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="s">"breaths/min\n"</span><span class="p">)</span>
-</code></pre></div>
-
-<hr />
-<h3 id="gh_summary_all">gh_summary_all<a class="headerlink" href="#gh_summary_all" title="Permanent link">&para;</a></h3>
-<div class="codehilite"><pre><span></span><code><span class="nf">gh_summary_all</span><span class="p">(</span><span class="n">user_ids</span><span class="p">,</span><span class="w"> </span><span class="n">start_date</span><span class="p">,</span><span class="w"> </span><span class="n">end_date</span><span class="p">,</span><span class="w"> </span><span class="n">env_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">".env"</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Run <code>gh_summary()</code> for multiple participants.
-Errors per participant are caught and returned as <code>list(error = "message")</code> for that entry
-rather than stopping the whole call.</p>
-<p><strong>Arguments</strong></p>
-<div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>Argument</th>
-<th>Type</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>user_ids</code></td>
-<td>character vector</td>
-<td>-</td>
-<td>TokenBridge participant IDs</td>
-</tr>
-<tr>
-<td><code>start_date</code></td>
-<td>character</td>
-<td>-</td>
-<td><code>"YYYY-MM-DD"</code></td>
-</tr>
-<tr>
-<td><code>end_date</code></td>
-<td>character</td>
-<td>-</td>
-<td><code>"YYYY-MM-DD"</code></td>
-</tr>
-<tr>
-<td><code>env_file</code></td>
-<td>character</td>
-<td><code>".env"</code></td>
-<td>Path to <code>.env</code> file</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Returns</strong> Named list, one element per <code>user_id</code>. Each element is the result
-of <code>gh_summary()</code>, or <code>list(error = "message")</code> if that participant failed.</p>
-<p><strong>Example</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="n">summaries</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">gh_summary_all</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"p002"</span><span class="p">,</span><span class="w"> </span><span class="s">"p003"</span><span class="p">),</span><span class="w"> </span><span class="s">"2026-05-01"</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-06-18"</span><span class="p">)</span>
-
-<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">uid</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">summaries</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">s</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">summaries</span><span class="p">[[</span><span class="n">uid</span><span class="p">]]</span>
-<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nf">is.null</span><span class="p">(</span><span class="n">s</span><span class="o">$</span><span class="n">error</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nf">cat</span><span class="p">(</span><span class="n">uid</span><span class="p">,</span><span class="w"> </span><span class="s">"ERROR:"</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="o">$</span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="s">"\n"</span><span class="p">)</span>
-<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nf">cat</span><span class="p">(</span><span class="n">uid</span><span class="p">,</span><span class="w"> </span><span class="s">"sleep coverage:"</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="o">$</span><span class="n">sleep</span><span class="o">$</span><span class="n">coverage_pct</span><span class="p">,</span><span class="w"> </span><span class="s">"%\n"</span><span class="p">)</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
 </code></pre></div>
 
 <hr />
@@ -1474,7 +1259,6 @@ per participant × data type - useful for checking data quality before running a
 <span class="w">         </span><span class="n">token</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span>
 <span class="w">         </span><span class="n">sleepscan</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span>
 <span class="w">         </span><span class="n">sleepscan_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span>
-<span class="w">         </span><span class="n">raw</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span>
 <span class="w">         </span><span class="n">env_file</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s">".env"</span><span class="p">)</span>
 </code></pre></div>
 
@@ -1534,12 +1318,6 @@ per participant × data type - useful for checking data quality before running a
 <td>SleepScan API key. Falls back to <code>SLEEPSCAN_API_KEY</code> env var</td>
 </tr>
 <tr>
-<td><code>raw</code></td>
-<td>logical</td>
-<td><code>FALSE</code></td>
-<td>If <code>TRUE</code>, return a list of raw page response bodies with zero processing</td>
-</tr>
-<tr>
 <td><code>env_file</code></td>
 <td>character</td>
 <td><code>".env"</code></td>
@@ -1547,7 +1325,7 @@ per participant × data type - useful for checking data quality before running a
 </tr>
 </tbody>
 </table></div>
-<p><strong>Returns</strong> <code>data.frame</code> with one row per record, or a <code>list</code> of raw page bodies when <code>raw = TRUE</code>.</p>
+<p><strong>Returns</strong> <code>data.frame</code> with one row per record.</p>
 <p><strong>Examples</strong></p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># Sleep summary with AHI</span>
 <span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"sleep-summary"</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-06-01"</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-07-01"</span><span class="p">)</span>
@@ -1559,10 +1337,6 @@ per participant × data type - useful for checking data quality before running a
 
 <span class="c1"># Via SleepScan (token from SleepScan instead of TokenBridge)</span>
 <span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="s">"p@lab.com"</span><span class="p">,</span><span class="w"> </span><span class="s">"sleep-summary"</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">sleepscan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span>
-
-<span class="c1"># Raw response bodies</span>
-<span class="n">bodies</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">wt_fetch</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"sleep-summary"</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span>
-<span class="c1"># bodies[[1]] == list(status = 0, body = list(series = list(...), more = FALSE))</span>
 </code></pre></div>
 
 <p>Supported type IDs: <code>"sleep-summary"</code>, <code>"sleep-detail"</code>, <code>"activity"</code>, <code>"workouts"</code>,
@@ -1570,9 +1344,73 @@ per participant × data type - useful for checking data quality before running a
 <code>"heart-rate"</code>, <code>"spo2"</code>, <code>"muscle-mass"</code>, <code>"bone-mass"</code>, <code>"ecg"</code>.
 See <a href="../../platform/providers/">Providers</a> for full details.</p>
 <hr />
-<h2 id="data-type-ids">Data type IDs<a class="headerlink" href="#data-type-ids" title="Permanent link">&para;</a></h2>
-<p>Pass any of these strings as the <code>data_type</code> argument. See <a href="../../platform/providers/">Providers</a>
-for units, device requirements, and notes.</p>
+<h2 id="oura-ou_">Oura (<code>ou_</code>)<a class="headerlink" href="#oura-ou_" title="Permanent link">&para;</a></h2>
+<h3 id="ou_fetch">ou_fetch<a class="headerlink" href="#ou_fetch" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="nf">ou_fetch</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">data_type</span><span class="p">,</span><span class="w"> </span><span class="n">start_date</span><span class="p">,</span><span class="w"> </span><span class="n">end_date</span><span class="p">,</span>
+<span class="w">         </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">env_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">".env"</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Fetch Oura Ring data for a participant. Equivalent to <code>tb_fetch(..., provider = "oura")</code>,
+except it's always <code>"oura"</code> regardless of the session default.</p>
+<p><strong>Arguments</strong></p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_id</code></td>
+<td>character</td>
+<td>-</td>
+<td>TokenBridge participant ID</td>
+</tr>
+<tr>
+<td><code>data_type</code></td>
+<td>character</td>
+<td>-</td>
+<td>Oura type ID. See <code>names(OU_DATA_TYPES)</code></td>
+</tr>
+<tr>
+<td><code>start_date</code></td>
+<td>character</td>
+<td>-</td>
+<td><code>"YYYY-MM-DD"</code></td>
+</tr>
+<tr>
+<td><code>end_date</code></td>
+<td>character</td>
+<td>-</td>
+<td><code>"YYYY-MM-DD"</code></td>
+</tr>
+<tr>
+<td><code>token</code></td>
+<td>character</td>
+<td><code>NULL</code></td>
+<td>Pre-fetched access token</td>
+</tr>
+<tr>
+<td><code>env_file</code></td>
+<td>character</td>
+<td><code>".env"</code></td>
+<td>Path to <code>.env</code> file</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Returns</strong> <code>data.frame</code> with one row per record.</p>
+<p><strong>Example</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ou_fetch</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"daily-readiness"</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-06-01"</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-07-01"</span><span class="p">)</span>
+</code></pre></div>
+
+<p>See <a href="../../platform/providers/">Providers</a> for the full Oura type ID list.</p>
+<hr />
+<h2 id="google-health-data-type-ids">Google Health data type IDs<a class="headerlink" href="#google-health-data-type-ids" title="Permanent link">&para;</a></h2>
+<p>Pass any of these strings as <code>gh_fetch()</code>'s/<code>tb_fetch()</code>'s <code>data_type</code> argument. See
+<a href="../../platform/providers/">Providers</a> for units, device requirements, and notes.</p>
 <div class="table-wrapper"><table>
 <thead>
 <tr>
@@ -1812,10 +1650,6 @@ for units, device requirements, and notes.</p>
             tb_get_token
         </a>
         
-        <a href="#tb_token_status" data-active="false" data-depth="3">
-            tb_token_status
-        </a>
-        
         
 
         
@@ -1830,14 +1664,6 @@ for units, device requirements, and notes.</p>
         
         <a href="#gh_fetch" data-active="false" data-depth="3">
             gh_fetch
-        </a>
-        
-        <a href="#gh_summary" data-active="false" data-depth="3">
-            gh_summary
-        </a>
-        
-        <a href="#gh_summary_all" data-active="false" data-depth="3">
-            gh_summary_all
         </a>
         
         <a href="#gh_data_completeness" data-active="false" data-depth="3">
@@ -1859,8 +1685,20 @@ for units, device requirements, and notes.</p>
         
 
         
-        <a href="#data-type-ids" data-active="false" data-depth="2">
-            Data type IDs
+        <a href="#oura-ou_" data-active="false" data-depth="2">
+            Oura (ou_)
+        </a>
+        
+        
+        <a href="#ou_fetch" data-active="false" data-depth="3">
+            ou_fetch
+        </a>
+        
+        
+
+        
+        <a href="#google-health-data-type-ids" data-active="false" data-depth="2">
+            Google Health data type IDs
         </a>
         
 
