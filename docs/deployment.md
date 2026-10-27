@@ -28,17 +28,19 @@ Your scripts call the `/token` endpoint to get a valid access token, then use it
 
 ## Edge functions
 
-Four Deno/TypeScript functions run on Supabase:
+Six Deno/TypeScript functions run on Supabase:
 
 | Function | Purpose |
 |---|---|
-| `auth-start` | Generates the provider OAuth URL and redirects the participant |
+| `auth-start` | Verifies the signed auth link, generates the provider OAuth URL, redirects the participant |
 | `auth-callback` | Receives the OAuth code after authorisation, exchanges it for tokens, stores them |
 | `token` | Called by your scripts - returns a valid access token, auto-refreshes if needed |
 | `token-keepalive` | Called weekly by GitHub Actions - proactively refreshes tokens before they expire |
+| `sleep-report` | Renders a stored report template with participant data into a self-contained HTML file |
+| `template-manager` | CRUD for report templates (`report_templates` table) used by `sleep-report` |
 
 The function code lives in [`supabase/functions/`](https://github.com/jackmanners/tokenbridge/tree/main/supabase/functions).
-Deploy via the CLI (`supabase functions deploy`) - the functions share code via `_shared/` so they must be bundled by the CLI, not pasted into the dashboard.
+Deploy via the CLI (`supabase functions deploy ... --import-map supabase/functions/deno.json`) - the functions share code via `_shared/` so they must be bundled by the CLI, not pasted into the dashboard. The `--import-map` flag resolves the `@supabase/supabase-js` import; without it, deploying without Docker running locally fails with a bundling error.
 
 ---
 
@@ -52,16 +54,7 @@ Set these in **Project Settings → Edge Functions → Secrets**.
 |---|---|
 | `TOKENBRIDGE_API_KEY` | A secret you choose - your scripts use this to authenticate with the `/token` endpoint |
 
-**Per provider - add the pair for each provider you enable:**
-
-| Secret | Description |
-|---|---|
-| `GOOGLE_HEALTH_CLIENT_ID` | From your Google Cloud OAuth credentials |
-| `GOOGLE_HEALTH_CLIENT_SECRET` | From your Google Cloud OAuth credentials |
-| `WITHINGS_CLIENT_ID` | From your Withings developer app |
-| `WITHINGS_CLIENT_SECRET` | From your Withings developer app |
-| `OURA_CLIENT_ID` | From your Oura developer app |
-| `OURA_CLIENT_SECRET` | From your Oura developer app |
+**Per provider - add the pair for each provider you enable:** `{PROVIDER}_CLIENT_ID` and `{PROVIDER}_CLIENT_SECRET`, e.g. `WITHINGS_CLIENT_ID` / `WITHINGS_CLIENT_SECRET`. Full list with doc links for every supported provider: [`.env.example`](https://github.com/jackmanners/tokenbridge/blob/main/.env.example) and [Provider Reference](providers/index.md).
 
 ---
 

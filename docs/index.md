@@ -135,8 +135,11 @@ You need a free [Supabase](https://supabase.com) account. Setup takes around 20â
 | `google-health` | Supported | Requires Fitbit app linked to a Google account |
 | `withings` | Supported | Requires Withings device (scale, BPM cuff, sleep mat, etc.) |
 | `oura` | Supported | Requires Oura Ring (Gen 2 or Gen 3) |
+| `polar` | Supported | Requires Polar watch / H-series HR strap + AccessLink app |
+| `strava` | Supported | Any GPS-capable device, via upload to Strava |
+| `whoop` | Supported | Requires WHOOP band (4.0 / 5.0) |
 
-Full list of data types, units, and endpoint notes: [Providers](providers/index.md)
+Plus Garmin, Huawei Health Kit, Health Connect, and Dexcom as unfinished stubs (token retrieval works; data fetching doesn't). Full list, data types, units, and endpoint notes: [Providers](providers/index.md)
 
 ---
 

@@ -7,6 +7,7 @@ Installation and first use. If you're setting up your own instance first, see [D
 ## Installation
 
 /// tab | Python (bash)
+
     :::bash
     pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
 
@@ -15,6 +16,7 @@ Installation and first use. If you're setting up your own instance first, see [D
 ///
 
 /// tab | R
+
     :::r
     install.packages("devtools")
     devtools::install_github("jackmanners/tokenbridge", subdir = "r")
@@ -24,6 +26,7 @@ Installation and first use. If you're setting up your own instance first, see [D
 ///
 
 /// tab | JS/TS (bash)
+
     :::bash
     npm install "git+https://github.com/jackmanners/tokenbridge.git#path:js"
 
@@ -177,7 +180,7 @@ The participant:
     Participants must have the **Fitbit app** installed and signed in with the same Google account they use to authorise. Without this, there is no health data to access.
 
 !!! note "Test mode warning"
-    If your Google Cloud app is in Testing mode (the default for new deployments), participants will see an "unverified app" warning. They should click **Advanced → Go to [app name] (unsafe)** to proceed. This is expected - see [Deployment](deployment.md#google-verification) for context.
+    If your Google Cloud app is in Testing mode (the default for new deployments), participants will see an "unverified app" warning. They should click **Advanced → Go to [app name] (unsafe)** to proceed. This is expected - see [Deployment](deployment.md#consent-screen-and-verification) for context.
 
 ---
 

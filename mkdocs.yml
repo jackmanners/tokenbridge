@@ -58,6 +58,7 @@ nav:
     - Polar: providers/polar.md
     - Strava: providers/strava.md
     - WHOOP: providers/whoop.md
+  - Reports: reports.md
   - Client packages:
     - Python:
       - python/index.md

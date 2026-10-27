@@ -22,6 +22,8 @@ Two phases:
 2. Open [`supabase/setup.sql`](https://github.com/jackmanners/tokenbridge/blob/main/supabase/setup.sql) from the repo, copy everything, paste and run it
 3. You should see "Success. No rows returned"
 
+Already comfortable with the Supabase CLI? `supabase link --project-ref YOUR_PROJECT_REF && supabase db push` applies everything in [`supabase/migrations/`](https://github.com/jackmanners/tokenbridge/tree/main/supabase/migrations) directly and stays in sync with future migrations automatically - prefer this over the copy-paste file if you're already using the CLI for step 2 below.
+
 ---
 
 ### 2. Deploy the edge functions (~5 min)
@@ -32,7 +34,8 @@ The functions use shared code so they must be deployed via the Supabase CLI. Thi
 npm install -g supabase
 supabase login
 supabase link --project-ref YOUR_PROJECT_REF
-supabase functions deploy auth-start auth-callback token token-keepalive --no-verify-jwt
+supabase functions deploy auth-start auth-callback token token-keepalive sleep-report template-manager \
+  --no-verify-jwt --import-map supabase/functions/deno.json
 ```
 
 If you don't have Node/npm, see the [Supabase CLI docs](https://supabase.com/docs/guides/cli) for alternative install methods.
@@ -78,4 +81,4 @@ See the [Providers section](providers/index.md) for detailed setup instructions 
 
 The backend is set up. To start pulling data, see [Basic Access via TokenBridge](basic-access.md) - it shows the full flow (auth link → token request → API call) using plain HTTP requests.
 
-If you'd prefer a Python or R wrapper, see [Client packages](../python/index.md).
+If you'd prefer a Python, R, or JS/TS wrapper instead of raw HTTP, see [Client packages](python/index.md) (also linked from the sidebar).

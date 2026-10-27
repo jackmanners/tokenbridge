@@ -41,6 +41,57 @@ create trigger oauth_tokens_updated_at
   before update on oauth_tokens
   for each row execute function set_updated_at();
 
+-- Store the Google Health user ID so we can map webhook notifications back to our user_id
+alter table oauth_tokens add column if not exists health_user_id text;
+create index if not exists oauth_tokens_health_user_id on oauth_tokens (health_user_id);
+
+-- Lightweight index of which dates we have data for each user + provider + data type.
+-- Populated by webhooks. Stores availability metadata only - no actual health values.
+create table data_availability (
+  user_id       text not null,
+  provider      text not null,
+  data_type     text not null,
+  data_date     date not null,
+  operation     text not null default 'UPSERT', -- UPSERT or DELETE
+  updated_at    timestamptz default now(),
+  primary key (user_id, provider, data_type, data_date)
+);
+
+create or replace function set_data_availability_updated_at()
+returns trigger language plpgsql as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
+
+create trigger data_availability_updated_at
+  before update on data_availability
+  for each row execute function set_data_availability_updated_at();
+
+-- Report templates used by the sleep-report / template-manager functions
+create table report_templates (
+  name        text primary key,
+  description text,
+  metadata    jsonb not null default '{}',
+  html        text not null,
+  created_at  timestamptz default now(),
+  updated_at  timestamptz default now()
+);
+
+create trigger report_templates_updated_at
+  before update on report_templates
+  for each row execute function set_updated_at();
+
+-- Lock down direct PostgREST access. All real access to these tables goes
+-- through service-role edge functions, which bypass RLS entirely - so
+-- enabling RLS with zero policies denies anon/authenticated clients while
+-- changing nothing for the app.
+alter table oauth_states      enable row level security;
+alter table oauth_tokens      enable row level security;
+alter table data_availability enable row level security;
+alter table report_templates  enable row level security;
+
 -- Clean up expired state rows
 create or replace function cleanup_oauth_states()
 returns void language sql as $$
