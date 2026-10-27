@@ -8,7 +8,7 @@ Self-hosted OAuth token management for health data research. TokenBridge runs th
 
 **The Platform** is TokenBridge itself: a small, self-hosted backend (Supabase edge functions + Postgres) that someone deploys once per lab or study. It's often the same person who also writes the analysis scripts - but not always, so the two are documented separately.
 
-**Client Libraries** (Python, R, JS/TS) are thin, optional packages that talk to an existing deployment from your research script. You don't need to understand the Platform to use one - you just need its URL and API key from whoever deployed it.
+**Client Libraries** (Python, R, JavaScript) are thin, optional packages that talk to an existing deployment from your research script. You don't need to understand the Platform to use one - you just need its URL and API key from whoever deployed it.
 
 ```
 Deploy once (Platform)              Use it (Client Libraries)              Participant (once)
@@ -16,7 +16,7 @@ Deploy once (Platform)              Use it (Client Libraries)              Parti
         ▼                                    ▼                                    ▼
 Supabase project + edge               tb.get_token("p001")            clicks auth link, signs in,
 functions + Postgres      ◄───────    tb.auth_url("p001")    ───────► approves - token stored
-(token storage + refresh)             (Python/R/JS-TS)                automatically from here on
+(token storage + refresh)          (Python/R/JavaScript)              automatically from here on
 ```
 
 | I want to... | Start here |

@@ -14,7 +14,7 @@
 
 Pulling data from Google Health/Fitbit, Withings, Oura, Polar, Strava, or WHOOP into a research script means dealing with OAuth, storing tokens for every participant, and keeping them refreshed across a study that can run for months. TokenBridge handles all of that once, self-hosted on your own Supabase project.
 
-Two parts: **the Platform** (the backend you deploy once) and **Client Libraries** (Python, R, JS/TS - thin packages your scripts use to talk to it). Often the same person does both, but they're documented separately, since not always.
+Two parts: **the Platform** (the backend you deploy once) and **Client Libraries** (Python, R, JavaScript - thin packages your scripts use to talk to it). Often the same person does both, but they're documented separately, since not always.
 
 ```
 Deploy once (Platform)              Use it (Client Libraries)              Participant (once)
@@ -22,7 +22,7 @@ Deploy once (Platform)              Use it (Client Libraries)              Parti
         ▼                                    ▼                                    ▼
 Supabase project + edge               tb.get_token("p001")            clicks auth link, signs in,
 functions + Postgres      ◄───────    tb.auth_url("p001")    ───────► approves - token stored
-(token storage + refresh)             (Python/R/JS-TS)                automatically from here on
+(token storage + refresh)          (Python/R/JavaScript)              automatically from here on
 ```
 
 ---
@@ -46,7 +46,7 @@ library(tokenbridge)
 tb_setup()
 ```
 
-**JS/TS** (token retrieval only - no data-fetching layer)
+**JavaScript** (token retrieval only - no data-fetching layer)
 ```bash
 npm install "git+https://github.com/jackmanners/tokenbridge.git#path:js"
 ```
@@ -59,7 +59,7 @@ print(tb.auth_url("p001"))                                    # send to particip
 sleep = tb.fetch("p001", "sleep", "2026-05-01", "2026-06-18")  # fetch once authorised
 ```
 
-See [Client Libraries → Getting Started](https://jackmanners.github.io/tokenbridge/clients/getting-started/) for R and JS/TS, or [Examples](https://jackmanners.github.io/tokenbridge/clients/examples/) for complete scripts.
+See [Client Libraries → Getting Started](https://jackmanners.github.io/tokenbridge/clients/getting-started/) for R and JavaScript, or [Examples](https://jackmanners.github.io/tokenbridge/clients/examples/) for complete scripts.
 
 ---
 

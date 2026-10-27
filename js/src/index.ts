@@ -1,5 +1,5 @@
 /**
- * TokenBridge platform client (JS/TS).
+ * TokenBridge platform client (JavaScript).
  *
  * Token retrieval and auth-link generation only - this package does not
  * wrap provider data APIs (see the Python/R packages if you want that).

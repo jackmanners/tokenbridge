@@ -1,7 +1,7 @@
 {
   "name": "tokenbridge",
   "version": "0.1.0",
-  "description": "TokenBridge client (JS/TS) - OAuth token management for research. Token retrieval and auth links only; call provider APIs directly with the token.",
+  "description": "TokenBridge client (JavaScript) - OAuth token management for research. Token retrieval and auth links only; call provider APIs directly with the token.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [

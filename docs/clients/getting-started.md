@@ -25,7 +25,7 @@ Install a client library, connect it to an existing TokenBridge deployment, and 
 
 ///
 
-/// tab | JS/TS (bash)
+/// tab | JavaScript (bash)
 
     :::bash
     npm install "git+https://github.com/jackmanners/tokenbridge.git#path:js"
@@ -68,7 +68,7 @@ The recommended way to store these is in a `.env` file in your project directory
 
 ///
 
-/// tab | JS/TS
+/// tab | JavaScript
 
     :::text
     # No setup wizard - create .env by hand:
@@ -108,7 +108,7 @@ If you prefer not to use `.env`, pass credentials directly:
 
 ///
 
-/// tab | JS/TS
+/// tab | JavaScript
 
     :::ts
     import { TokenBridge } from "tokenbridge";
@@ -156,7 +156,7 @@ Each participant needs to authorise their account once. Generate a unique link f
 
 ///
 
-/// tab | JS/TS
+/// tab | JavaScript
 
     :::ts
     // Single participant
@@ -202,14 +202,14 @@ Once a participant has authorised, retrieve a token immediately:
 
 ///
 
-/// tab | JS/TS
+/// tab | JavaScript
 
     :::ts
     const token = await tb.getToken("p001");
 
 ///
 
-That's the entire JS/TS package - call the provider's API directly with the token from here. Python and R can either do the same, or use the built-in [Data-Fetching Guide](data-fetching.md) convenience layer:
+That's the entire JavaScript package - call the provider's API directly with the token from here. Python and R can either do the same, or use the built-in [Data-Fetching Guide](data-fetching.md) convenience layer:
 
 /// tab | Python
 

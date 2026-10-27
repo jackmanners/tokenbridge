@@ -49,8 +49,8 @@ tb_set_provider(provider)
 ```
 
 Set the default provider for the current R session. All subsequent `tb_fetch()`,
-`tb_auth_url()`, `tb_get_token()`, and `tb_token_status()` calls use this provider
-unless overridden with `provider=`.
+`tb_auth_url()`, and `tb_get_token()` calls use this provider unless overridden
+with `provider=`.
 
 Can be called multiple times to switch providers mid-script.
 
@@ -95,7 +95,6 @@ tb_fetch(user_id, data_type, start_date, end_date,
          provider     = tb_get_provider(),
          sleepscan    = NULL,
          sleepscan_key = NULL,
-         raw          = FALSE,
          env_file     = ".env")
 ```
 
@@ -127,16 +126,11 @@ call without changing the session default.
 | `provider` | character | `tb_get_provider()` | Provider ID. Overrides session default for this call only |
 | `sleepscan` | logical | `NULL` | If `TRUE`, resolve token via SleepScan using `user_id` as lookup key (email, Withings user ID as integer string, or participant ID) |
 | `sleepscan_key` | character | `NULL` | SleepScan API key. Falls back to `SLEEPSCAN_API_KEY` env var |
-| `raw` | logical | `FALSE` | If `TRUE`, return a list of raw page response bodies (zero processing). See **Raw responses** below |
 | `env_file` | character | `".env"` | Path to `.env` file |
 
 **Returns** `data.frame` with one row per data point. Column names are the API field
 names, flattened with dot notation (e.g. `startTime.seconds`).
 Returns an empty `data.frame` if no data exists for the period.
-
-When `raw = TRUE`, returns a `list` of raw page response bodies (one element per
-paginated API request) with zero transformation. Useful when you need fields not
-exposed by normal processing.
 
 **Examples**
 
@@ -257,41 +251,6 @@ hrv   <- tb_fetch("p001", "heart-rate-variability", start, end, token = tok)
 
 ---
 
-### tb_token_status
-
-```r
-tb_token_status(user_id, provider = tb_get_provider(), env_file = ".env")
-```
-
-Return token metadata for a participant without exposing the raw token.
-Useful for auditing whether participants have authorised and when their tokens expire.
-
-**Arguments**
-
-| Argument | Type | Default | Description |
-|---|---|---|---|
-| `user_id` | character | - | TokenBridge participant ID |
-| `provider` | character | `tb_get_provider()` | Provider |
-| `env_file` | character | `".env"` | Path to `.env` file |
-
-**Returns** Named list:
-
-| Field | Type | Description |
-|---|---|---|
-| `expires_at` | character | ISO 8601 expiry timestamp |
-| `refreshed` | logical | `TRUE` if the token was refreshed on this call |
-| `scopes` | character vector | Granted OAuth scopes |
-
-**Example**
-
-```r
-status <- tb_token_status("p001")
-cat("Expires:", status$expires_at, "\n")
-cat("Was refreshed:", status$refreshed, "\n")
-```
-
----
-
 ## Google Health (`gh_`)
 
 ### GH_DATA_TYPES
@@ -373,99 +332,6 @@ spo2  <- gh_fetch("p001", "daily-oxygen-saturation", start, end, token = tok)
 
 ---
 
-### gh_summary
-
-```r
-gh_summary(user_id, start_date, end_date, env_file = ".env")
-```
-
-Summary statistics for one participant covering sleep and respiratory rate.
-Makes a single token request and reuses it for both data fetches.
-
-**Arguments**
-
-| Argument | Type | Default | Description |
-|---|---|---|---|
-| `user_id` | character | - | TokenBridge participant ID |
-| `start_date` | character | - | `"YYYY-MM-DD"` |
-| `end_date` | character | - | `"YYYY-MM-DD"` |
-| `env_file` | character | `".env"` | Path to `.env` file |
-
-**Returns** Named list:
-
-```
-list(
-  user_id      = "p001",
-  period_days  = 48,
-  sleep = list(
-    n                  = 45,      # number of sleep sessions
-    days_with_data     = 44,      # unique days with at least one session
-    coverage_pct       = 91.7,    # days_with_data / period_days * 100
-    mean_duration_hours = 7.23,
-    std_duration_hours  = 0.91
-  ),
-  respiratory_rate = list(
-    n              = 44,
-    days_with_data = 44,
-    coverage_pct   = 91.7,
-    mean           = 15.2,
-    min            = 12.1,
-    max            = 18.4,
-    std            = 1.3
-  )
-)
-```
-
-**Example**
-
-```r
-s <- gh_summary("p001", "2026-05-01", "2026-06-18")
-cat("Sleep coverage:", s$sleep$coverage_pct, "%\n")
-cat("Mean sleep duration:", s$sleep$mean_duration_hours, "hours\n")
-cat("Mean respiratory rate:", s$respiratory_rate$mean, "breaths/min\n")
-```
-
----
-
-### gh_summary_all
-
-```r
-gh_summary_all(user_ids, start_date, end_date, env_file = ".env")
-```
-
-Run `gh_summary()` for multiple participants.
-Errors per participant are caught and returned as `list(error = "message")` for that entry
-rather than stopping the whole call.
-
-**Arguments**
-
-| Argument | Type | Default | Description |
-|---|---|---|---|
-| `user_ids` | character vector | - | TokenBridge participant IDs |
-| `start_date` | character | - | `"YYYY-MM-DD"` |
-| `end_date` | character | - | `"YYYY-MM-DD"` |
-| `env_file` | character | `".env"` | Path to `.env` file |
-
-**Returns** Named list, one element per `user_id`. Each element is the result
-of `gh_summary()`, or `list(error = "message")` if that participant failed.
-
-**Example**
-
-```r
-summaries <- gh_summary_all(c("p001", "p002", "p003"), "2026-05-01", "2026-06-18")
-
-for (uid in names(summaries)) {
-  s <- summaries[[uid]]
-  if (!is.null(s$error)) {
-    cat(uid, "ERROR:", s$error, "\n")
-  } else {
-    cat(uid, "sleep coverage:", s$sleep$coverage_pct, "%\n")
-  }
-}
-```
-
----
-
 ### gh_data_completeness
 
 ```r
@@ -525,7 +391,6 @@ wt_fetch(user_id, data_type, start_date, end_date,
          token         = NULL,
          sleepscan     = NULL,
          sleepscan_key = NULL,
-         raw           = FALSE,
          env_file      = ".env")
 ```
 
@@ -543,10 +408,9 @@ Fetch Withings data for a participant. Equivalent to
 | `token` | character | `NULL` | Pre-fetched access token |
 | `sleepscan` | logical | `NULL` | If `TRUE`, resolve token via SleepScan using `user_id` as lookup key |
 | `sleepscan_key` | character | `NULL` | SleepScan API key. Falls back to `SLEEPSCAN_API_KEY` env var |
-| `raw` | logical | `FALSE` | If `TRUE`, return a list of raw page response bodies with zero processing |
 | `env_file` | character | `".env"` | Path to `.env` file |
 
-**Returns** `data.frame` with one row per record, or a `list` of raw page bodies when `raw = TRUE`.
+**Returns** `data.frame` with one row per record.
 
 **Examples**
 
@@ -561,10 +425,6 @@ bp <- wt_fetch("p001", "blood-pressure", "2026-06-01", "2026-07-01")
 
 # Via SleepScan (token from SleepScan instead of TokenBridge)
 sleep <- wt_fetch("p@lab.com", "sleep-summary", start, end, sleepscan = TRUE)
-
-# Raw response bodies
-bodies <- wt_fetch("p001", "sleep-summary", start, end, raw = TRUE)
-# bodies[[1]] == list(status = 0, body = list(series = list(...), more = FALSE))
 ```
 
 Supported type IDs: `"sleep-summary"`, `"sleep-detail"`, `"activity"`, `"workouts"`,
@@ -574,10 +434,45 @@ See [Providers](../platform/providers/index.md) for full details.
 
 ---
 
-## Data type IDs
+## Oura (`ou_`)
 
-Pass any of these strings as the `data_type` argument. See [Providers](../platform/providers/index.md)
-for units, device requirements, and notes.
+### ou_fetch
+
+```r
+ou_fetch(user_id, data_type, start_date, end_date,
+         token = NULL, env_file = ".env")
+```
+
+Fetch Oura Ring data for a participant. Equivalent to `tb_fetch(..., provider = "oura")`,
+except it's always `"oura"` regardless of the session default.
+
+**Arguments**
+
+| Argument | Type | Default | Description |
+|---|---|---|---|
+| `user_id` | character | - | TokenBridge participant ID |
+| `data_type` | character | - | Oura type ID. See `names(OU_DATA_TYPES)` |
+| `start_date` | character | - | `"YYYY-MM-DD"` |
+| `end_date` | character | - | `"YYYY-MM-DD"` |
+| `token` | character | `NULL` | Pre-fetched access token |
+| `env_file` | character | `".env"` | Path to `.env` file |
+
+**Returns** `data.frame` with one row per record.
+
+**Example**
+
+```r
+sleep <- ou_fetch("p001", "daily-readiness", "2026-06-01", "2026-07-01")
+```
+
+See [Providers](../platform/providers/index.md) for the full Oura type ID list.
+
+---
+
+## Google Health data type IDs
+
+Pass any of these strings as `gh_fetch()`'s/`tb_fetch()`'s `data_type` argument. See
+[Providers](../platform/providers/index.md) for units, device requirements, and notes.
 
 | Category | Type IDs |
 |---|---|
