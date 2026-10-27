@@ -5,43 +5,31 @@
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/apispec-js/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/clients/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/apispec-python/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/clients/data-fetching/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/apispec-r/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/clients/examples/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/apispec/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/clients/getting-started/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/basic-access/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/clients/python-reference/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/basic-quickstart/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/clients/r-reference/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/deployment/</loc>
-         <lastmod>2026-10-27</lastmod>
-    </url>
-    <url>
-         <loc>https://jackmanners.github.io/tokenbridge/examples/</loc>
-         <lastmod>2026-10-27</lastmod>
-    </url>
-    <url>
-         <loc>https://jackmanners.github.io/tokenbridge/getting-started/</loc>
-         <lastmod>2026-10-27</lastmod>
-    </url>
-    <url>
-         <loc>https://jackmanners.github.io/tokenbridge/reports/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/clients/token-reference/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
@@ -49,51 +37,47 @@
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/js/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/platform/deploying/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/providers/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/platform/http-api/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/providers/google-health/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/platform/overview/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/providers/oura/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/platform/reports/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/providers/polar/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/platform/providers/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/providers/strava/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/platform/providers/google-health/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/providers/whoop/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/platform/providers/oura/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/providers/withings/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/platform/providers/polar/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/python/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/platform/providers/strava/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/python/reference/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/platform/providers/whoop/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
-         <loc>https://jackmanners.github.io/tokenbridge/r/</loc>
-         <lastmod>2026-10-27</lastmod>
-    </url>
-    <url>
-         <loc>https://jackmanners.github.io/tokenbridge/r/reference/</loc>
+         <loc>https://jackmanners.github.io/tokenbridge/platform/providers/withings/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
 </urlset>
