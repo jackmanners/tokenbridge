@@ -46,7 +46,7 @@ tb.google.data_completeness(
 )
 ```
 
-All data type IDs are kebab-case strings. See [`DATA_TYPES`](tokenbridge/providers/google_health.py) or the [provider reference](https://jackmanners.github.io/tokenbridge/providers/).
+All data type IDs are kebab-case strings. See [`DATA_TYPES`](tokenbridge/providers/google_health.py) or the [provider reference](https://jackmanners.github.io/tokenbridge/platform/providers/).
 
 ## Documentation
 

@@ -3,6 +3,8 @@
 Functions are grouped by prefix. All functions load `.env` automatically when
 `env_file` is specified (default: `".env"` in the working directory).
 
+For a quick cross-language comparison of just the auth/token functions, see the [Token API Reference](token-reference.md).
+
 ---
 
 ## TokenBridge platform (`tb_`)
@@ -101,7 +103,7 @@ tb_fetch(user_id, data_type, start_date, end_date,
 returns a flat `data.frame` with one row per data point.
 
 `data_type` is the kebab-case type ID - e.g. `"sleep"`, `"steps"`,
-`"heart-rate-variability"`. See `names(GH_DATA_TYPES)` or [Providers](../providers/index.md)
+`"heart-rate-variability"`. See `names(GH_DATA_TYPES)` or [Providers](../platform/providers/index.md)
 for the full list.
 
 `provider` defaults to `tb_get_provider()`. Pass explicitly to override for a single
@@ -320,7 +322,7 @@ for (dt in names(GH_DATA_TYPES)) {
 }
 ```
 
-Full descriptions, units, and device requirements: [Providers](../providers/index.md).
+Full descriptions, units, and device requirements: [Providers](../platform/providers/index.md).
 
 ---
 
@@ -535,7 +537,7 @@ Fetch Withings data for a participant. Equivalent to
 | Argument | Type | Default | Description |
 |---|---|---|---|
 | `user_id` | character | - | TokenBridge participant ID (or SleepScan lookup key when `sleepscan = TRUE`) |
-| `data_type` | character | - | Withings type ID. See [Providers](../providers/index.md) |
+| `data_type` | character | - | Withings type ID. See [Providers](../platform/providers/index.md) |
 | `start_date` | character | - | `"YYYY-MM-DD"` |
 | `end_date` | character | - | `"YYYY-MM-DD"` |
 | `token` | character | `NULL` | Pre-fetched access token |
@@ -568,13 +570,13 @@ bodies <- wt_fetch("p001", "sleep-summary", start, end, raw = TRUE)
 Supported type IDs: `"sleep-summary"`, `"sleep-detail"`, `"activity"`, `"workouts"`,
 `"weight"`, `"height"`, `"fat-ratio"`, `"fat-mass"`, `"blood-pressure"`,
 `"heart-rate"`, `"spo2"`, `"muscle-mass"`, `"bone-mass"`, `"ecg"`.
-See [Providers](../providers/index.md) for full details.
+See [Providers](../platform/providers/index.md) for full details.
 
 ---
 
 ## Data type IDs
 
-Pass any of these strings as the `data_type` argument. See [Providers](../providers/index.md)
+Pass any of these strings as the `data_type` argument. See [Providers](../platform/providers/index.md)
 for units, device requirements, and notes.
 
 | Category | Type IDs |

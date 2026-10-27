@@ -1,6 +1,6 @@
-# Using TokenBridge Without the Packages
+# Direct HTTP API Reference
 
-If you'd rather not use the Python or R packages - or you're working in another language - you can drive the whole flow with plain HTTP. TokenBridge is just a few REST endpoints.
+TokenBridge is a small set of HTTP endpoints. The [Client Libraries](../clients/index.md) wrap them, but nothing stops you calling them directly - to build a client in another language, or to avoid a dependency entirely.
 
 This page shows the minimal code to get from zero to a valid access token. What you do with it after that is up to you.
 
@@ -10,7 +10,7 @@ This page shows the minimal code to get from zero to a valid access token. What 
 
 - Your TokenBridge deployment URL: `https://YOUR_PROJECT_REF.supabase.co/functions/v1`
 - Your `TOKENBRIDGE_API_KEY`
-- A provider set up (see [Setup Guide](basic-quickstart.md))
+- A provider set up (see [Deploying TokenBridge](deploying.md))
 
 ------------------------------------------------------------------------
 

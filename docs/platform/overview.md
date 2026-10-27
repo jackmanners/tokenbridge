@@ -1,8 +1,8 @@
-# Deploying TokenBridge
+# Platform Overview
 
-TokenBridge is self-hosted - you run your own Supabase instance and tokens stay in your own database.
+TokenBridge is self-hosted - you run your own Supabase instance and tokens stay in your own database. This page covers the architecture, security model, and config options. For a step-by-step walkthrough, see [Deploying TokenBridge](deploying.md).
 
-For a step-by-step walkthrough, see the [Setup Guide](basic-quickstart.md). This page covers the architecture and config options.
+This is the platform: the thing you deploy once per lab or study. The [Client Libraries](../clients/index.md) (Python, R, JS/TS) are separate, optional packages that talk to it - you don't need to touch this page again once your instance is running, unless you're changing its configuration.
 
 ---
 
@@ -22,7 +22,7 @@ Your scripts call the `/token` endpoint to get a valid access token, then use it
 ## What you need
 
 - A [Supabase](https://supabase.com) account (free tier is fine)
-- An OAuth app for each provider you want to support (see [Setup Guide](basic-quickstart.md))
+- An OAuth app for each provider you want to support (see [Deploying TokenBridge](deploying.md))
 
 ---
 
@@ -107,3 +107,11 @@ Tokens are refreshed automatically in two ways:
 - **Proactive (keepalive):** the weekly GitHub Actions job refreshes tokens that haven't been touched in 80 days, keeping refresh tokens alive even during long gaps between data collection.
 
 This ensures participants never need to re-authorise due to token expiry during a study, as long as the weekly job is running.
+
+---
+
+## Security model
+
+- **No direct database access.** `oauth_states`, `oauth_tokens`, `data_availability`, and `report_templates` all have Row Level Security enabled with no policies - every real read/write goes through a service-role edge function, so the public (anon) Supabase key can't read stored tokens even if it leaks.
+- **Signed auth links.** `auth-start` requires an HMAC-SHA256 signature (keyed with `TOKENBRIDGE_API_KEY`, 7-day lifetime) over `provider:user_id:exp`, generated for you by `auth_url()`/`tb_auth_url()`/`authUrl()`. A bare URL with a guessed `user_id` is rejected - this is what stops someone starting an OAuth flow under an arbitrary participant ID.
+- **One API key gates every data-moving endpoint.** `/token`, `/sleep-report`, and `template-manager` all require `Authorization: Bearer $TOKENBRIDGE_API_KEY`. Treat it like a password - it's shared across every participant in the deployment, not scoped per-participant.

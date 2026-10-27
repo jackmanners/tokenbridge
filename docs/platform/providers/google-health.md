@@ -105,7 +105,7 @@ Three types only support `dailyRollup` (no raw datapoints available):
     print(TokenBridge().auth_url("test", provider="google-health"))
     ```
 
-    `auth-start` requires a signed, time-limited link (see [API Spec](../apispec-python.md)), so a bare URL with `user_id=test` won't work.
+    `auth-start` requires a signed, time-limited link (see [Token API Reference](../../clients/token-reference.md)), so a bare URL with `user_id=test` won't work.
 
     !!! note
         Participants will see an "unverified app" warning - tell them to click **Advanced → Continue**.

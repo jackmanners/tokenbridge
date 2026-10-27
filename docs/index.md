@@ -1,130 +1,29 @@
 # TokenBridge
 
-A small tool for pulling data from health APIs (Google Health/Fitbit, Withings, Oura) without dealing with OAuth every time.
-
-Getting data out of these APIs into a research script means implementing OAuth, storing tokens for all your participants, and keeping them refreshed across a study that can run for months. This handles all of that so your analysis code doesn't have to.
+Self-hosted OAuth token management for health data research. TokenBridge runs the OAuth flow for providers like Google Health/Fitbit, Withings, and Oura, stores tokens for every participant, and keeps them refreshed automatically for the life of a study - so your analysis code never has to touch OAuth.
 
 ---
 
-## How it works
+## Two parts, two audiences
+
+**The Platform** is TokenBridge itself: a small, self-hosted backend (Supabase edge functions + Postgres) that someone deploys once per lab or study. It's often the same person who also writes the analysis scripts - but not always, so the two are documented separately.
+
+**Client Libraries** (Python, R, JS/TS) are thin, optional packages that talk to an existing deployment from your research script. You don't need to understand the Platform to use one - you just need its URL and API key from whoever deployed it.
 
 ```
-Participant (once)               Your research script
-     │                                  │
-     │  clicks auth link                │  tb.fetch("p001", "sleep", ...)
-     ▼                                  ▼
- TokenBridge  ────────────────────  /token endpoint
-     │                             returns a valid access token
-     └── Supabase Postgres         script calls the health API directly
-         token storage + refresh
+Deploy once (Platform)              Use it (Client Libraries)              Participant (once)
+        │                                    │                                    │
+        ▼                                    ▼                                    ▼
+Supabase project + edge               tb.get_token("p001")            clicks auth link, signs in,
+functions + Postgres      ◄───────    tb.auth_url("p001")    ───────► approves - token stored
+(token storage + refresh)             (Python/R/JS-TS)                automatically from here on
 ```
 
-It's a small set of Supabase edge functions. It runs the OAuth flow, stores tokens in Postgres, and refreshes them automatically before they expire. Your scripts ask for a token, get one back, and call the provider API directly.
-
----
-
-## Two ways to use it
-
-### Using an existing deployment
-
-If someone in your lab has already set this up, you just need the client package. Get the URL and API key from them and point the package at their instance.
-
-/// tab | Python
-
-    :::bash
-    pip install git+https://github.com/jackmanners/tokenbridge.git#subdirectory=python
-    python -m tokenbridge
-
-///
-
-/// tab | R
-
-    :::r
-    devtools::install_github("jackmanners/tokenbridge", subdir = "r")
-    library(tokenbridge)
-    tb_setup()
-
-///
-
-/// tab | JS/TS
-
-    :::bash
-    npm install "git+https://github.com/jackmanners/tokenbridge.git#path:js"
-
-    Token retrieval only - no data-fetching layer. See [JS/TS package](js/index.md).
-
-///
-
-→ Continue with [Getting Started](getting-started.md)
-
-See [Examples](examples.md) for realistic end-to-end use cases, or the [API Spec](apispec.md) for a concise reference per language.
-
-### Deploying your own instance
-
-You need a free [Supabase](https://supabase.com) account. Setup takes around 20–30 minutes.
-
-→ [Basic setup walkthrough](basic-quickstart.md) - step-by-step from scratch  
-→ [Deployment overview](deployment.md) - architecture, config options, adding providers
-
----
-
-## Quick start
-
-/// tab | Python
-
-    :::python
-    from tokenbridge import TokenBridge
-
-    tb = TokenBridge()   # reads .env
-
-    # Generate a link for each participant and send it to them
-    print(tb.auth_url("participant-001"))
-
-    # Fetch data as soon as they've authorised
-    sleep = tb.fetch("participant-001", "sleep", "2026-05-01", "2026-06-18")
-    steps = tb.fetch("participant-001", "steps", "2026-05-01", "2026-06-18")
-
-    # One token request for multiple data types
-    token = tb.get_token("participant-001")
-    sleep = tb.fetch("participant-001", "sleep",                  start, end, token=token)
-    hrv   = tb.fetch("participant-001", "heart-rate-variability", start, end, token=token)
-
-///
-
-/// tab | R
-
-    :::r
-    library(tokenbridge)
-
-    # Generate links for your cohort
-    links <- tb_auth_urls(c("p001", "p002", "p003"))
-
-    # Fetch data
-    sleep <- tb_fetch("p001", "sleep", "2026-05-01", "2026-06-18")
-    steps <- tb_fetch("p001", "steps", "2026-05-01", "2026-06-18")
-
-    # One token for multiple data types
-    tok <- tb_get_token("p001")
-    sleep <- tb_fetch("p001", "sleep",                  start, end, token = tok)
-    hrv   <- tb_fetch("p001", "heart-rate-variability", start, end, token = tok)
-
-///
-
-/// tab | JS/TS
-
-    :::ts
-    import { TokenBridge } from "tokenbridge";
-
-    const tb = new TokenBridge();   // reads .env
-
-    // Generate a link for each participant and send it to them
-    console.log(tb.authUrl("participant-001", "withings"));
-
-    // Get a token, then call the provider's own API directly - this
-    // package stops at the token, by design. See the API Spec below.
-    const token = await tb.getToken("participant-001", "withings");
-
-///
+| I want to... | Start here |
+|---|---|
+| Deploy my own TokenBridge instance | [Platform → Deploying TokenBridge](platform/deploying.md) |
+| Use an instance someone else already deployed | [Client Libraries → Getting Started](clients/getting-started.md) |
+| See a complete, realistic script | [Examples](clients/examples.md) |
 
 ---
 
@@ -139,12 +38,4 @@ You need a free [Supabase](https://supabase.com) account. Setup takes around 20�
 | `strava` | Supported | Any GPS-capable device, via upload to Strava |
 | `whoop` | Supported | Requires WHOOP band (4.0 / 5.0) |
 
-Plus Garmin, Huawei Health Kit, Health Connect, and Dexcom as unfinished stubs (token retrieval works; data fetching doesn't). Full list, data types, units, and endpoint notes: [Providers](providers/index.md)
-
----
-
-## Reports
-
-Generate self-contained HTML reports from participant data — sleep summaries, blood pressure over time, or combined views. Reports are rendered server-side from stored templates.
-
-→ [Reports & template authoring](reports.md)
+Plus Garmin, Huawei Health Kit, Health Connect, and Dexcom as unfinished stubs (token retrieval works; data fetching doesn't). Full list, data types, units, and endpoint notes: [Providers](platform/providers/index.md).

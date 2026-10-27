@@ -40,33 +40,24 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
-  - Examples: examples.md
-  - API Spec:
-    - Overview: apispec.md
-    - Python: apispec-python.md
-    - R: apispec-r.md
-    - JS/TS: apispec-js.md
-  - Deployment:
-    - Overview: deployment.md
-    - Setup Guide: basic-quickstart.md
-    - Accessing Tokens: basic-access.md
-  - Providers:
-    - Overview: providers/index.md
-    - Google Health: providers/google-health.md
-    - Withings: providers/withings.md
-    - Oura: providers/oura.md
-    - Polar: providers/polar.md
-    - Strava: providers/strava.md
-    - WHOOP: providers/whoop.md
-  - Reports: reports.md
-  - Client packages:
-    - Python:
-      - python/index.md
-      - API Reference: python/reference.md
-    - R:
-      - r/index.md
-      - API Reference: r/reference.md
-    - JS/TS:
-      - js/index.md
-      - API Reference: apispec-js.md
+  - Platform:
+    - Overview: platform/overview.md
+    - Deploying TokenBridge: platform/deploying.md
+    - Providers:
+      - Overview: platform/providers/index.md
+      - Google Health: platform/providers/google-health.md
+      - Withings: platform/providers/withings.md
+      - Oura: platform/providers/oura.md
+      - Polar: platform/providers/polar.md
+      - Strava: platform/providers/strava.md
+      - WHOOP: platform/providers/whoop.md
+    - Reports: platform/reports.md
+    - Direct HTTP API: platform/http-api.md
+  - Client Libraries:
+    - Overview: clients/index.md
+    - Getting Started: clients/getting-started.md
+    - Token API Reference: clients/token-reference.md
+    - Data-Fetching Guide: clients/data-fetching.md
+    - Python Reference: clients/python-reference.md
+    - R Reference: clients/r-reference.md
+    - Examples: clients/examples.md

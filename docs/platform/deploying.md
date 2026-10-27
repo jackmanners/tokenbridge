@@ -1,6 +1,6 @@
-# Setup Guide
+# Deploying TokenBridge
 
-Two phases:
+Standing up your own instance. Two phases:
 
 1. **Backend** - Supabase project + edge functions (once, ~10 min)
 2. **Providers** - OAuth app per data source (10–15 min each, add as many as you need)
@@ -79,6 +79,4 @@ See the [Providers section](providers/index.md) for detailed setup instructions 
 
 ## Next steps
 
-The backend is set up. To start pulling data, see [Basic Access via TokenBridge](basic-access.md) - it shows the full flow (auth link → token request → API call) using plain HTTP requests.
-
-If you'd prefer a Python, R, or JS/TS wrapper instead of raw HTTP, see [Client packages](python/index.md) (also linked from the sidebar).
+The backend is set up. Head to [Client Libraries](../clients/getting-started.md) to install a package and onboard your first participant - or see the [Direct HTTP API Reference](http-api.md) if you'd rather not use a client library at all.

@@ -7,8 +7,7 @@ Authors@R: person("Jack", "Manners", role = c("aut", "cre"),
 Description: Lightweight client for fetching health data via a TokenBridge
     deployment. TokenBridge handles OAuth token management; this package
     provides the R interface for auth URLs, token retrieval, and health data
-    fetching. Currently supports Google Health API (Fitbit-backed), with
-    Withings support planned.
+    fetching. Supports Google Health (Fitbit-backed), Withings, and Oura.
 License: file LICENSE
 Imports:
     httr,

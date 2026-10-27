@@ -51,4 +51,4 @@ from tokenbridge import TokenBridge
 print(TokenBridge().auth_url("test", provider="polar"))
 ```
 
-`auth-start` requires a signed, time-limited link (see [API Spec](../apispec-python.md)), so a bare URL with `user_id=test` won't work.
+`auth-start` requires a signed, time-limited link (see [Token API Reference](../../clients/token-reference.md)), so a bare URL with `user_id=test` won't work.

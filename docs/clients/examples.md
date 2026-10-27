@@ -59,7 +59,7 @@ resp = requests.post(
 open("p001_report.html", "wb").write(resp.content)
 ```
 
-The result is a single, self-contained HTML file - no server round-trips needed to view it, and it opens fine as an email attachment. See [Reports](reports.md) for the available templates and how to write your own.
+The result is a single, self-contained HTML file - no server round-trips needed to view it, and it opens fine as an email attachment. See [Reports](../platform/reports.md) for the available templates and how to write your own.
 
 ---
 
@@ -91,4 +91,4 @@ for (const userId of ["p001", "p002", "p003"]) {
 }
 ```
 
-`getToken()` refreshes transparently if the stored token is near expiry, so this can run on a plain cron schedule without any token-management logic of its own. This is the pattern the JS/TS package is built for - see its [API Spec](apispec-js.md).
+`getToken()` refreshes transparently if the stored token is near expiry, so this can run on a plain cron schedule without any token-management logic of its own. This is the pattern the JS/TS package is built for - see the [Token API Reference](token-reference.md).

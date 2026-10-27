@@ -1,5 +1,7 @@
 # Python API Reference
 
+Exhaustive, auto-generated from source docstrings. For a quick cross-language comparison of just the auth/token functions, see the [Token API Reference](token-reference.md).
+
 ## TokenBridge
 
 The main client class. Import and instantiate once; use `tb.fetch()` for data and

@@ -2,7 +2,7 @@
 
 JS/TS client for [TokenBridge](https://github.com/jackmanners/tokenbridge) - OAuth token management for research.
 
-**Token retrieval and auth-link generation only.** This package doesn't wrap provider data APIs the way the Python/R packages do - get a token, then call the provider's own API directly. See [APISPEC.md](https://github.com/jackmanners/tokenbridge/blob/main/APISPEC.md) for why, and for links to each provider's API reference.
+**Token retrieval and auth-link generation only.** This package doesn't wrap provider data APIs the way the Python/R packages do - get a token, then call the provider's own API directly. See the [Client Libraries docs](https://jackmanners.github.io/tokenbridge/clients/) for why, and for links to each provider's API reference.
 
 ## Install
 
