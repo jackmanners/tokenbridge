@@ -41,7 +41,8 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
-  - API Spec (AI-friendly):
+  - Examples: examples.md
+  - API Spec:
     - Overview: apispec.md
     - Python: apispec-python.md
     - R: apispec-r.md

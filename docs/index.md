@@ -57,7 +57,7 @@ If someone in your lab has already set this up, you just need the client package
 
 → Continue with [Getting Started](getting-started.md)
 
-Integrating TokenBridge into another script or project (or handing it to an LLM to wire up for you)? [**API Spec**](apispec.md) has single-file, copy-paste-into-context references for Python, R, and JS/TS.
+See [Examples](examples.md) for realistic end-to-end use cases, or the [API Spec](apispec.md) for a concise reference per language.
 
 ### Deploying your own instance
 

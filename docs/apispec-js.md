@@ -1,7 +1,7 @@
 # API Spec — JS/TS
 
-Single-file reference for the JS/TS package, written to be pasted whole into
-an LLM's context when wiring TokenBridge into another project.
+Reference for the JS/TS package's auth and token functions - exact
+signatures, return shapes, and error conditions.
 
 **This package is token retrieval and auth-link generation only - that's the
 entire scope, by design.** TokenBridge's job is OAuth token management; it

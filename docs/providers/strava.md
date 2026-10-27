@@ -51,6 +51,11 @@ Available stream keys: `time`, `distance`, `latlng`, `altitude`, `velocity_smoot
 | `STRAVA_CLIENT_ID` | Client ID from above |
 | `STRAVA_CLIENT_SECRET` | Client Secret from above |
 
-**Test** — visit this URL, you should be redirected to Strava authorisation:
+**Test:** generate a signed auth link and visit it - you should be redirected to Strava authorisation.
 
-`https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=strava&user_id=test`
+```python
+from tokenbridge import TokenBridge
+print(TokenBridge().auth_url("test", provider="strava"))
+```
+
+`auth-start` requires a signed, time-limited link (see [API Spec](../apispec-python.md)), so a bare URL with `user_id=test` won't work.
