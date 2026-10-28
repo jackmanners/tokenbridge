@@ -838,7 +838,7 @@
 
 </div>
 </div>
-<p><code>get_token</code>'s <code>sleepscan</code> option (Python/R only) is an alternate Withings token source for participants registered through a separate system called SleepScan rather than TokenBridge's own OAuth flow - see the <a href="../data-fetching/#sleepscan">Data-Fetching Guide</a> if that applies to your study.</p>
+<p>Python's <code>get_token()</code> additionally takes a <code>sleepscan=True</code> option - an alternate Withings token source for participants registered through a separate system called SleepScan rather than TokenBridge's own OAuth flow. R has the equivalent on <code>wt_fetch()</code> instead (its token-layer <code>tb_get_token()</code> doesn't take it) - see the <a href="../data-fetching/#sleepscan">Data-Fetching Guide</a> either way if that applies to your study.</p>
 <hr />
 <h2 id="errors">Errors<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h2>
 <div class="table-wrapper"><table>
@@ -854,7 +854,7 @@
 <tr>
 <td>Missing config</td>
 <td><code>RuntimeError: TOKENBRIDGE_URL not set</code></td>
-<td><code>stop(".env is not set - run tb_setup() first.")</code></td>
+<td><code>stop("TOKENBRIDGE_URL is not set - run tb_setup() first.")</code></td>
 <td><code>TokenBridgeError: TOKENBRIDGE_URL is not set</code></td>
 </tr>
 <tr>

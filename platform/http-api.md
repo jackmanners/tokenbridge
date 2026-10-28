@@ -172,10 +172,10 @@ See the [Google Health API docs](https://developers.google.com/health/api) for t
     :::python
     import requests
 
-    r = requests.post(
+    r = requests.get(
         "https://wbsapi.withings.net/v2/measure",
         headers={"Authorization": f"Bearer {access_token}"},
-        data={
+        params={
             "action":       "getactivity",
             "startdateymd": "2026-05-01",
             "enddateymd":   "2026-06-18",
@@ -183,7 +183,7 @@ See the [Google Health API docs](https://developers.google.com/health/api) for t
     )
     print(r.json())   # {"status": 0, "body": {"activities": [...]}}
 
-All Withings endpoints use POST with an `action` parameter. Status 0 = success.
+Every Withings endpoint takes an `action` parameter. Status 0 = success.
 
 ///
 

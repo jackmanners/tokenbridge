@@ -847,10 +847,10 @@
 <input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">Withings</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
-<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
     <span class="s2">"https://wbsapi.withings.net/v2/measure"</span><span class="p">,</span>
     <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">"Authorization"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"Bearer </span><span class="si">{</span><span class="n">access_token</span><span class="si">}</span><span class="s2">"</span><span class="p">},</span>
-    <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+    <span class="n">params</span><span class="o">=</span><span class="p">{</span>
         <span class="s2">"action"</span><span class="p">:</span>       <span class="s2">"getactivity"</span><span class="p">,</span>
         <span class="s2">"startdateymd"</span><span class="p">:</span> <span class="s2">"2026-05-01"</span><span class="p">,</span>
         <span class="s2">"enddateymd"</span><span class="p">:</span>   <span class="s2">"2026-06-18"</span><span class="p">,</span>
@@ -859,7 +859,7 @@
 <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>   <span class="c1"># {"status": 0, "body": {"activities": [...]}}</span>
 </code></pre></div>
 
-<p>All Withings endpoints use POST with an <code>action</code> parameter. Status 0 = success.</p>
+<p>Every Withings endpoint takes an <code>action</code> parameter. Status 0 = success.</p>
 </div>
 <input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><label for="__tabbed_3_3">Oura</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>

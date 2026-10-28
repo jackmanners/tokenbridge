@@ -39,13 +39,12 @@ A participant has been wearing a Withings sleep mat and using a Withings BP cuff
 ```python
 import requests
 from tokenbridge import TokenBridge
-from tokenbridge.providers.withings import _fetch_all
 
 tb = TokenBridge()
 token = tb.get_token("p001", provider="withings")
 
-sleep = _fetch_all(token, "sleep-summary",  "2026-01-01", "2026-03-31")
-bp    = _fetch_all(token, "blood-pressure", "2026-01-01", "2026-03-31")
+sleep = tb.fetch("p001", "sleep-summary",  "2026-01-01", "2026-03-31", provider="withings", token=token)
+bp    = tb.fetch("p001", "blood-pressure", "2026-01-01", "2026-03-31", provider="withings", token=token)
 
 resp = requests.post(
     f"{tb.url}/sleep-report",

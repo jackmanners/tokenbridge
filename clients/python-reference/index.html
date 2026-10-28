@@ -1189,7 +1189,6 @@ client or <code>SLEEPSCAN_API_KEY</code> in the environment.</p>
 proxy objects. Each pre-binds a provider and forwards every call to the underlying provider
 instance, so all <code>GoogleHealth</code> methods are available as <code>tb.google.&lt;method&gt;</code>, and so on.</p>
 <div class="codehilite"><pre><span></span><code><span class="n">tb</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"sleep"</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>           <span class="c1"># same as tb.fetch(..., provider="google-health")</span>
-<span class="n">tb</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>                  <span class="c1"># GoogleHealth.summary</span>
 <span class="n">tb</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">data_completeness</span><span class="p">([</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"p002"</span><span class="p">],</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>    <span class="c1"># GoogleHealth.data_completeness</span>
 </code></pre></div>
 
@@ -1204,7 +1203,7 @@ go through <code>tb.fetch()</code>, for example when building scripts that only 
 <span class="n">gh</span> <span class="o">=</span> <span class="n">GoogleHealth</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
 
 <span class="n">sleep</span> <span class="o">=</span> <span class="n">gh</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"sleep"</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
-<span class="n">s</span>     <span class="o">=</span> <span class="n">gh</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+<span class="n">audit</span> <span class="o">=</span> <span class="n">gh</span><span class="o">.</span><span class="n">data_completeness</span><span class="p">([</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"p002"</span><span class="p">],</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -1269,9 +1268,8 @@ fetching multiple types for the same participant:</p>
     <div class="doc doc-contents ">
 
         <p>Fetch any Google Health data type by its ID.</p>
-<p>This is the primary method - all named helpers (<code>fetch_sleep</code>, etc.)
-delegate here.  Automatically routes to the correct endpoint type
-(<code>list</code> or <code>dailyRollup</code>) based on <code>DATA_TYPES</code>.</p>
+<p>Automatically routes to the correct endpoint type (<code>list</code> or
+<code>dailyRollup</code>) based on <code>DATA_TYPES</code>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
