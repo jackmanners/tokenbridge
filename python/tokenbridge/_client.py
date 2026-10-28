@@ -28,17 +28,11 @@ Quick start:
     tb.fetch("p001", "steps", start, end, token=token)
 """
 
-import hashlib
-import hmac
 import os
-import time
 from typing import Optional
-from urllib.parse import quote
 
 import requests
 from dotenv import load_dotenv
-
-_AUTH_LINK_LIFETIME_S = 7 * 24 * 3600
 
 
 class TokenBridge:
@@ -307,14 +301,7 @@ class TokenBridge:
             ```
         """
         p = provider or self.provider
-        exp = int(time.time()) + _AUTH_LINK_LIFETIME_S
-        sig = hmac.new(
-            self.api_key.encode(), f"{p}:{user_id}:{exp}".encode(), hashlib.sha256
-        ).hexdigest()
-        return (
-            f"{self.url}/auth-start?provider={p}&user_id={quote(str(user_id), safe='')}"
-            f"&exp={exp}&sig={sig}"
-        )
+        return f"{self.url}/auth-start?provider={p}&user_id={user_id}"
 
     def auth_urls(
         self, user_ids: list[str], provider: Optional[str] = None

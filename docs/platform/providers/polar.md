@@ -44,11 +44,6 @@
 | `POLAR_CLIENT_ID` | Client ID from above |
 | `POLAR_CLIENT_SECRET` | Client Secret from above |
 
-**Test:** generate a signed auth link and visit it - you should be redirected to Polar authorisation.
+**Test** - visit this URL, you should be redirected to Polar authorisation:
 
-```python
-from tokenbridge import TokenBridge
-print(TokenBridge().auth_url("test", provider="polar"))
-```
-
-`auth-start` requires a signed, time-limited link (see [Token API Reference](../../clients/token-reference.md)), so a bare URL with `user_id=test` won't work.
+`https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=polar&user_id=test`

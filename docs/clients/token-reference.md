@@ -1,6 +1,6 @@
 # Token API Reference
 
-The interface every client library shares: generate a signed auth link, retrieve a token. This is the whole of the R and JavaScript packages, and the auth/token half of Python. For Python's data-fetching convenience layer, see the [Data-Fetching Guide](data-fetching.md).
+The interface every client library shares: generate an auth link, retrieve a token. This is the whole of the R and JavaScript packages, and the auth/token half of Python. For Python's data-fetching convenience layer, see the [Data-Fetching Guide](data-fetching.md).
 
 ---
 
@@ -93,7 +93,9 @@ All three read the same two environment variables, typically from a `.env` file:
 
 ## Generating an auth link
 
-Returns a signed, time-limited URL - `.../auth-start?provider=...&user_id=...&exp=...&sig=...`. `exp`/`sig` are an HMAC-SHA256 signature (keyed with `TOKENBRIDGE_API_KEY`, 7-day lifetime) over `{provider}:{user_id}:{exp}`; `auth-start` verifies them before starting OAuth, so a link can't be forged or have its `user_id` tampered with. Send the link to the participant - once they complete OAuth, their token is stored and ready.
+Returns `.../auth-start?provider=...&user_id=...`. Send the link to the participant - once they complete OAuth, their token is stored and ready.
+
+`user_id` can be anything you use to identify a participant - there's no server-side check that it's one you actually issued a link for, so treat the link itself as the only thing that gates onboarding. See [Platform → Security model](../platform/overview.md#security-model) for what that does and doesn't protect against.
 
 /// tab | Python
 
@@ -102,6 +104,7 @@ Returns a signed, time-limited URL - `.../auth-start?provider=...&user_id=...&ex
     tb.auth_urls(user_ids, provider=None) -> dict[str, str]   # batch
 
     print(tb.auth_url("p001", provider="withings"))
+    # https://xxx.supabase.co/functions/v1/auth-start?provider=withings&user_id=p001
 
 ///
 

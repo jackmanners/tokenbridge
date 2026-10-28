@@ -1,11 +1,10 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { createHmac } = require("node:crypto");
 const { TokenBridge, TokenBridgeError } = require("../dist/index.js");
 
 const opts = { url: "https://example.supabase.co/functions/v1/", apiKey: "test-key", envFile: "nonexistent.env" };
 
-test("authUrl is HMAC-signed and shaped correctly", () => {
+test("authUrl is shaped correctly", () => {
   const tb = new TokenBridge({ ...opts, provider: "withings" });
   const link = tb.authUrl("p001");
   const u = new URL(link);
@@ -13,10 +12,6 @@ test("authUrl is HMAC-signed and shaped correctly", () => {
   assert.equal(u.origin + u.pathname, "https://example.supabase.co/functions/v1/auth-start");
   assert.equal(u.searchParams.get("provider"), "withings");
   assert.equal(u.searchParams.get("user_id"), "p001");
-
-  const exp = u.searchParams.get("exp");
-  const expected = createHmac("sha256", "test-key").update(`withings:p001:${exp}`).digest("hex");
-  assert.equal(u.searchParams.get("sig"), expected);
 });
 
 test("authUrls batches by user_id", () => {

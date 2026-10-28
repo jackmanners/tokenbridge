@@ -11,8 +11,7 @@ Description: Lightweight R client for TokenBridge, a self-hosted OAuth token
     package instead.
 License: file LICENSE
 Imports:
-    httr,
-    openssl
+    httr
 Suggests:
     testthat (>= 3.0.0)
 Encoding: UTF-8

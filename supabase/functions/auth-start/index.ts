@@ -6,25 +6,9 @@ Deno.serve(async (req) => {
   const url = new URL(req.url)
   const providerName = url.searchParams.get('provider')
   const userId = url.searchParams.get('user_id')
-  const exp = url.searchParams.get('exp')
-  const sig = url.searchParams.get('sig')
 
-  if (!providerName || !userId || !exp || !sig) {
-    return json({ error: 'provider, user_id, exp and sig are required query params - use auth_url()/tb_auth_url() to generate a valid link' }, 400)
-  }
-
-  // Links are HMAC-signed with TOKENBRIDGE_API_KEY (by auth_url()/tb_auth_url())
-  // and time-limited, so an arbitrary user_id can't be injected by just
-  // guessing this URL's shape.
-  const apiKey = Deno.env.get('TOKENBRIDGE_API_KEY')
-  const expNum = Number(exp)
-  const validLink = apiKey
-    && Number.isFinite(expNum)
-    && expNum >= Date.now() / 1000
-    && sig === await hmacHex(apiKey, `${providerName}:${userId}:${exp}`)
-
-  if (!validLink) {
-    return json({ error: 'this auth link is invalid or has expired - ask your researcher for a new one' }, 401)
+  if (!providerName || !userId) {
+    return json({ error: 'provider and user_id are required query params' }, 400)
   }
 
   const provider = providers[providerName]
@@ -95,12 +79,4 @@ function json(data: unknown, status = 200): Response {
     status,
     headers: { 'Content-Type': 'application/json' },
   })
-}
-
-async function hmacHex(key: string, msg: string): Promise<string> {
-  const cryptoKey = await crypto.subtle.importKey(
-    'raw', new TextEncoder().encode(key), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'],
-  )
-  const sigBuf = await crypto.subtle.sign('HMAC', cryptoKey, new TextEncoder().encode(msg))
-  return Array.from(new Uint8Array(sigBuf)).map((b) => b.toString(16).padStart(2, '0')).join('')
 }

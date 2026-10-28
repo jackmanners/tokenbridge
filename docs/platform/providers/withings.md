@@ -60,11 +60,6 @@ Body measurement values from `/measure getmeas` are encoded as `value × 10^unit
 | `WITHINGS_CLIENT_ID` | Client ID from above |
 | `WITHINGS_CLIENT_SECRET` | Consumer Secret from above |
 
-**Test:** generate a signed auth link and visit it - you should be redirected to Withings authorisation.
+**Test** - visit this URL, you should be redirected to Withings authorisation:
 
-```python
-from tokenbridge import TokenBridge
-print(TokenBridge().auth_url("test", provider="withings"))
-```
-
-`auth-start` requires a signed, time-limited link (see [Token API Reference](../../clients/token-reference.md)), so a bare URL with `user_id=test` won't work.
+`https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=withings&user_id=test`

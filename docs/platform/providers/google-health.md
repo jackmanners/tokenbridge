@@ -98,14 +98,9 @@ Three types only support `dailyRollup` (no raw datapoints available):
     | `GOOGLE_HEALTH_CLIENT_ID` | Client ID from above |
     | `GOOGLE_HEALTH_CLIENT_SECRET` | Client Secret from above |
 
-    **Test:** generate a signed auth link and visit it - you should be redirected to Google sign-in.
+    **Test** - visit this URL, you should be redirected to Google sign-in:
 
-    ```python
-    from tokenbridge import TokenBridge
-    print(TokenBridge().auth_url("test", provider="google-health"))
-    ```
-
-    `auth-start` requires a signed, time-limited link (see [Token API Reference](../../clients/token-reference.md)), so a bare URL with `user_id=test` won't work.
+    `https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=google-health&user_id=test`
 
     !!! note
         Participants will see an "unverified app" warning - tell them to click **Advanced → Continue**.

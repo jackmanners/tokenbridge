@@ -1,6 +1,6 @@
 test_that("tb_auth_url contains user_id and provider", {
-  Sys.setenv(TOKENBRIDGE_URL = "https://test.supabase.co/functions/v1", TOKENBRIDGE_API_KEY = "test-key")
-  on.exit(Sys.unsetenv(c("TOKENBRIDGE_URL", "TOKENBRIDGE_API_KEY")))
+  Sys.setenv(TOKENBRIDGE_URL = "https://test.supabase.co/functions/v1")
+  on.exit(Sys.unsetenv("TOKENBRIDGE_URL"))
 
   url <- tb_auth_url("p001")
   expect_true(grepl("user_id=p001",          url))
@@ -9,16 +9,16 @@ test_that("tb_auth_url contains user_id and provider", {
 })
 
 test_that("tb_auth_url uses custom provider", {
-  Sys.setenv(TOKENBRIDGE_URL = "https://test.supabase.co/functions/v1", TOKENBRIDGE_API_KEY = "test-key")
-  on.exit(Sys.unsetenv(c("TOKENBRIDGE_URL", "TOKENBRIDGE_API_KEY")))
+  Sys.setenv(TOKENBRIDGE_URL = "https://test.supabase.co/functions/v1")
+  on.exit(Sys.unsetenv("TOKENBRIDGE_URL"))
 
   url <- tb_auth_url("p001", provider = "withings")
   expect_true(grepl("provider=withings", url))
 })
 
 test_that("tb_auth_urls returns named character vector", {
-  Sys.setenv(TOKENBRIDGE_URL = "https://test.supabase.co/functions/v1", TOKENBRIDGE_API_KEY = "test-key")
-  on.exit(Sys.unsetenv(c("TOKENBRIDGE_URL", "TOKENBRIDGE_API_KEY")))
+  Sys.setenv(TOKENBRIDGE_URL = "https://test.supabase.co/functions/v1")
+  on.exit(Sys.unsetenv("TOKENBRIDGE_URL"))
 
   urls <- tb_auth_urls(c("p001", "p002"))
   expect_equal(names(urls), c("p001", "p002"))

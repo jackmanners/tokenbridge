@@ -15,10 +15,7 @@
  *   // now call https://wbsapi.withings.net/... (or whichever provider) with `token` yourself
  */
 
-import { createHmac } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
-
-const AUTH_LINK_LIFETIME_S = 7 * 24 * 3600;
 
 function loadEnvFile(envFile: string): void {
   if (!existsSync(envFile)) return;
@@ -68,16 +65,12 @@ export class TokenBridge {
   }
 
   /**
-   * Return a signed, time-limited auth URL for one participant.
+   * Return the auth URL for one participant.
    * Send this to them - once they complete OAuth, their token is stored
    * and getToken() will return it immediately.
    */
   authUrl(userId: string, provider: string = this.provider): string {
-    const exp = Math.floor(Date.now() / 1000) + AUTH_LINK_LIFETIME_S;
-    const sig = createHmac("sha256", this.apiKey)
-      .update(`${provider}:${userId}:${exp}`)
-      .digest("hex");
-    const params = new URLSearchParams({ provider, user_id: userId, exp: String(exp), sig });
+    const params = new URLSearchParams({ provider, user_id: userId });
     return `${this.url}/auth-start?${params.toString()}`;
   }
 
