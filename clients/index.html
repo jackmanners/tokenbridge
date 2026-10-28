@@ -483,21 +483,6 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../platform/reports/"
-        class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-        
-        Reports
-        
-        
-        
-        
-    </a>
-</li>
-            
-            
-            
-            <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
-    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../platform/http-api/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
         
@@ -575,6 +560,21 @@
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
         
         Data-Fetching Guide
+        
+        
+        
+        
+    </a>
+</li>
+            
+            
+            
+            <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
+    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
+        data-size="default" href="reports/"
+        class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
+        
+        Reports (Python)
         
         
         
@@ -677,7 +677,7 @@
   <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
     <h1 id="client-libraries">Client Libraries<a class="headerlink" href="#client-libraries" title="Permanent link">&para;</a></h1>
 <p>A client library is how your research script talks to a TokenBridge instance - it is not TokenBridge itself. If someone in your lab has already deployed an instance, you only need one of these; see <a href="../platform/overview/">Platform</a> if you're the one setting it up.</p>
-<p><strong>TokenBridge's job is OAuth token management: run the flow, store tokens, refresh them before they expire, hand one back on request.</strong> Every client library wraps that - auth-link generation and token retrieval - identically. Python and R additionally wrap some providers' data endpoints as a convenience; that layer is maintained more slowly than the core token API, so treat the provider's own API reference as the source of truth once you're past token retrieval.</p>
+<p><strong>TokenBridge's job is OAuth token management: run the flow, store tokens, refresh them before they expire, hand one back on request.</strong> Every client library wraps that - auth-link generation and token retrieval - identically. Python additionally wraps provider data endpoints (and renders reports) as a convenience; that layer is maintained more slowly than the core token API, so treat the provider's own API reference as the source of truth once you're past token retrieval. R and JavaScript are token-only, by design - lean, with nothing extra to keep in sync against providers' own APIs.</p>
 <h2 id="choosing-a-language">Choosing a language<a class="headerlink" href="#choosing-a-language" title="Permanent link">&para;</a></h2>
 <div class="table-wrapper"><table>
 <thead>
@@ -698,7 +698,13 @@
 <tr>
 <td>Data-fetching convenience layer</td>
 <td>✓ (6 providers)</td>
-<td>✓ (3 providers)</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Report generation</td>
+<td>✓</td>
+<td>—</td>
 <td>—</td>
 </tr>
 <tr>
@@ -709,12 +715,12 @@
 </tr>
 </tbody>
 </table></div>
-<p>If you just need a token to call a provider API yourself - a backend job, a different language entirely - any of the three works the same way; JavaScript is the leanest for that.</p>
+<p>If you just need a token to call a provider API yourself - a backend job, a different language entirely, or you'd simply rather not add the data-fetching layer's maintenance surface - any of the three works the same way for that; R and JavaScript are the leanest.</p>
 <h2 id="where-to-go-next">Where to go next<a class="headerlink" href="#where-to-go-next" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="getting-started/">Getting Started</a> - install, configure, onboard your first participant, get a token</li>
 <li><a href="token-reference/">Token API Reference</a> - <code>auth_url</code>, <code>auth_urls</code>, <code>get_token</code>, and errors, side by side for all three languages</li>
-<li><a href="data-fetching/">Data-Fetching Guide</a> - the Python/R convenience layer, if you want it</li>
+<li><a href="data-fetching/">Data-Fetching Guide</a> - Python's provider data layer and report generation</li>
 <li><a href="examples/">Examples</a> - complete, realistic scripts</li>
 </ul>
   </div>
@@ -795,12 +801,6 @@
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../platform/reports/">
-                            
-                            Reports
-                            
-                        </a>
-                        
                         <a class="text-2xl font-medium" href="../platform/http-api/">
                             
                             Direct HTTP API
@@ -837,6 +837,12 @@
                         <a class="text-2xl font-medium" href="data-fetching/">
                             
                             Data-Fetching Guide
+                            
+                        </a>
+                        
+                        <a class="text-2xl font-medium" href="reports/">
+                            
+                            Reports (Python)
                             
                         </a>
                         

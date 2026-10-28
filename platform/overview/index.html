@@ -483,21 +483,6 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../reports/"
-        class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-        
-        Reports
-        
-        
-        
-        
-    </a>
-</li>
-            
-            
-            
-            <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
-    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../http-api/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
         
@@ -575,6 +560,21 @@
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
         
         Data-Fetching Guide
+        
+        
+        
+        
+    </a>
+</li>
+            
+            
+            
+            <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
+    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
+        data-size="default" href="../../clients/reports/"
+        class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
+        
+        Reports (Python)
         
         
         
@@ -693,7 +693,7 @@ It's the only piece that needs to be publicly reachable - participants click a l
 </ul>
 <hr />
 <h2 id="edge-functions">Edge functions<a class="headerlink" href="#edge-functions" title="Permanent link">&para;</a></h2>
-<p>Six Deno/TypeScript functions run on Supabase:</p>
+<p>Four Deno/TypeScript functions run on Supabase:</p>
 <div class="table-wrapper"><table>
 <thead>
 <tr>
@@ -718,16 +718,9 @@ It's the only piece that needs to be publicly reachable - participants click a l
 <td><code>token-keepalive</code></td>
 <td>Called weekly by GitHub Actions - proactively refreshes tokens before they expire</td>
 </tr>
-<tr>
-<td><code>sleep-report</code></td>
-<td>Renders a stored report template with participant data into a self-contained HTML file</td>
-</tr>
-<tr>
-<td><code>template-manager</code></td>
-<td>CRUD for report templates (<code>report_templates</code> table) used by <code>sleep-report</code></td>
-</tr>
 </tbody>
 </table></div>
+<p>Report rendering (<code>sleep-report</code>/<code>template-manager</code>) used to live here too - it's moved to the Python package (<code>tokenbridge.reports.generate_report()</code>), since it's pure templating over data the client already has and never needed a server round-trip. See <a href="../../clients/reports/">Reports</a>.</p>
 <p>The function code lives in <a href="https://github.com/jackmanners/tokenbridge/tree/main/supabase/functions"><code>supabase/functions/</code></a>.
 Deploy via the CLI (<code>supabase functions deploy ... --import-map supabase/functions/deno.json</code>) - the functions share code via <code>_shared/</code> so they must be bundled by the CLI, not pasted into the dashboard. The <code>--import-map</code> flag resolves the <code>@supabase/supabase-js</code> import; without it, deploying without Docker running locally fails with a bundling error.</p>
 <hr />
@@ -804,9 +797,9 @@ If your study exceeds 100 participants, you will need to go through Google's ver
 <hr />
 <h2 id="security-model">Security model<a class="headerlink" href="#security-model" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>No direct database access.</strong> <code>oauth_states</code>, <code>oauth_tokens</code>, <code>data_availability</code>, and <code>report_templates</code> all have Row Level Security enabled with no policies - every real read/write goes through a service-role edge function, so the public (anon) Supabase key can't read stored tokens even if it leaks.</li>
+<li><strong>No direct database access.</strong> <code>oauth_states</code>, <code>oauth_tokens</code>, and <code>data_availability</code> all have Row Level Security enabled with no policies - every real read/write goes through a service-role edge function, so the public (anon) Supabase key can't read stored tokens even if it leaks.</li>
 <li><strong>Signed auth links.</strong> <code>auth-start</code> requires an HMAC-SHA256 signature (keyed with <code>TOKENBRIDGE_API_KEY</code>, 7-day lifetime) over <code>provider:user_id:exp</code>, generated for you by <code>auth_url()</code>/<code>tb_auth_url()</code>/<code>authUrl()</code>. A bare URL with a guessed <code>user_id</code> is rejected - this is what stops someone starting an OAuth flow under an arbitrary participant ID.</li>
-<li><strong>One API key gates every data-moving endpoint.</strong> <code>/token</code>, <code>/sleep-report</code>, and <code>template-manager</code> all require <code>Authorization: Bearer $TOKENBRIDGE_API_KEY</code>. Treat it like a password - it's shared across every participant in the deployment, not scoped per-participant.</li>
+<li><strong>One API key gates every data-moving endpoint.</strong> <code>/token</code> requires <code>Authorization: Bearer $TOKENBRIDGE_API_KEY</code>. Treat it like a password - it's shared across every participant in the deployment, not scoped per-participant.</li>
 </ul>
   </div>
 </article>
@@ -886,12 +879,6 @@ If your study exceeds 100 participants, you will need to go through Google's ver
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../reports/">
-                            
-                            Reports
-                            
-                        </a>
-                        
                         <a class="text-2xl font-medium" href="../http-api/">
                             
                             Direct HTTP API
@@ -928,6 +915,12 @@ If your study exceeds 100 participants, you will need to go through Google's ver
                         <a class="text-2xl font-medium" href="../../clients/data-fetching/">
                             
                             Data-Fetching Guide
+                            
+                        </a>
+                        
+                        <a class="text-2xl font-medium" href="../../clients/reports/">
+                            
+                            Reports (Python)
                             
                         </a>
                         

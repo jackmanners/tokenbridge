@@ -34,7 +34,7 @@ The functions use shared code so they must be deployed via the Supabase CLI. Thi
 npm install -g supabase
 supabase login
 supabase link --project-ref YOUR_PROJECT_REF
-supabase functions deploy auth-start auth-callback token token-keepalive sleep-report template-manager \
+supabase functions deploy auth-start auth-callback token token-keepalive \
   --no-verify-jwt --import-map supabase/functions/deno.json
 ```
 
