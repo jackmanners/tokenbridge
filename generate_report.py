@@ -12,12 +12,11 @@ Examples:
 """
 
 import argparse
-import sys
 from datetime import date, timedelta
 from pathlib import Path
 
-import requests
 from tokenbridge import TokenBridge
+from tokenbridge.reports import generate_report
 
 
 def main():
@@ -57,15 +56,10 @@ def main():
         print(f"  {len(data['withings-bp'])} records")
 
     print(f"Generating report (template: {args.template})...")
-    resp = requests.post(
-        f"{tb.url}/sleep-report",
-        headers={"Authorization": f"Bearer {tb.api_key}"},
-        json={"label": args.user_id, "template": args.template, "data": data},
-    )
-    resp.raise_for_status()
+    html = generate_report(args.user_id, data, template=args.template)
 
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_bytes(resp.content)
+    out.write_text(html, encoding="utf-8")
     print(f"Report saved to {out}")
 
 

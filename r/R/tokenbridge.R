@@ -1,6 +1,8 @@
 # TokenBridge platform client
 #
-# Handles auth URLs, token retrieval, and health data fetching via providers.
+# Auth-link generation and token retrieval only - this package does not wrap
+# provider data APIs (see the Python package if you want that). Get a token,
+# then call the provider's own API directly.
 #
 # Quick start:
 #   library(tokenbridge)
@@ -10,15 +12,9 @@
 #
 #   tb_auth_url("p001")                              # send link to participant
 #
-#   tb_fetch("p001", "sleep",  "2026-05-01", "2026-06-18")   # canonical
-#   gh_fetch("p001", "sleep",  "2026-05-01", "2026-06-18")   # Google Health shorthand
-#   tb_fetch("p001", "sleep",  "2026-05-01", "2026-06-18", provider = "withings")  # override
+#   tok <- tb_get_token("p001")                      # then call the provider API yourself
 #
-#   # Change default mid-script:
-#   tb_set_provider("withings")
-#   tb_fetch("p001", "sleep", start, end)            # now uses Withings
-#
-# See docs/providers/index.md for all supported providers and data type IDs.
+# See the Platform docs for supported providers.
 #
 # Function prefix: tb_   (TokenBridge platform)
 
@@ -52,20 +48,16 @@
 
 #' Set the default provider for this R session
 #'
-#' Call once at the top of your script. All subsequent tb_fetch() calls use
-#' this provider unless you pass provider= explicitly.
-#' Can be changed mid-script to switch providers.
+#' Call once at the top of your script. All subsequent tb_auth_url(),
+#' tb_auth_urls(), and tb_get_token() calls use this provider unless you
+#' pass provider= explicitly. Can be changed mid-script to switch providers.
 #'
-#' @param provider Provider ID string - e.g. "google-health", "withings".
-#'   See docs/providers/index.md for the full list.
+#' @param provider Provider ID string, matching whatever your TokenBridge
+#'   deployment has configured - e.g. "google-health", "withings", "oura".
+#'   See the Platform docs for the full list for your deployment.
 #' @return Invisibly returns the provider string
 #' @export
 tb_set_provider <- function(provider) {
-  supported <- c("google-health", "withings")
-  if (!provider %in% supported)
-    warning("Unknown provider '", provider, "'. ",
-            "Supported: ", paste(supported, collapse = ", "),
-            ". See docs/providers/index.md.", call. = FALSE)
   .tb_state$provider <- provider
   invisible(provider)
 }
@@ -116,9 +108,7 @@ tb_setup <- function(env_file = ".env") {
   cat("\n✓ Saved to", env_file, "\n\n")
   cat("Quick start:\n")
   cat("  tb_auth_url(\"p001\")                             # send to participant\n")
-  cat("  tb_fetch(\"p001\", \"sleep\", \"2026-05-01\", \"2026-06-18\")\n")
-  cat("  tb_fetch(\"p001\", \"steps\", \"2026-05-01\", \"2026-06-18\")\n\n")
-  cat("See names(GH_DATA_TYPES) for all Google Health type IDs.\n\n")
+  cat("  tok <- tb_get_token(\"p001\")                      # then call the provider API yourself\n\n")
   invisible(list(url = url, api_key = api_key))
 }
 
@@ -163,60 +153,13 @@ tb_auth_urls <- function(user_ids, provider = tb_get_provider(), env_file = ".en
   )
 }
 
-# ── Health data ────────────────────────────────────────────────────────────────
-
-#' Fetch health data for a participant
-#'
-#' The canonical fetch function. data_type is the kebab-case type ID from the
-#' provider - e.g. "sleep", "steps", "heart-rate-variability".
-#'
-#' See docs/providers/index.md for the full list, or print names(GH_DATA_TYPES).
-#'
-#' @param user_id    TokenBridge user ID
-#' @param data_type  Data type ID (kebab-case). See docs/providers/index.md.
-#' @param start_date "YYYY-MM-DD"
-#' @param end_date   "YYYY-MM-DD"
-#' @param token      Pre-fetched access token (optional). Pass this when fetching
-#'   multiple types for the same user to avoid repeated TokenBridge calls:
-#'   \code{tok <- tb_get_token("p001"); tb_fetch("p001", "sleep", s, e, token = tok)}
-#' @param provider   Provider ID. Defaults to tb_get_provider().
-#'   Pass explicitly to override for a single call without changing the session default:
-#'   \code{tb_fetch("p001", "sleep", s, e, provider = "withings")}
-#' @param sleepscan  If \code{TRUE}, resolve the Withings token via SleepScan using
-#'   \code{user_id} as the lookup key (email, Withings user ID as integer, or
-#'   SleepScan participant ID). Takes priority over \code{token=}.
-#'   Requires \code{SLEEPSCAN_API_KEY} in the environment or \code{sleepscan_key=}.
-#' @param sleepscan_key  SleepScan API key. Falls back to \code{SLEEPSCAN_API_KEY} env var.
-#' @param env_file   Path to .env file (default ".env")
-#' @return data.frame, one row per data point
-#' @export
-tb_fetch <- function(user_id, data_type, start_date, end_date,
-                     token        = NULL,
-                     provider     = tb_get_provider(),
-                     sleepscan    = NULL,
-                     sleepscan_key = NULL,
-                     env_file     = ".env") {
-  switch(provider,
-    "google-health" = gh_fetch(user_id, data_type, start_date, end_date,
-                               token = token, env_file = env_file),
-    "withings"      = wt_fetch(user_id, data_type, start_date, end_date,
-                               token = token, sleepscan = sleepscan,
-                               sleepscan_key = sleepscan_key, env_file = env_file),
-    stop("Unknown provider '", provider, "'. See docs/providers/index.md.", call. = FALSE)
-  )
-}
-
 # ── Token management ───────────────────────────────────────────────────────────
 
 #' Fetch a valid access token for a participant from TokenBridge
 #'
 #' TokenBridge refreshes automatically if the token is close to expiry.
-#'
-#' Useful when fetching multiple data types for the same user - call this once
-#' and pass token= to tb_fetch() to skip repeated round-trips:
+#' Call the provider's own API directly with the result:
 #' \code{tok <- tb_get_token("p001")}
-#' \code{tb_fetch("p001", "sleep", s, e, token = tok)}
-#' \code{tb_fetch("p001", "steps", s, e, token = tok)}
 #'
 #' @param user_id  TokenBridge user ID
 #' @param provider Health data provider. Defaults to tb_get_provider().

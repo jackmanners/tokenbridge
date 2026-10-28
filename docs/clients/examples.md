@@ -37,8 +37,8 @@ print(non_responders)  # follow up with these participants
 A participant has been wearing a Withings sleep mat and using a Withings BP cuff for three months. Generate a single HTML report combining both, ready to attach to an email.
 
 ```python
-import requests
 from tokenbridge import TokenBridge
+from tokenbridge.reports import generate_report
 
 tb = TokenBridge()
 token = tb.get_token("p001", provider="withings")
@@ -46,19 +46,11 @@ token = tb.get_token("p001", provider="withings")
 sleep = tb.fetch("p001", "sleep-summary",  "2026-01-01", "2026-03-31", provider="withings", token=token)
 bp    = tb.fetch("p001", "blood-pressure", "2026-01-01", "2026-03-31", provider="withings", token=token)
 
-resp = requests.post(
-    f"{tb.url}/sleep-report",
-    headers={"Authorization": f"Bearer {tb.api_key}"},
-    json={
-        "label": "P001",
-        "template": "sleep-bp",
-        "data": {"withings-summary": sleep, "withings-bp": bp},
-    },
-)
-open("p001_report.html", "wb").write(resp.content)
+html = generate_report("P001", {"withings-summary": sleep, "withings-bp": bp}, template="sleep-bp")
+open("p001_report.html", "w", encoding="utf-8").write(html)
 ```
 
-The result is a single, self-contained HTML file - no server round-trips needed to view it, and it opens fine as an email attachment. See [Reports](../platform/reports.md) for the available templates and how to write your own.
+The result is a single, self-contained HTML file, rendered locally with no server round-trip - it opens fine as an email attachment. See [Reports](reports.md) for the available templates and how to write your own.
 
 ---
 

@@ -1,21 +1,15 @@
-# SleepScan token source for TokenBridge Withings data fetching
-#
-# Retrieves Withings access tokens via the SleepScan API, then fetches data
-# using the same Withings internals as wt_fetch().
+# SleepScan token source - an alternate Withings token source for
+# participants registered through SleepScan rather than TokenBridge's own
+# OAuth flow.
 #
 # Usage:
 #
-#   ss <- ss_client("your-sleepscan-api-key")
-#
-#   # Fetch data directly
-#   df <- ss_fetch(ss, "sleep-summary", "2024-01-01", "2024-03-31",
-#                  email = "participant@example.com")
-#   df <- ss_fetch(ss, "blood-pressure", "2024-01-01", "2024-03-31",
-#                  withings_user_id = 12345678L)
-#
-#   # Or retrieve just the Withings token
+#   ss    <- ss_client("your-sleepscan-api-key")
 #   token <- ss_get_token(ss, email = "participant@example.com")
-#   df    <- wt_fetch("p001", "sleep-summary", "2024-01-01", "2024-03-31", token = token)
+#   # or: ss_get_token(ss, withings_user_id = 12345678L)
+#   # or: ss_get_token(ss, participant_id = "SS-P001")
+#
+#   # Call the Withings API directly with the token
 #
 # Function prefix: ss_   (SleepScan)
 
@@ -82,50 +76,4 @@ ss_get_token <- function(client,
 
   body <- httr::content(resp, as = "parsed", type = "application/json")
   body$access_token
-}
-
-#' Fetch Withings data using a SleepScan-managed token
-#'
-#' Retrieves a Withings access token from SleepScan then calls the Withings
-#' API directly. Returns the same data frame as \code{wt_fetch()}.
-#'
-#' Exactly one of \code{email}, \code{withings_user_id}, or \code{participant_id}
-#' must be provided.
-#'
-#' @param client         A SleepScan client from \code{ss_client()}.
-#' @param data_type      Withings data type ID (see \code{names(WT_DATA_TYPES)}).
-#' @param start_date     "YYYY-MM-DD"
-#' @param end_date       "YYYY-MM-DD"
-#' @param email          Participant email address.
-#' @param withings_user_id Withings user ID (integer).
-#' @param participant_id SleepScan participant ID.
-#' @return data.frame, one row per record.
-#' @export
-ss_fetch <- function(client,
-                     data_type,
-                     start_date,
-                     end_date,
-                     email            = NULL,
-                     withings_user_id = NULL,
-                     participant_id   = NULL) {
-  stopifnot(inherits(client, "SleepScanClient"))
-
-  if (!data_type %in% names(WT_DATA_TYPES)) {
-    stop(
-      "Unknown Withings data type: ", shQuote(data_type),
-      ". Available: ", paste(names(WT_DATA_TYPES), collapse = ", "),
-      call. = FALSE
-    )
-  }
-
-  .wt_validate_dates(start_date, end_date)
-
-  token <- ss_get_token(
-    client,
-    email            = email,
-    withings_user_id = withings_user_id,
-    participant_id   = participant_id
-  )
-
-  .wt_fetch_all(token, data_type, start_date, end_date)
 }

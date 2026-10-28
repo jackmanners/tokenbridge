@@ -1,13 +1,14 @@
 Package: tokenbridge
 Type: Package
 Title: TokenBridge Client for Health API Research
-Version: 0.1.1
+Version: 0.2.0
 Authors@R: person("Jack", "Manners", role = c("aut", "cre"),
                   email = "jack.manners@flinders.edu.au")
-Description: Lightweight client for fetching health data via a TokenBridge
-    deployment. TokenBridge handles OAuth token management; this package
-    provides the R interface for auth URLs, token retrieval, and health data
-    fetching. Supports Google Health (Fitbit-backed), Withings, and Oura.
+Description: Lightweight R client for TokenBridge, a self-hosted OAuth token
+    manager for health data research. Provides auth-link generation and
+    token retrieval only; call the provider's own API directly with the
+    token. For a built-in data-fetching convenience layer, see the Python
+    package instead.
 License: file LICENSE
 Imports:
     httr,

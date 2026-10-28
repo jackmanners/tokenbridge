@@ -1,6 +1,6 @@
 # Token API Reference
 
-The interface every client library shares: generate a signed auth link, retrieve a token. This is the whole of the JavaScript package, and the auth/token half of Python and R. For the Python/R data-fetching convenience layer, see the [Data-Fetching Guide](data-fetching.md).
+The interface every client library shares: generate a signed auth link, retrieve a token. This is the whole of the R and JavaScript packages, and the auth/token half of Python. For Python's data-fetching convenience layer, see the [Data-Fetching Guide](data-fetching.md).
 
 ---
 
@@ -57,6 +57,35 @@ All three read the same two environment variables, typically from a `.env` file:
     :::ts
     import { TokenBridge } from "tokenbridge";
     const tb = new TokenBridge();   // reads .env; or pass { url, apiKey }
+
+///
+
+## Setting a default provider
+
+`auth_url()`/`auth_urls()`/`get_token()` all take an explicit `provider=` on every call, or you can set a session default once so you don't have to repeat it:
+
+/// tab | Python
+
+    :::python
+    tb.provider = "withings"    # persists on this TokenBridge instance
+    tb.auth_url("p001")         # uses tb.provider
+
+///
+
+/// tab | R
+
+    :::r
+    tb_set_provider("withings")    # persists for the R session
+    tb_get_provider()               # "withings"
+    tb_auth_url("p001")             # uses the session default
+
+///
+
+/// tab | JavaScript
+
+    :::ts
+    tb.provider = "withings";   // persists on this TokenBridge instance
+    tb.authUrl("p001");         // uses tb.provider
 
 ///
 
@@ -150,7 +179,7 @@ Returns a valid access token for `user_id` + `provider`, auto-refreshing server-
 
 ///
 
-Python's `get_token()` additionally takes a `sleepscan=True` option - an alternate Withings token source for participants registered through a separate system called SleepScan rather than TokenBridge's own OAuth flow. R has the equivalent on `wt_fetch()` instead (its token-layer `tb_get_token()` doesn't take it) - see the [Data-Fetching Guide](data-fetching.md#sleepscan) either way if that applies to your study.
+Python's `get_token()` additionally takes a `sleepscan=True` option - an alternate Withings token source for participants registered through a separate system called SleepScan rather than TokenBridge's own OAuth flow. R has the equivalent as a separate function, `ss_get_token()` (not a `tb_get_token()` option) - see the [Data-Fetching Guide](data-fetching.md#sleepscan) either way if that applies to your study.
 
 ---
 

@@ -28,7 +28,7 @@ Your scripts call the `/token` endpoint to get a valid access token, then use it
 
 ## Edge functions
 
-Six Deno/TypeScript functions run on Supabase:
+Four Deno/TypeScript functions run on Supabase:
 
 | Function | Purpose |
 |---|---|
@@ -36,8 +36,8 @@ Six Deno/TypeScript functions run on Supabase:
 | `auth-callback` | Receives the OAuth code after authorisation, exchanges it for tokens, stores them |
 | `token` | Called by your scripts - returns a valid access token, auto-refreshes if needed |
 | `token-keepalive` | Called weekly by GitHub Actions - proactively refreshes tokens before they expire |
-| `sleep-report` | Renders a stored report template with participant data into a self-contained HTML file |
-| `template-manager` | CRUD for report templates (`report_templates` table) used by `sleep-report` |
+
+Report rendering (`sleep-report`/`template-manager`) used to live here too - it's moved to the Python package (`tokenbridge.reports.generate_report()`), since it's pure templating over data the client already has and never needed a server round-trip. See [Reports](../clients/reports.md).
 
 The function code lives in [`supabase/functions/`](https://github.com/jackmanners/tokenbridge/tree/main/supabase/functions).
 Deploy via the CLI (`supabase functions deploy ... --import-map supabase/functions/deno.json`) - the functions share code via `_shared/` so they must be bundled by the CLI, not pasted into the dashboard. The `--import-map` flag resolves the `@supabase/supabase-js` import; without it, deploying without Docker running locally fails with a bundling error.
@@ -112,6 +112,6 @@ This ensures participants never need to re-authorise due to token expiry during 
 
 ## Security model
 
-- **No direct database access.** `oauth_states`, `oauth_tokens`, `data_availability`, and `report_templates` all have Row Level Security enabled with no policies - every real read/write goes through a service-role edge function, so the public (anon) Supabase key can't read stored tokens even if it leaks.
+- **No direct database access.** `oauth_states`, `oauth_tokens`, and `data_availability` all have Row Level Security enabled with no policies - every real read/write goes through a service-role edge function, so the public (anon) Supabase key can't read stored tokens even if it leaks.
 - **Signed auth links.** `auth-start` requires an HMAC-SHA256 signature (keyed with `TOKENBRIDGE_API_KEY`, 7-day lifetime) over `provider:user_id:exp`, generated for you by `auth_url()`/`tb_auth_url()`/`authUrl()`. A bare URL with a guessed `user_id` is rejected - this is what stops someone starting an OAuth flow under an arbitrary participant ID.
-- **One API key gates every data-moving endpoint.** `/token`, `/sleep-report`, and `template-manager` all require `Authorization: Bearer $TOKENBRIDGE_API_KEY`. Treat it like a password - it's shared across every participant in the deployment, not scoped per-participant.
+- **One API key gates every data-moving endpoint.** `/token` requires `Authorization: Bearer $TOKENBRIDGE_API_KEY`. Treat it like a password - it's shared across every participant in the deployment, not scoped per-participant.

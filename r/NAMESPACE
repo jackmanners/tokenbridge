@@ -2,20 +2,10 @@
 export(tb_setup)
 export(tb_set_provider)
 export(tb_get_provider)
-export(tb_fetch)
 export(tb_auth_url)
 export(tb_auth_urls)
 export(tb_get_token)
 
-# Google Health
-export(GH_DATA_TYPES)
-export(gh_fetch)
-export(gh_data_completeness)
-
-# Withings
-export(WT_DATA_TYPES)
-export(wt_fetch)
-
-# Oura
-export(OU_DATA_TYPES)
-export(ou_fetch)
+# SleepScan (alternate Withings token source)
+export(ss_client)
+export(ss_get_token)

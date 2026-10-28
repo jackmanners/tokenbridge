@@ -51,11 +51,11 @@ nav:
       - Polar: platform/providers/polar.md
       - Strava: platform/providers/strava.md
       - WHOOP: platform/providers/whoop.md
-    - Reports: platform/reports.md
     - Direct HTTP API: platform/http-api.md
   - Client Libraries:
     - Overview: clients/index.md
     - Getting Started: clients/getting-started.md
     - Token API Reference: clients/token-reference.md
     - Data-Fetching Guide: clients/data-fetching.md
+    - Reports (Python): clients/reports.md
     - Examples: clients/examples.md

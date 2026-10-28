@@ -209,24 +209,14 @@ Once a participant has authorised, retrieve a token immediately:
 
 ///
 
-That's the entire JavaScript package - call the provider's API directly with the token from here. Python and R can either do the same, or use the built-in [Data-Fetching Guide](data-fetching.md) convenience layer:
+That's the entire R and JavaScript packages - call the provider's API directly with the token from here. Python can either do the same, or use the built-in [Data-Fetching Guide](data-fetching.md) convenience layer:
 
-/// tab | Python
-
-    :::python
-    sleep = tb.fetch("p001", "sleep", "2026-05-01", "2026-06-18", token=token)
-
-///
-
-/// tab | R
-
-    :::r
-    sleep <- tb_fetch("p001", "sleep", "2026-05-01", "2026-06-18", token = tok)
-
-///
+```python
+sleep = tb.fetch("p001", "sleep", "2026-05-01", "2026-06-18", token=token)
+```
 
 ## Next steps
 
 - [Token API Reference](token-reference.md) - exact signatures and errors for every function used above
-- [Data-Fetching Guide](data-fetching.md) - the Python/R convenience layer, cohort auditing, reports, SleepScan
+- [Data-Fetching Guide](data-fetching.md) - Python's convenience layer, cohort auditing, reports, SleepScan
 - [Examples](examples.md) - complete, realistic scripts

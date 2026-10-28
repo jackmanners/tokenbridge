@@ -69,20 +69,6 @@ create trigger data_availability_updated_at
   before update on data_availability
   for each row execute function set_data_availability_updated_at();
 
--- Report templates used by the sleep-report / template-manager functions
-create table report_templates (
-  name        text primary key,
-  description text,
-  metadata    jsonb not null default '{}',
-  html        text not null,
-  created_at  timestamptz default now(),
-  updated_at  timestamptz default now()
-);
-
-create trigger report_templates_updated_at
-  before update on report_templates
-  for each row execute function set_updated_at();
-
 -- Lock down direct PostgREST access. All real access to these tables goes
 -- through service-role edge functions, which bypass RLS entirely - so
 -- enabling RLS with zero policies denies anon/authenticated clients while
@@ -90,7 +76,6 @@ create trigger report_templates_updated_at
 alter table oauth_states      enable row level security;
 alter table oauth_tokens      enable row level security;
 alter table data_availability enable row level security;
-alter table report_templates  enable row level security;
 
 -- Clean up expired state rows
 create or replace function cleanup_oauth_states()
