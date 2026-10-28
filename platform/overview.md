@@ -32,7 +32,7 @@ Four Deno/TypeScript functions run on Supabase:
 
 | Function | Purpose |
 |---|---|
-| `auth-start` | Verifies the signed auth link, generates the provider OAuth URL, redirects the participant |
+| `auth-start` | Generates the provider OAuth URL for a participant and redirects them to it |
 | `auth-callback` | Receives the OAuth code after authorisation, exchanges it for tokens, stores them |
 | `token` | Called by your scripts - returns a valid access token, auto-refreshes if needed |
 | `token-keepalive` | Called weekly by GitHub Actions - proactively refreshes tokens before they expire |
@@ -113,5 +113,5 @@ This ensures participants never need to re-authorise due to token expiry during 
 ## Security model
 
 - **No direct database access.** `oauth_states`, `oauth_tokens`, and `data_availability` all have Row Level Security enabled with no policies - every real read/write goes through a service-role edge function, so the public (anon) Supabase key can't read stored tokens even if it leaks.
-- **Signed auth links.** `auth-start` requires an HMAC-SHA256 signature (keyed with `TOKENBRIDGE_API_KEY`, 7-day lifetime) over `provider:user_id:exp`, generated for you by `auth_url()`/`tb_auth_url()`/`authUrl()`. A bare URL with a guessed `user_id` is rejected - this is what stops someone starting an OAuth flow under an arbitrary participant ID.
-- **One API key gates every data-moving endpoint.** `/token` requires `Authorization: Bearer $TOKENBRIDGE_API_KEY`. Treat it like a password - it's shared across every participant in the deployment, not scoped per-participant.
+- **`auth-start` takes a bare `user_id`, unauthenticated.** Anyone who knows your deployment URL can start an OAuth flow under any `user_id` they choose - worst case, a participant ID ends up linked to the wrong provider account. This was previously closed with an HMAC-signed, time-limited link, but that broke generating links from systems (e.g. REDCap) that can't safely hold a secret, for a failure mode that can't expose health data (see the next bullet) - so it's deliberately reverted. If you need links your own tools can't forge, generate them outside those tools (batch Python/R, or a scheduled job pulling from your data source) using `auth_url()`/`tb_auth_url()`/`authUrl()` and distribute the result instead of letting the untrusted tool build the URL itself.
+- **One API key gates every data-moving endpoint.** `/token` requires `Authorization: Bearer $TOKENBRIDGE_API_KEY`. This is what actually protects participant data - a mislinked `auth-start` call never exposes a token or health data, since retrieving either still requires this key. Treat it like a password - it's shared across every participant in the deployment, not scoped per-participant.

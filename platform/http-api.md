@@ -16,70 +16,13 @@ This page shows the minimal code to get from zero to a valid access token. What 
 
 ## Step 1 - Onboard a participant
 
-Generate an auth link and send it to them - by email, SMS, or embedded in a survey tool such as Qualtrics.
+Generate an auth link and send it to them - by email, SMS, or embedded in a survey tool such as Qualtrics:
 
-The link must carry an `exp` (expiry) and `sig` (HMAC-SHA256 of `{provider}:{user_id}:{exp}`, keyed with `TOKENBRIDGE_API_KEY`) - `auth-start` rejects any link that's missing these, wrong, or expired. This stops someone from guessing the URL shape and starting an OAuth flow under an arbitrary `user_id`.
+```
+https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=google-health&user_id=p001
+```
 
-/// tab | Python
-
-    :::python
-    import hashlib, hmac, time
-    from urllib.parse import quote
-
-    TOKENBRIDGE_URL     = "https://YOUR_PROJECT_REF.supabase.co/functions/v1"
-    TOKENBRIDGE_API_KEY = "..."
-
-    user_id  = "p001"
-    provider = "google-health"   # or "withings", "oura"
-
-    exp = int(time.time()) + 7 * 24 * 3600   # link valid for 7 days
-    sig = hmac.new(TOKENBRIDGE_API_KEY.encode(), f"{provider}:{user_id}:{exp}".encode(), hashlib.sha256).hexdigest()
-
-    auth_url = f"{TOKENBRIDGE_URL}/auth-start?provider={provider}&user_id={quote(user_id, safe='')}&exp={exp}&sig={sig}"
-    print(auth_url)
-
-///
-
-/// tab | R
-
-    :::r
-    TOKENBRIDGE_URL     <- "https://YOUR_PROJECT_REF.supabase.co/functions/v1"
-    TOKENBRIDGE_API_KEY <- "..."
-
-    user_id  <- "p001"
-    provider <- "google-health"   # or "withings", "oura"
-
-    exp <- as.integer(Sys.time()) + 7L * 24L * 3600L   # link valid for 7 days
-    msg <- paste0(provider, ":", user_id, ":", exp)
-    sig <- as.character(openssl::sha256(charToRaw(msg), key = charToRaw(TOKENBRIDGE_API_KEY)))
-
-    auth_url <- paste0(TOKENBRIDGE_URL, "/auth-start?provider=", provider,
-                        "&user_id=", utils::URLencode(user_id, reserved = TRUE),
-                        "&exp=", exp, "&sig=", sig)
-    cat(auth_url, "\n")
-
-///
-
-/// tab | Node.js
-
-    :::javascript
-    const crypto = require("node:crypto");
-
-    const TOKENBRIDGE_URL = "https://YOUR_PROJECT_REF.supabase.co/functions/v1";
-    const TOKENBRIDGE_API_KEY = "...";
-
-    const userId = "p001";
-    const provider = "google-health"; // or "withings", "oura"
-
-    const exp = Math.floor(Date.now() / 1000) + 7 * 24 * 3600; // link valid for 7 days
-    const sig = crypto.createHmac("sha256", TOKENBRIDGE_API_KEY).update(`${provider}:${userId}:${exp}`).digest("hex");
-
-    const authUrl = `${TOKENBRIDGE_URL}/auth-start?provider=${provider}&user_id=${encodeURIComponent(userId)}&exp=${exp}&sig=${sig}`;
-    console.log(authUrl);
-
-///
-
-Using the Python, R, or JavaScript packages instead? `tb.auth_url(user_id)` / `tb_auth_url(user_id)` / `tb.authUrl(userId)` already does this signing for you.
+`provider` is any configured provider ID (`google-health`, `withings`, `oura`, ...); `user_id` is whatever identifier you use for this participant. Nothing else is required - see [Platform → Security model](overview.md#security-model) for what that does and doesn't protect against, and generate links from a trusted source if that matters for your study.
 
 The participant clicks the link, signs in, approves access, and sees a success page. TokenBridge stores their token automatically. You don't need to do anything else on your end.
 

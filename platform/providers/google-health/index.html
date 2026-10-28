@@ -1071,11 +1071,8 @@ client-side by comparing <code>startTime.seconds</code> to epoch boundaries.</p>
 </tr>
 </tbody>
 </table></div>
-<p><strong>Test:</strong> generate a signed auth link and visit it - you should be redirected to Google sign-in.</p>
-<p><code>python
-from tokenbridge import TokenBridge
-print(TokenBridge().auth_url("test", provider="google-health"))</code></p>
-<p><code>auth-start</code> requires a signed, time-limited link (see <a href="../../../clients/token-reference/">Token API Reference</a>), so a bare URL with <code>user_id=test</code> won't work.</p>
+<p><strong>Test</strong> - visit this URL, you should be redirected to Google sign-in:</p>
+<p><code>https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=google-health&amp;user_id=test</code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Participants will see an "unverified app" warning - tell them to click <strong>Advanced → Continue</strong>.

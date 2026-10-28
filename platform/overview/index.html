@@ -704,7 +704,7 @@ It's the only piece that needs to be publicly reachable - participants click a l
 <tbody>
 <tr>
 <td><code>auth-start</code></td>
-<td>Verifies the signed auth link, generates the provider OAuth URL, redirects the participant</td>
+<td>Generates the provider OAuth URL for a participant and redirects them to it</td>
 </tr>
 <tr>
 <td><code>auth-callback</code></td>
@@ -798,8 +798,8 @@ If your study exceeds 100 participants, you will need to go through Google's ver
 <h2 id="security-model">Security model<a class="headerlink" href="#security-model" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>No direct database access.</strong> <code>oauth_states</code>, <code>oauth_tokens</code>, and <code>data_availability</code> all have Row Level Security enabled with no policies - every real read/write goes through a service-role edge function, so the public (anon) Supabase key can't read stored tokens even if it leaks.</li>
-<li><strong>Signed auth links.</strong> <code>auth-start</code> requires an HMAC-SHA256 signature (keyed with <code>TOKENBRIDGE_API_KEY</code>, 7-day lifetime) over <code>provider:user_id:exp</code>, generated for you by <code>auth_url()</code>/<code>tb_auth_url()</code>/<code>authUrl()</code>. A bare URL with a guessed <code>user_id</code> is rejected - this is what stops someone starting an OAuth flow under an arbitrary participant ID.</li>
-<li><strong>One API key gates every data-moving endpoint.</strong> <code>/token</code> requires <code>Authorization: Bearer $TOKENBRIDGE_API_KEY</code>. Treat it like a password - it's shared across every participant in the deployment, not scoped per-participant.</li>
+<li><strong><code>auth-start</code> takes a bare <code>user_id</code>, unauthenticated.</strong> Anyone who knows your deployment URL can start an OAuth flow under any <code>user_id</code> they choose - worst case, a participant ID ends up linked to the wrong provider account. This was previously closed with an HMAC-signed, time-limited link, but that broke generating links from systems (e.g. REDCap) that can't safely hold a secret, for a failure mode that can't expose health data (see the next bullet) - so it's deliberately reverted. If you need links your own tools can't forge, generate them outside those tools (batch Python/R, or a scheduled job pulling from your data source) using <code>auth_url()</code>/<code>tb_auth_url()</code>/<code>authUrl()</code> and distribute the result instead of letting the untrusted tool build the URL itself.</li>
+<li><strong>One API key gates every data-moving endpoint.</strong> <code>/token</code> requires <code>Authorization: Bearer $TOKENBRIDGE_API_KEY</code>. This is what actually protects participant data - a mislinked <code>auth-start</code> call never exposes a token or health data, since retrieving either still requires this key. Treat it like a password - it's shared across every participant in the deployment, not scoped per-participant.</li>
 </ul>
   </div>
 </article>

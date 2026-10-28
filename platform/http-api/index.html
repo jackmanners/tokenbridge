@@ -687,68 +687,16 @@
 </ul>
 <hr />
 <h2 id="step-1-onboard-a-participant">Step 1 - Onboard a participant<a class="headerlink" href="#step-1-onboard-a-participant" title="Permanent link">&para;</a></h2>
-<p>Generate an auth link and send it to them - by email, SMS, or embedded in a survey tool such as Qualtrics.</p>
-<p>The link must carry an <code>exp</code> (expiry) and <code>sig</code> (HMAC-SHA256 of <code>{provider}:{user_id}:{exp}</code>, keyed with <code>TOKENBRIDGE_API_KEY</code>) - <code>auth-start</code> rejects any link that's missing these, wrong, or expired. This stops someone from guessing the URL shape and starting an OAuth flow under an arbitrary <code>user_id</code>.</p>
-<div class="tabbed-set" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Python</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span><span class="o">,</span><span class="w"> </span><span class="nn">hmac</span><span class="o">,</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">quote</span>
-
-<span class="n">TOKENBRIDGE_URL</span>     <span class="o">=</span> <span class="s2">"https://YOUR_PROJECT_REF.supabase.co/functions/v1"</span>
-<span class="n">TOKENBRIDGE_API_KEY</span> <span class="o">=</span> <span class="s2">"..."</span>
-
-<span class="n">user_id</span>  <span class="o">=</span> <span class="s2">"p001"</span>
-<span class="n">provider</span> <span class="o">=</span> <span class="s2">"google-health"</span>   <span class="c1"># or "withings", "oura"</span>
-
-<span class="n">exp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">3600</span>   <span class="c1"># link valid for 7 days</span>
-<span class="n">sig</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">TOKENBRIDGE_API_KEY</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">provider</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">exp</span><span class="si">}</span><span class="s2">"</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
-
-<span class="n">auth_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">TOKENBRIDGE_URL</span><span class="si">}</span><span class="s2">/auth-start?provider=</span><span class="si">{</span><span class="n">provider</span><span class="si">}</span><span class="s2">&amp;user_id=</span><span class="si">{</span><span class="n">quote</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">safe</span><span class="o">=</span><span class="s1">''</span><span class="p">)</span><span class="si">}</span><span class="s2">&amp;exp=</span><span class="si">{</span><span class="n">exp</span><span class="si">}</span><span class="s2">&amp;sig=</span><span class="si">{</span><span class="n">sig</span><span class="si">}</span><span class="s2">"</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">auth_url</span><span class="p">)</span>
+<p>Generate an auth link and send it to them - by email, SMS, or embedded in a survey tool such as Qualtrics:</p>
+<div class="codehilite"><pre><span></span><code>https://YOUR_PROJECT_REF.supabase.co/functions/v1/auth-start?provider=google-health&amp;user_id=p001
 </code></pre></div>
 
-</div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">R</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="n">TOKENBRIDGE_URL</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">"https://YOUR_PROJECT_REF.supabase.co/functions/v1"</span>
-<span class="n">TOKENBRIDGE_API_KEY</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">"..."</span>
-
-<span class="n">user_id</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">"p001"</span>
-<span class="n">provider</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">"google-health"</span><span class="w">   </span><span class="c1"># or "withings", "oura"</span>
-
-<span class="n">exp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.integer</span><span class="p">(</span><span class="nf">Sys.time</span><span class="p">())</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">7L</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">24L</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">3600L</span><span class="w">   </span><span class="c1"># link valid for 7 days</span>
-<span class="n">msg</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">paste0</span><span class="p">(</span><span class="n">provider</span><span class="p">,</span><span class="w"> </span><span class="s">":"</span><span class="p">,</span><span class="w"> </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="s">":"</span><span class="p">,</span><span class="w"> </span><span class="n">exp</span><span class="p">)</span>
-<span class="n">sig</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.character</span><span class="p">(</span><span class="n">openssl</span><span class="o">::</span><span class="nf">sha256</span><span class="p">(</span><span class="nf">charToRaw</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">charToRaw</span><span class="p">(</span><span class="n">TOKENBRIDGE_API_KEY</span><span class="p">)))</span>
-
-<span class="n">auth_url</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">paste0</span><span class="p">(</span><span class="n">TOKENBRIDGE_URL</span><span class="p">,</span><span class="w"> </span><span class="s">"/auth-start?provider="</span><span class="p">,</span><span class="w"> </span><span class="n">provider</span><span class="p">,</span>
-<span class="w">                    </span><span class="s">"&amp;user_id="</span><span class="p">,</span><span class="w"> </span><span class="n">utils</span><span class="o">::</span><span class="nf">URLencode</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">reserved</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">),</span>
-<span class="w">                    </span><span class="s">"&amp;exp="</span><span class="p">,</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="s">"&amp;sig="</span><span class="p">,</span><span class="w"> </span><span class="n">sig</span><span class="p">)</span>
-<span class="nf">cat</span><span class="p">(</span><span class="n">auth_url</span><span class="p">,</span><span class="w"> </span><span class="s">"\n"</span><span class="p">)</span>
-</code></pre></div>
-
-</div>
-<input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><label for="__tabbed_1_3">Node.js</label><div class="tabbed-content">
-<div class="codehilite"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">crypto</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"node:crypto"</span><span class="p">);</span>
-
-<span class="kd">const</span><span class="w"> </span><span class="nx">TOKENBRIDGE_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"https://YOUR_PROJECT_REF.supabase.co/functions/v1"</span><span class="p">;</span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">TOKENBRIDGE_API_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"..."</span><span class="p">;</span>
-
-<span class="kd">const</span><span class="w"> </span><span class="nx">userId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"p001"</span><span class="p">;</span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"google-health"</span><span class="p">;</span><span class="w"> </span><span class="c1">// or "withings", "oura"</span>
-
-<span class="kd">const</span><span class="w"> </span><span class="nx">exp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1000</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">7</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">24</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">3600</span><span class="p">;</span><span class="w"> </span><span class="c1">// link valid for 7 days</span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">sig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">crypto</span><span class="p">.</span><span class="nx">createHmac</span><span class="p">(</span><span class="s2">"sha256"</span><span class="p">,</span><span class="w"> </span><span class="nx">TOKENBRIDGE_API_KEY</span><span class="p">).</span><span class="nx">update</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">provider</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">userId</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">exp</span><span class="si">}</span><span class="sb">`</span><span class="p">).</span><span class="nx">digest</span><span class="p">(</span><span class="s2">"hex"</span><span class="p">);</span>
-
-<span class="kd">const</span><span class="w"> </span><span class="nx">authUrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`</span><span class="si">${</span><span class="nx">TOKENBRIDGE_URL</span><span class="si">}</span><span class="sb">/auth-start?provider=</span><span class="si">${</span><span class="nx">provider</span><span class="si">}</span><span class="sb">&amp;user_id=</span><span class="si">${</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">userId</span><span class="p">)</span><span class="si">}</span><span class="sb">&amp;exp=</span><span class="si">${</span><span class="nx">exp</span><span class="si">}</span><span class="sb">&amp;sig=</span><span class="si">${</span><span class="nx">sig</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">authUrl</span><span class="p">);</span>
-</code></pre></div>
-
-</div>
-</div>
-<p>Using the Python, R, or JavaScript packages instead? <code>tb.auth_url(user_id)</code> / <code>tb_auth_url(user_id)</code> / <code>tb.authUrl(userId)</code> already does this signing for you.</p>
+<p><code>provider</code> is any configured provider ID (<code>google-health</code>, <code>withings</code>, <code>oura</code>, ...); <code>user_id</code> is whatever identifier you use for this participant. Nothing else is required - see <a href="../overview/#security-model">Platform → Security model</a> for what that does and doesn't protect against, and generate links from a trusted source if that matters for your study.</p>
 <p>The participant clicks the link, signs in, approves access, and sees a success page. TokenBridge stores their token automatically. You don't need to do anything else on your end.</p>
 <hr />
 <h2 id="step-2-get-an-access-token">Step 2 - Get an access token<a class="headerlink" href="#step-2-get-an-access-token" title="Permanent link">&para;</a></h2>
 <p>Once a participant has authorised, call the <code>/token</code> endpoint. TokenBridge handles refresh automatically - you always get back a usable token.</p>
-<div class="tabbed-set" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Python</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Python</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 <span class="n">TOKENBRIDGE_URL</span> <span class="o">=</span> <span class="s2">"https://YOUR_PROJECT_REF.supabase.co/functions/v1"</span>
@@ -765,7 +713,7 @@
 </code></pre></div>
 
 </div>
-<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">R</label><div class="tabbed-content">
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">R</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="nf">library</span><span class="p">(</span><span class="n">httr</span><span class="p">)</span>
 
 <span class="n">TOKENBRIDGE_URL</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">"https://YOUR_PROJECT_REF.supabase.co/functions/v1"</span>
@@ -783,7 +731,7 @@
 </code></pre></div>
 
 </div>
-<input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><label for="__tabbed_2_3">Node.js</label><div class="tabbed-content">
+<input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><label for="__tabbed_1_3">Node.js</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">TOKENBRIDGE_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"https://YOUR_PROJECT_REF.supabase.co/functions/v1"</span><span class="p">;</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">API_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"your-tokenbridge-api-key"</span><span class="p">;</span>
 
@@ -802,7 +750,7 @@
 <hr />
 <h2 id="step-3-call-the-provider-api">Step 3 - Call the provider API<a class="headerlink" href="#step-3-call-the-provider-api" title="Permanent link">&para;</a></h2>
 <p>Pass the token in an <code>Authorization: Bearer</code> header. Minimal example for each provider:</p>
-<div class="tabbed-set" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Google Health</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Google Health</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
@@ -814,7 +762,7 @@
 
 <p>See the <a href="https://developers.google.com/health/api">Google Health API docs</a> for the full endpoint list.</p>
 </div>
-<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">Withings</label><div class="tabbed-content">
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">Withings</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
@@ -831,7 +779,7 @@
 
 <p>Every Withings endpoint takes an <code>action</code> parameter. Status 0 = success.</p>
 </div>
-<input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><label for="__tabbed_3_3">Oura</label><div class="tabbed-content">
+<input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><label for="__tabbed_2_3">Oura</label><div class="tabbed-content">
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
