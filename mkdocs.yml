@@ -58,6 +58,4 @@ nav:
     - Getting Started: clients/getting-started.md
     - Token API Reference: clients/token-reference.md
     - Data-Fetching Guide: clients/data-fetching.md
-    - Python Data-Fetching Reference: clients/python-reference.md
-    - R Data-Fetching Reference: clients/r-reference.md
     - Examples: clients/examples.md

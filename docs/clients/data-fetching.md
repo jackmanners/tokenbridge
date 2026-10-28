@@ -189,6 +189,3 @@ Templates: `full` (sleep), `sleep-bp` (sleep + BP), `bp` (BP only). See [Reports
 
 Not available - by design, the JavaScript package stops at `getToken()`. Call the provider's API directly with the token; see [Providers](../platform/providers/index.md) for each one's API base and official docs, or the [Direct HTTP API](../platform/http-api.md) if you're not using a client library at all.
 
-## Full reference
-
-Exhaustive, auto-generated-where-possible function reference for everything on this page: [Python Data-Fetching Reference](python-reference.md) · [R Data-Fetching Reference](r-reference.md).
