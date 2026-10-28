@@ -75,15 +75,14 @@ All Withings Sleep Summary Series fields are accepted. `startdate`/`enddate` are
 ### Generating from the Python client
 
 ```python
-import json, requests
+import requests
 from tokenbridge import TokenBridge
-from tokenbridge.providers.withings import _fetch_all
 
 tb = TokenBridge()
 token = tb.get_token("p001", provider="withings")
 
-sleep = _fetch_all(token, "sleep-summary",  "2024-01-01", "2024-06-30")
-bp    = _fetch_all(token, "blood-pressure", "2024-01-01", "2024-06-30")
+sleep = tb.fetch("p001", "sleep-summary",  "2024-01-01", "2024-06-30", provider="withings", token=token)
+bp    = tb.fetch("p001", "blood-pressure", "2024-01-01", "2024-06-30", provider="withings", token=token)
 
 resp = requests.post(
     f"{tb.url}/sleep-report",

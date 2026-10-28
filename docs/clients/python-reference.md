@@ -27,7 +27,6 @@ instance, so all `GoogleHealth` methods are available as `tb.google.<method>`, a
 
 ```python
 tb.google.fetch("p001", "sleep", start, end)           # same as tb.fetch(..., provider="google-health")
-tb.google.summary("p001", start, end)                  # GoogleHealth.summary
 tb.google.data_completeness(["p001", "p002"], s, e)    # GoogleHealth.data_completeness
 ```
 
@@ -47,7 +46,7 @@ tb = TokenBridge()
 gh = GoogleHealth(tb)
 
 sleep = gh.fetch("p001", "sleep", start, end)
-s     = gh.summary("p001", start, end)
+audit = gh.data_completeness(["p001", "p002"], start, end)
 ```
 
 ::: tokenbridge.GoogleHealth
@@ -55,8 +54,6 @@ s     = gh.summary("p001", start, end)
       show_source: false
       members:
         - fetch
-        - summary
-        - summary_all
         - data_completeness
 
 ---

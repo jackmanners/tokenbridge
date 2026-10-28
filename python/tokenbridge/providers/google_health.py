@@ -166,9 +166,8 @@ class GoogleHealth(HealthProvider):
     ) -> list[dict]:
         """Fetch any Google Health data type by its ID.
 
-        This is the primary method - all named helpers (`fetch_sleep`, etc.)
-        delegate here.  Automatically routes to the correct endpoint type
-        (`list` or `dailyRollup`) based on `DATA_TYPES`.
+        Automatically routes to the correct endpoint type (`list` or
+        `dailyRollup`) based on `DATA_TYPES`.
 
         Args:
             user_id: TokenBridge participant ID.

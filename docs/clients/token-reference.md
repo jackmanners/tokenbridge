@@ -150,7 +150,7 @@ Returns a valid access token for `user_id` + `provider`, auto-refreshing server-
 
 ///
 
-`get_token`'s `sleepscan` option (Python/R only) is an alternate Withings token source for participants registered through a separate system called SleepScan rather than TokenBridge's own OAuth flow - see the [Data-Fetching Guide](data-fetching.md#sleepscan) if that applies to your study.
+Python's `get_token()` additionally takes a `sleepscan=True` option - an alternate Withings token source for participants registered through a separate system called SleepScan rather than TokenBridge's own OAuth flow. R has the equivalent on `wt_fetch()` instead (its token-layer `tb_get_token()` doesn't take it) - see the [Data-Fetching Guide](data-fetching.md#sleepscan) either way if that applies to your study.
 
 ---
 
@@ -158,7 +158,7 @@ Returns a valid access token for `user_id` + `provider`, auto-refreshing server-
 
 | Condition | Python | R | JavaScript |
 |---|---|---|---|
-| Missing config | `RuntimeError: TOKENBRIDGE_URL not set` | `stop(".env is not set - run tb_setup() first.")` | `TokenBridgeError: TOKENBRIDGE_URL is not set` |
+| Missing config | `RuntimeError: TOKENBRIDGE_URL not set` | `stop("TOKENBRIDGE_URL is not set - run tb_setup() first.")` | `TokenBridgeError: TOKENBRIDGE_URL is not set` |
 | Not yet authorised (404) | `RuntimeError: No token found for user '...'` (includes auth URL) | `stop("No token found for user '...'")` (includes auth URL) | `TokenBridgeError: No token found for user '...'` (includes auth URL) |
 | Refresh token expired (401) | `RuntimeError: Token for '...' has expired` | `stop("Token for '...' has expired ...")` | `TokenBridgeError: Token for '...' has expired ...` |
 | Other non-2xx from `/token` | `RuntimeError` with status + body | `stop("TokenBridge error (...): ...")` | `TokenBridgeError: TokenBridge error (...): ...` |

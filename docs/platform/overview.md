@@ -22,7 +22,7 @@ Your scripts call the `/token` endpoint to get a valid access token, then use it
 ## What you need
 
 - A [Supabase](https://supabase.com) account (free tier is fine)
-- An OAuth app for each provider you want to support (see [Deploying TokenBridge](deploying.md))
+- An OAuth app for each provider you want to support (see [Providers](providers/index.md))
 
 ---
 
