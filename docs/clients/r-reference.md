@@ -1,93 +1,29 @@
-# R API Reference
+# R Data-Fetching Reference
 
-Functions are grouped by prefix. All functions load `.env` automatically when
-`env_file` is specified (default: `".env"` in the working directory).
+Exhaustive reference for the R package's **data-fetching layer only** -
+`tb_fetch()`, the provider shorthand functions, and session-default helpers.
+For `tb_setup()`, `tb_auth_url()`, `tb_auth_urls()`, and `tb_get_token()`,
+see the [Token API Reference](token-reference.md) - this page doesn't repeat them.
 
-For a quick cross-language comparison of just the auth/token functions, see the [Token API Reference](token-reference.md).
-
----
-
-## TokenBridge platform (`tb_`)
-
-### tb_setup
-
-```r
-tb_setup(env_file = ".env")
-```
-
-Interactive setup wizard. Prompts for your TokenBridge URL and API key, verifies the
-connection, and saves them to an `.env` file. Run once before anything else.
-
-**Arguments**
-
-| Argument | Type | Default | Description |
-|---|---|---|---|
-| `env_file` | character | `".env"` | Path to the `.env` file to write |
-
-**Returns** Invisibly: `list(url, api_key)`
-
-**Example**
-
-```r
-tb_setup()
-# ── TokenBridge setup ─────────────────────────────
-#
-# TokenBridge URL [https://YOUR_PROJECT_REF.supabase.co/functions/v1]:
-# > https://abcdef.supabase.co/functions/v1
-# API key:
-# > ••••••••••••••••••••
-#
-# ✓ Saved to .env
-```
+All functions load `.env` automatically when `env_file` is specified
+(default: `".env"` in the working directory).
 
 ---
 
-### tb_set_provider
+## tb_set_provider / tb_get_provider
 
 ```r
-tb_set_provider(provider)
-```
-
-Set the default provider for the current R session. All subsequent `tb_fetch()`,
-`tb_auth_url()`, and `tb_get_token()` calls use this provider unless overridden
-with `provider=`.
-
-Can be called multiple times to switch providers mid-script.
-
-**Arguments**
-
-| Argument | Type | Description |
-|---|---|---|
-| `provider` | character | Provider ID - e.g. `"google-health"`, `"withings"` |
-
-**Returns** Invisibly: the provider string
-
-**Example**
-
-```r
-tb_set_provider("google-health")
-tb_fetch("p001", "sleep", "2026-05-01", "2026-06-18")   # uses google-health
-
-tb_set_provider("withings")
-tb_fetch("p001", "sleep", "2026-05-01", "2026-06-18")   # now uses withings
-```
-
----
-
-### tb_get_provider
-
-```r
+tb_set_provider(provider)   # e.g. "google-health", "withings", "oura"
 tb_get_provider()
 ```
 
-Return the current session default provider (set by `tb_set_provider()`).
-Default at package load: `"google-health"`.
-
-**Returns** character - the current default provider ID
+Set/get the default provider for the current R session - used by `tb_fetch()`
+when `provider=` isn't passed explicitly. See [Data-Fetching Guide](data-fetching.md#setting-a-default-provider)
+for usage.
 
 ---
 
-### tb_fetch
+## tb_fetch
 
 ```r
 tb_fetch(user_id, data_type, start_date, end_date,
@@ -155,98 +91,6 @@ all_data <- lapply(names(GH_DATA_TYPES), function(dt) {
   tb_fetch("p001", dt, "2026-05-01", "2026-06-18", token = tok)
 })
 names(all_data) <- names(GH_DATA_TYPES)
-```
-
----
-
-### tb_auth_url
-
-```r
-tb_auth_url(user_id, provider = tb_get_provider(), env_file = ".env")
-```
-
-Return the URL a participant should visit to authorise their account.
-Send this link via email, SMS, or however you communicate with participants.
-Once they complete the OAuth flow, their token is stored and you can fetch data immediately.
-
-**Arguments**
-
-| Argument | Type | Default | Description |
-|---|---|---|---|
-| `user_id` | character | - | TokenBridge participant ID |
-| `provider` | character | `tb_get_provider()` | Provider to authorise |
-| `env_file` | character | `".env"` | Path to `.env` file |
-
-**Returns** character - the full auth URL
-
-**Example**
-
-```r
-url <- tb_auth_url("participant-001")
-cat("Please visit this link to connect your Fitbit:\n", url, "\n")
-```
-
----
-
-### tb_auth_urls
-
-```r
-tb_auth_urls(user_ids, provider = tb_get_provider(), env_file = ".env")
-```
-
-Return auth URLs for multiple participants at once.
-
-**Arguments**
-
-| Argument | Type | Default | Description |
-|---|---|---|---|
-| `user_ids` | character vector | - | TokenBridge participant IDs |
-| `provider` | character | `tb_get_provider()` | Provider to authorise |
-| `env_file` | character | `".env"` | Path to `.env` file |
-
-**Returns** Named character vector: `c(user_id = url, ...)`
-
-**Example**
-
-```r
-urls <- tb_auth_urls(c("p001", "p002", "p003", "p004"))
-# Send each URL to the corresponding participant
-for (uid in names(urls)) {
-  cat(uid, "->", urls[[uid]], "\n")
-}
-```
-
----
-
-### tb_get_token
-
-```r
-tb_get_token(user_id, provider = tb_get_provider(), env_file = ".env")
-```
-
-Fetch a valid access token for a participant. TokenBridge refreshes automatically
-if the token is within 5 minutes of expiry.
-
-You rarely need this directly - `tb_fetch()` and `gh_fetch()` call it internally.
-Use it when you want to fetch multiple data types for the same user efficiently:
-
-**Arguments**
-
-| Argument | Type | Default | Description |
-|---|---|---|---|
-| `user_id` | character | - | TokenBridge participant ID |
-| `provider` | character | `tb_get_provider()` | Provider |
-| `env_file` | character | `".env"` | Path to `.env` file |
-
-**Returns** character - the OAuth access token
-
-**Example**
-
-```r
-tok <- tb_get_token("p001")
-sleep <- tb_fetch("p001", "sleep", start, end, token = tok)
-steps <- tb_fetch("p001", "steps", start, end, token = tok)
-hrv   <- tb_fetch("p001", "heart-rate-variability", start, end, token = tok)
 ```
 
 ---
@@ -443,8 +287,13 @@ ou_fetch(user_id, data_type, start_date, end_date,
          token = NULL, env_file = ".env")
 ```
 
-Fetch Oura Ring data for a participant. Equivalent to `tb_fetch(..., provider = "oura")`,
-except it's always `"oura"` regardless of the session default.
+Fetch Oura Ring data for a participant.
+
+!!! warning
+    Unlike `gh_fetch()`/`wt_fetch()`, this is **not** interchangeable with
+    `tb_fetch(..., provider = "oura")` - `tb_fetch()`'s internal provider
+    dispatch doesn't currently include an `"oura"` case and will error with
+    `"Unknown provider 'oura'"`. Call `ou_fetch()` directly for Oura.
 
 **Arguments**
 

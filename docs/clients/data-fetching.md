@@ -39,6 +39,29 @@ JavaScript doesn't have this layer at all, by design - see the note at the botto
 
 Results are flat records (Python: `list[dict]`, R: `data.frame`), one per sleep session / activity / measurement. Nested API fields are flattened with dot notation, e.g. `startTime.seconds`.
 
+## Setting a default provider
+
+`fetch()`/`tb_fetch()` take an explicit `provider=` on every call, or use a session default so you don't have to repeat it:
+
+/// tab | Python
+
+    :::python
+    tb.provider = "withings"    # persists on this TokenBridge instance
+
+    tb.fetch("p001", "sleep-summary", start, end)    # uses tb.provider
+
+///
+
+/// tab | R
+
+    :::r
+    tb_set_provider("withings")    # persists for the R session
+    tb_get_provider()              # "withings"
+
+    tb_fetch("p001", "sleep-summary", start, end)    # uses the session default
+
+///
+
 ## Provider namespaces and shorthand
 
 /// tab | Python
@@ -168,4 +191,4 @@ Not available - by design, the JavaScript package stops at `getToken()`. Call th
 
 ## Full reference
 
-Exhaustive, auto-generated-where-possible function reference for everything on this page: [Python Reference](python-reference.md) · [R Reference](r-reference.md).
+Exhaustive, auto-generated-where-possible function reference for everything on this page: [Python Data-Fetching Reference](python-reference.md) · [R Data-Fetching Reference](r-reference.md).

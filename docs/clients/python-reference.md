@@ -1,22 +1,21 @@
-# Python API Reference
+# Python Data-Fetching Reference
 
-Exhaustive, auto-generated from source docstrings. For a quick cross-language comparison of just the auth/token functions, see the [Token API Reference](token-reference.md).
+Exhaustive, auto-generated-from-docstrings reference for the Python package's
+**data-fetching layer only** - `tb.fetch()`, the provider classes, and their
+methods. For `TokenBridge()`, `auth_url()`, `auth_urls()`, and `get_token()`,
+see the [Token API Reference](token-reference.md) - this page doesn't repeat
+them.
 
-## TokenBridge
+## TokenBridge.fetch
 
-The main client class. Import and instantiate once; use `tb.fetch()` for data and
-`tb.auth_url()` for participant onboarding.
+The canonical data-fetch dispatcher - routes to the right provider based on
+`provider=` (or `tb.provider` if not passed).
 
 ::: tokenbridge.TokenBridge
     options:
       show_source: false
       members:
-        - __init__
         - fetch
-        - auth_url
-        - auth_urls
-        - get_token
-        - token_status
 
 ---
 
