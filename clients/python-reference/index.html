@@ -16,7 +16,7 @@
     
 
 
-<title>Python Reference</title>
+<title>Python Data-Fetching Reference</title>
 
 
 
@@ -31,7 +31,7 @@
 
 <!-- Open Graph (Facebook, LinkedIn) -->
 
-<meta property="og:title" content="Python Reference">
+<meta property="og:title" content="Python Data-Fetching Reference">
 
 
 
@@ -46,7 +46,7 @@
 
 <!-- Twitter Card -->
 
-<meta name="twitter:title" content="Python Reference">
+<meta name="twitter:title" content="Python Data-Fetching Reference">
 
 
 
@@ -589,7 +589,7 @@
         data-size="default" href="./"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
         
-        Python Reference
+        Python Data-Fetching Reference
         
         
         
@@ -604,7 +604,7 @@
         data-size="default" href="../r-reference/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
         
-        R Reference
+        R Data-Fetching Reference
         
         
         
@@ -653,7 +653,7 @@
     <div class="flex flex-col gap-2">
       <div id="page-header" class="flex items-start justify-between">
         <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">
-          Python Reference
+          Python Data-Fetching Reference
         </h1>
         <div class="flex items-start gap-2">
           
@@ -705,11 +705,15 @@
     </div>
   </div>
   <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
-    <h1 id="python-api-reference">Python API Reference<a class="headerlink" href="#python-api-reference" title="Permanent link">&para;</a></h1>
-<p>Exhaustive, auto-generated from source docstrings. For a quick cross-language comparison of just the auth/token functions, see the <a href="../token-reference/">Token API Reference</a>.</p>
-<h2 id="tokenbridge">TokenBridge<a class="headerlink" href="#tokenbridge" title="Permanent link">&para;</a></h2>
-<p>The main client class. Import and instantiate once; use <code>tb.fetch()</code> for data and
-<code>tb.auth_url()</code> for participant onboarding.</p>
+    <h1 id="python-data-fetching-reference">Python Data-Fetching Reference<a class="headerlink" href="#python-data-fetching-reference" title="Permanent link">&para;</a></h1>
+<p>Exhaustive, auto-generated-from-docstrings reference for the Python package's
+<strong>data-fetching layer only</strong> - <code>tb.fetch()</code>, the provider classes, and their
+methods. For <code>TokenBridge()</code>, <code>auth_url()</code>, <code>auth_urls()</code>, and <code>get_token()</code>,
+see the <a href="../token-reference/">Token API Reference</a> - this page doesn't repeat
+them.</p>
+<h2 id="tokenbridgefetch">TokenBridge.fetch<a class="headerlink" href="#tokenbridgefetch" title="Permanent link">&para;</a></h2>
+<p>The canonical data-fetch dispatcher - routes to the right provider based on
+<code>provider=</code> (or <code>tb.provider</code> if not passed).</p>
 
 
 <div class="doc doc-object doc-class">
@@ -1166,325 +1170,6 @@ client or <code>SLEEPSCAN_API_KEY</code> in the environment.</p>
 
 <span class="c1"># One-off provider override</span>
 <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"sleep"</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">"withings"</span><span class="p">)</span>
-</code></pre></div>
-</details>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h4 id="tokenbridge.TokenBridge.auth_url" class="doc doc-heading">
-            <code class=" language-python"><span class="n">auth_url</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">provider</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span></code>
-
-<a href="#tokenbridge.TokenBridge.auth_url" class="headerlink" title="Permanent link">&para;</a></h4>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Return the auth URL for one participant.</p>
-<p>Send this URL to the participant.  Once they complete the OAuth flow,
-their token is stored and you can fetch data immediately.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <div class="table-wrapper"><table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>user_id</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>TokenBridge participant ID.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>provider</code>
-            </td>
-            <td>
-                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Provider to authorise.  Defaults to <code>tb.provider</code>.</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-      </tbody>
-    </table></div>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <div class="table-wrapper"><table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Full auth URL as a string.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table></div>
-
-
-<details class="example" open>
-  <summary>Example</summary>
-  <div class="codehilite"><pre><span></span><code><span class="n">url</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">auth_url</span><span class="p">(</span><span class="s2">"participant-001"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Please visit: </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-</code></pre></div>
-</details>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h4 id="tokenbridge.TokenBridge.auth_urls" class="doc doc-heading">
-            <code class=" language-python"><span class="n">auth_urls</span><span class="p">(</span><span class="n">user_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">provider</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span></code>
-
-<a href="#tokenbridge.TokenBridge.auth_urls" class="headerlink" title="Permanent link">&para;</a></h4>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Return auth URLs for multiple participants.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <div class="table-wrapper"><table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>user_ids</code>
-            </td>
-            <td>
-                  <code><span title="list">list</span>[<span title="str">str</span>]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>List of TokenBridge participant IDs.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>provider</code>
-            </td>
-            <td>
-                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Provider to authorise.  Defaults to <code>tb.provider</code>.</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-      </tbody>
-    </table></div>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <div class="table-wrapper"><table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="dict">dict</span>[<span title="str">str</span>, <span title="str">str</span>]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Dict mapping <code>user_id</code> to auth URL.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table></div>
-
-
-<details class="example" open>
-  <summary>Example</summary>
-  <div class="codehilite"><pre><span></span><code><span class="n">urls</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">auth_urls</span><span class="p">([</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"p002"</span><span class="p">,</span> <span class="s2">"p003"</span><span class="p">])</span>
-<span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-</code></pre></div>
-</details>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h4 id="tokenbridge.TokenBridge.get_token" class="doc doc-heading">
-            <code class=" language-python"><span class="n">get_token</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">provider</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">sleepscan</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span></code>
-
-<a href="#tokenbridge.TokenBridge.get_token" class="headerlink" title="Permanent link">&para;</a></h4>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Fetch a valid access token for a participant.</p>
-<p>TokenBridge refreshes automatically if the token is within 5 minutes
-of expiry.</p>
-<p>You rarely need this directly - <code>tb.fetch()</code> handles it internally.
-Use it when fetching multiple data types for the same participant to
-avoid one TokenBridge round-trip per call:</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <div class="table-wrapper"><table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>user_id</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>TokenBridge participant ID (or SleepScan lookup key when
-<code>sleepscan=True</code>).</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>provider</code>
-            </td>
-            <td>
-                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Provider.  Defaults to <code>tb.provider</code>.</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>sleepscan</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If <code>True</code>, retrieve the token from SleepScan rather
-than TokenBridge.  <code>user_id</code> is used as the lookup key
-(email, Withings user ID as int, or SleepScan participant ID).</p>
-              </div>
-            </td>
-            <td>
-                  <code>False</code>
-            </td>
-          </tr>
-      </tbody>
-    </table></div>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <div class="table-wrapper"><table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>OAuth access token string.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table></div>
-
-
-<details class="example" open>
-  <summary>Example</summary>
-  <div class="codehilite"><pre><span></span><code><span class="c1"># TokenBridge token — reuse across multiple fetches</span>
-<span class="n">token</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">)</span>
-<span class="n">sleep</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"sleep"</span><span class="p">,</span>  <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
-<span class="n">steps</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"p001"</span><span class="p">,</span> <span class="s2">"steps"</span><span class="p">,</span>  <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
-
-<span class="c1"># SleepScan token</span>
-<span class="n">token</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="s2">"p@lab.com"</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">"withings"</span><span class="p">,</span> <span class="n">sleepscan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">sleep</span> <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"p@lab.com"</span><span class="p">,</span> <span class="s2">"sleep-summary"</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
-<span class="n">bp</span>    <span class="o">=</span> <span class="n">tb</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"p@lab.com"</span><span class="p">,</span> <span class="s2">"blood-pressure"</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
 </details>
 
@@ -3266,7 +2951,7 @@ raises <code>NotImplementedError</code> - these were never finished and aren't p
     
     
     <a class="button secondary" href="../r-reference/">
-    <span class="max-[500px]:hidden truncate">R Reference</span>
+    <span class="max-[500px]:hidden truncate">R Data-Fetching Reference</span>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
     class="tabler-icon tabler-icon-arrow-right">
@@ -3374,13 +3059,13 @@ raises <code>NotImplementedError</code> - these were never finished and aren't p
                         
                         <a class="text-2xl font-medium" href="./">
                             
-                            Python Reference
+                            Python Data-Fetching Reference
                             
                         </a>
                         
                         <a class="text-2xl font-medium" href="../r-reference/">
                             
-                            R Reference
+                            R Data-Fetching Reference
                             
                         </a>
                         
@@ -3413,8 +3098,8 @@ raises <code>NotImplementedError</code> - these were never finished and aren't p
         
         
         
-        <a href="#tokenbridge" data-active="false" data-depth="2">
-            TokenBridge
+        <a href="#tokenbridgefetch" data-active="false" data-depth="2">
+            TokenBridge.fetch
         </a>
         
 

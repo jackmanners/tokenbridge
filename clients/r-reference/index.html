@@ -16,7 +16,7 @@
     
 
 
-<title>R Reference</title>
+<title>R Data-Fetching Reference</title>
 
 
 
@@ -31,7 +31,7 @@
 
 <!-- Open Graph (Facebook, LinkedIn) -->
 
-<meta property="og:title" content="R Reference">
+<meta property="og:title" content="R Data-Fetching Reference">
 
 
 
@@ -46,7 +46,7 @@
 
 <!-- Twitter Card -->
 
-<meta name="twitter:title" content="R Reference">
+<meta name="twitter:title" content="R Data-Fetching Reference">
 
 
 
@@ -589,7 +589,7 @@
         data-size="default" href="../python-reference/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
         
-        Python Reference
+        Python Data-Fetching Reference
         
         
         
@@ -604,7 +604,7 @@
         data-size="default" href="./"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
         
-        R Reference
+        R Data-Fetching Reference
         
         
         
@@ -653,7 +653,7 @@
     <div class="flex flex-col gap-2">
       <div id="page-header" class="flex items-start justify-between">
         <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">
-          R Reference
+          R Data-Fetching Reference
         </h1>
         <div class="flex items-start gap-2">
           
@@ -705,95 +705,24 @@
     </div>
   </div>
   <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
-    <h1 id="r-api-reference">R API Reference<a class="headerlink" href="#r-api-reference" title="Permanent link">&para;</a></h1>
-<p>Functions are grouped by prefix. All functions load <code>.env</code> automatically when
-<code>env_file</code> is specified (default: <code>".env"</code> in the working directory).</p>
-<p>For a quick cross-language comparison of just the auth/token functions, see the <a href="../token-reference/">Token API Reference</a>.</p>
+    <h1 id="r-data-fetching-reference">R Data-Fetching Reference<a class="headerlink" href="#r-data-fetching-reference" title="Permanent link">&para;</a></h1>
+<p>Exhaustive reference for the R package's <strong>data-fetching layer only</strong> -
+<code>tb_fetch()</code>, the provider shorthand functions, and session-default helpers.
+For <code>tb_setup()</code>, <code>tb_auth_url()</code>, <code>tb_auth_urls()</code>, and <code>tb_get_token()</code>,
+see the <a href="../token-reference/">Token API Reference</a> - this page doesn't repeat them.</p>
+<p>All functions load <code>.env</code> automatically when <code>env_file</code> is specified
+(default: <code>".env"</code> in the working directory).</p>
 <hr />
-<h2 id="tokenbridge-platform-tb_">TokenBridge platform (<code>tb_</code>)<a class="headerlink" href="#tokenbridge-platform-tb_" title="Permanent link">&para;</a></h2>
-<h3 id="tb_setup">tb_setup<a class="headerlink" href="#tb_setup" title="Permanent link">&para;</a></h3>
-<div class="codehilite"><pre><span></span><code><span class="nf">tb_setup</span><span class="p">(</span><span class="n">env_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">".env"</span><span class="p">)</span>
+<h2 id="tb_set_provider-tb_get_provider">tb_set_provider / tb_get_provider<a class="headerlink" href="#tb_set_provider-tb_get_provider" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="nf">tb_set_provider</span><span class="p">(</span><span class="n">provider</span><span class="p">)</span><span class="w">   </span><span class="c1"># e.g. "google-health", "withings", "oura"</span>
+<span class="nf">tb_get_provider</span><span class="p">()</span>
 </code></pre></div>
 
-<p>Interactive setup wizard. Prompts for your TokenBridge URL and API key, verifies the
-connection, and saves them to an <code>.env</code> file. Run once before anything else.</p>
-<p><strong>Arguments</strong></p>
-<div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>Argument</th>
-<th>Type</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>env_file</code></td>
-<td>character</td>
-<td><code>".env"</code></td>
-<td>Path to the <code>.env</code> file to write</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Returns</strong> Invisibly: <code>list(url, api_key)</code></p>
-<p><strong>Example</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="nf">tb_setup</span><span class="p">()</span>
-<span class="c1"># ── TokenBridge setup ─────────────────────────────</span>
-<span class="c1">#</span>
-<span class="c1"># TokenBridge URL [https://YOUR_PROJECT_REF.supabase.co/functions/v1]:</span>
-<span class="c1"># &gt; https://abcdef.supabase.co/functions/v1</span>
-<span class="c1"># API key:</span>
-<span class="c1"># &gt; ••••••••••••••••••••</span>
-<span class="c1">#</span>
-<span class="c1"># ✓ Saved to .env</span>
-</code></pre></div>
-
+<p>Set/get the default provider for the current R session - used by <code>tb_fetch()</code>
+when <code>provider=</code> isn't passed explicitly. See <a href="../data-fetching/#setting-a-default-provider">Data-Fetching Guide</a>
+for usage.</p>
 <hr />
-<h3 id="tb_set_provider">tb_set_provider<a class="headerlink" href="#tb_set_provider" title="Permanent link">&para;</a></h3>
-<div class="codehilite"><pre><span></span><code><span class="nf">tb_set_provider</span><span class="p">(</span><span class="n">provider</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Set the default provider for the current R session. All subsequent <code>tb_fetch()</code>,
-<code>tb_auth_url()</code>, and <code>tb_get_token()</code> calls use this provider unless overridden
-with <code>provider=</code>.</p>
-<p>Can be called multiple times to switch providers mid-script.</p>
-<p><strong>Arguments</strong></p>
-<div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>Argument</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>provider</code></td>
-<td>character</td>
-<td>Provider ID - e.g. <code>"google-health"</code>, <code>"withings"</code></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Returns</strong> Invisibly: the provider string</p>
-<p><strong>Example</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="nf">tb_set_provider</span><span class="p">(</span><span class="s">"google-health"</span><span class="p">)</span>
-<span class="nf">tb_fetch</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"sleep"</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-05-01"</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-06-18"</span><span class="p">)</span><span class="w">   </span><span class="c1"># uses google-health</span>
-
-<span class="nf">tb_set_provider</span><span class="p">(</span><span class="s">"withings"</span><span class="p">)</span>
-<span class="nf">tb_fetch</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"sleep"</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-05-01"</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-06-18"</span><span class="p">)</span><span class="w">   </span><span class="c1"># now uses withings</span>
-</code></pre></div>
-
-<hr />
-<h3 id="tb_get_provider">tb_get_provider<a class="headerlink" href="#tb_get_provider" title="Permanent link">&para;</a></h3>
-<div class="codehilite"><pre><span></span><code><span class="nf">tb_get_provider</span><span class="p">()</span>
-</code></pre></div>
-
-<p>Return the current session default provider (set by <code>tb_set_provider()</code>).
-Default at package load: <code>"google-health"</code>.</p>
-<p><strong>Returns</strong> character - the current default provider ID</p>
-<hr />
-<h3 id="tb_fetch">tb_fetch<a class="headerlink" href="#tb_fetch" title="Permanent link">&para;</a></h3>
+<h2 id="tb_fetch">tb_fetch<a class="headerlink" href="#tb_fetch" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span><code><span class="nf">tb_fetch</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">data_type</span><span class="p">,</span><span class="w"> </span><span class="n">start_date</span><span class="p">,</span><span class="w"> </span><span class="n">end_date</span><span class="p">,</span>
 <span class="w">         </span><span class="n">token</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span>
 <span class="w">         </span><span class="n">provider</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nf">tb_get_provider</span><span class="p">(),</span>
@@ -906,145 +835,6 @@ Returns an empty <code>data.frame</code> if no data exists for the period.</p>
 <span class="w">  </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="n">dt</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-05-01"</span><span class="p">,</span><span class="w"> </span><span class="s">"2026-06-18"</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
 <span class="p">})</span>
 <span class="nf">names</span><span class="p">(</span><span class="n">all_data</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">GH_DATA_TYPES</span><span class="p">)</span>
-</code></pre></div>
-
-<hr />
-<h3 id="tb_auth_url">tb_auth_url<a class="headerlink" href="#tb_auth_url" title="Permanent link">&para;</a></h3>
-<div class="codehilite"><pre><span></span><code><span class="nf">tb_auth_url</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">tb_get_provider</span><span class="p">(),</span><span class="w"> </span><span class="n">env_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">".env"</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Return the URL a participant should visit to authorise their account.
-Send this link via email, SMS, or however you communicate with participants.
-Once they complete the OAuth flow, their token is stored and you can fetch data immediately.</p>
-<p><strong>Arguments</strong></p>
-<div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>Argument</th>
-<th>Type</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>user_id</code></td>
-<td>character</td>
-<td>-</td>
-<td>TokenBridge participant ID</td>
-</tr>
-<tr>
-<td><code>provider</code></td>
-<td>character</td>
-<td><code>tb_get_provider()</code></td>
-<td>Provider to authorise</td>
-</tr>
-<tr>
-<td><code>env_file</code></td>
-<td>character</td>
-<td><code>".env"</code></td>
-<td>Path to <code>.env</code> file</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Returns</strong> character - the full auth URL</p>
-<p><strong>Example</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="n">url</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_url</span><span class="p">(</span><span class="s">"participant-001"</span><span class="p">)</span>
-<span class="nf">cat</span><span class="p">(</span><span class="s">"Please visit this link to connect your Fitbit:\n"</span><span class="p">,</span><span class="w"> </span><span class="n">url</span><span class="p">,</span><span class="w"> </span><span class="s">"\n"</span><span class="p">)</span>
-</code></pre></div>
-
-<hr />
-<h3 id="tb_auth_urls">tb_auth_urls<a class="headerlink" href="#tb_auth_urls" title="Permanent link">&para;</a></h3>
-<div class="codehilite"><pre><span></span><code><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="n">user_ids</span><span class="p">,</span><span class="w"> </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">tb_get_provider</span><span class="p">(),</span><span class="w"> </span><span class="n">env_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">".env"</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Return auth URLs for multiple participants at once.</p>
-<p><strong>Arguments</strong></p>
-<div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>Argument</th>
-<th>Type</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>user_ids</code></td>
-<td>character vector</td>
-<td>-</td>
-<td>TokenBridge participant IDs</td>
-</tr>
-<tr>
-<td><code>provider</code></td>
-<td>character</td>
-<td><code>tb_get_provider()</code></td>
-<td>Provider to authorise</td>
-</tr>
-<tr>
-<td><code>env_file</code></td>
-<td>character</td>
-<td><code>".env"</code></td>
-<td>Path to <code>.env</code> file</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Returns</strong> Named character vector: <code>c(user_id = url, ...)</code></p>
-<p><strong>Example</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="n">urls</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_auth_urls</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"p002"</span><span class="p">,</span><span class="w"> </span><span class="s">"p003"</span><span class="p">,</span><span class="w"> </span><span class="s">"p004"</span><span class="p">))</span>
-<span class="c1"># Send each URL to the corresponding participant</span>
-<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">uid</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">urls</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="nf">cat</span><span class="p">(</span><span class="n">uid</span><span class="p">,</span><span class="w"> </span><span class="s">"-&gt;"</span><span class="p">,</span><span class="w"> </span><span class="n">urls</span><span class="p">[[</span><span class="n">uid</span><span class="p">]],</span><span class="w"> </span><span class="s">"\n"</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<hr />
-<h3 id="tb_get_token">tb_get_token<a class="headerlink" href="#tb_get_token" title="Permanent link">&para;</a></h3>
-<div class="codehilite"><pre><span></span><code><span class="nf">tb_get_token</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">tb_get_provider</span><span class="p">(),</span><span class="w"> </span><span class="n">env_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">".env"</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Fetch a valid access token for a participant. TokenBridge refreshes automatically
-if the token is within 5 minutes of expiry.</p>
-<p>You rarely need this directly - <code>tb_fetch()</code> and <code>gh_fetch()</code> call it internally.
-Use it when you want to fetch multiple data types for the same user efficiently:</p>
-<p><strong>Arguments</strong></p>
-<div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>Argument</th>
-<th>Type</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>user_id</code></td>
-<td>character</td>
-<td>-</td>
-<td>TokenBridge participant ID</td>
-</tr>
-<tr>
-<td><code>provider</code></td>
-<td>character</td>
-<td><code>tb_get_provider()</code></td>
-<td>Provider</td>
-</tr>
-<tr>
-<td><code>env_file</code></td>
-<td>character</td>
-<td><code>".env"</code></td>
-<td>Path to <code>.env</code> file</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Returns</strong> character - the OAuth access token</p>
-<p><strong>Example</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="n">tok</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_get_token</span><span class="p">(</span><span class="s">"p001"</span><span class="p">)</span>
-<span class="n">sleep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"sleep"</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
-<span class="n">steps</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"steps"</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
-<span class="n">hrv</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tb_fetch</span><span class="p">(</span><span class="s">"p001"</span><span class="p">,</span><span class="w"> </span><span class="s">"heart-rate-variability"</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tok</span><span class="p">)</span>
 </code></pre></div>
 
 <hr />
@@ -1350,8 +1140,14 @@ See <a href="../../platform/providers/">Providers</a> for full details.</p>
 <span class="w">         </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">env_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">".env"</span><span class="p">)</span>
 </code></pre></div>
 
-<p>Fetch Oura Ring data for a participant. Equivalent to <code>tb_fetch(..., provider = "oura")</code>,
-except it's always <code>"oura"</code> regardless of the session default.</p>
+<p>Fetch Oura Ring data for a participant.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Unlike <code>gh_fetch()</code>/<code>wt_fetch()</code>, this is <strong>not</strong> interchangeable with
+<code>tb_fetch(..., provider = "oura")</code> - <code>tb_fetch()</code>'s internal provider
+dispatch doesn't currently include an <code>"oura"</code> case and will error with
+<code>"Unknown provider 'oura'"</code>. Call <code>ou_fetch()</code> directly for Oura.</p>
+</div>
 <p><strong>Arguments</strong></p>
 <div class="table-wrapper"><table>
 <thead>
@@ -1465,7 +1261,7 @@ except it's always <code>"oura"</code> regardless of the session default.</p>
     <path d="M5 12l6 6"></path>
     <path d="M5 12l6 -6"></path>
 </svg>
-    <span class="max-[500px]:hidden truncate">Python Reference</span>
+    <span class="max-[500px]:hidden truncate">Python Data-Fetching Reference</span>
 </a>
     
     
@@ -1578,13 +1374,13 @@ except it's always <code>"oura"</code> regardless of the session default.</p>
                         
                         <a class="text-2xl font-medium" href="../python-reference/">
                             
-                            Python Reference
+                            Python Data-Fetching Reference
                             
                         </a>
                         
                         <a class="text-2xl font-medium" href="./">
                             
-                            R Reference
+                            R Data-Fetching Reference
                             
                         </a>
                         
@@ -1617,39 +1413,15 @@ except it's always <code>"oura"</code> regardless of the session default.</p>
         
         
         
-        <a href="#tokenbridge-platform-tb_" data-active="false" data-depth="2">
-            TokenBridge platform (tb_)
+        <a href="#tb_set_provider-tb_get_provider" data-active="false" data-depth="2">
+            tb_set_provider / tb_get_provider
         </a>
         
+
         
-        <a href="#tb_setup" data-active="false" data-depth="3">
-            tb_setup
-        </a>
-        
-        <a href="#tb_set_provider" data-active="false" data-depth="3">
-            tb_set_provider
-        </a>
-        
-        <a href="#tb_get_provider" data-active="false" data-depth="3">
-            tb_get_provider
-        </a>
-        
-        <a href="#tb_fetch" data-active="false" data-depth="3">
+        <a href="#tb_fetch" data-active="false" data-depth="2">
             tb_fetch
         </a>
-        
-        <a href="#tb_auth_url" data-active="false" data-depth="3">
-            tb_auth_url
-        </a>
-        
-        <a href="#tb_auth_urls" data-active="false" data-depth="3">
-            tb_auth_urls
-        </a>
-        
-        <a href="#tb_get_token" data-active="false" data-depth="3">
-            tb_get_token
-        </a>
-        
         
 
         
